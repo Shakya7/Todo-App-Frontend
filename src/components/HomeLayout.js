@@ -7,7 +7,7 @@ function HomeLayout(){
     return(
         <div className="flex min-h-screen bg-stone-400">
                 <Sidebar className=""/>
-                <div className=" basis-full md:basis-4/5 min-h-full bg-red-300 relative">
+                <div className=" basis-full md:basis-4/5 min-h-full bg-zinc-900 relative">
                     <Header/>
                     <Outlet/>
                 </div>

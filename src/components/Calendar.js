@@ -5,6 +5,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import { useRef, useEffect, useCallback } from "react";
 import moment from 'moment';
 
+
 const events=[
     {
       allDay: true,
@@ -185,9 +186,21 @@ const events=[
 const localizer = momentLocalizer(moment)
 
 const MyCalendar = function(props){
+  const clickRef = useRef(null)
 
-    const clickRef = useRef(null)
+  const calendarStyle = (date) => {
+    let currentDate = `${new Date().getDate()} ${new Date().getMonth()+1} ${new Date().getFullYear()}`
+    let allDate = `${date.getDate()} ${date.getMonth()+1} ${date.getFullYear()}`
 
+    if ( allDate === currentDate)
+    return {
+      style: {
+        backgroundColor: 'rgb(51 65 85)', 
+        border: '1px solid yellow',
+      }
+    }
+  }
+    
   useEffect(() => {
     /**
      * What Is This?
@@ -213,19 +226,22 @@ const MyCalendar = function(props){
     }, 250)
   }, [])
 
-
     return(
         <div>
+            <div className="m-5 h-10"></div>
             <Calendar
-            localizer={localizer}
-            events={events}
-            startAccessor="start"
-            endAccessor="end"
-            style={{ height: 500 }}
-            showMultiDayTimes={true}
-            showAllEvents={true}
-            selectable
-            onSelectSlot={onSelectSlot}
+              localizer={localizer}
+              events={events}
+              startAccessor="start"
+              endAccessor="end"
+              style={{ height: 500 }}
+              showMultiDayTimes={true}
+              showAllEvents={true}
+              selectable
+              onSelectSlot={onSelectSlot}
+              className="px-8 text-slate-400"
+              dayPropGetter={calendarStyle}
+              
             />
         </div>
     )

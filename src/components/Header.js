@@ -4,7 +4,7 @@ import {faBars, faUser, faBell, faComment, faMagnifyingGlass} from "@fortawesome
 
 function Header() {
   return (
-    <div className="bg-transparent h-14 w-full mt-2 absolute flex justify-end items-center">
+    <div className="bg-transparent h-14 w-full mt-2 absolute flex justify-end items-center z-10">
       <div className="absolute top-4 left-4 md:hidden">
         <FontAwesomeIcon className="text-slate-400" icon={faBars}/>
       </div>
