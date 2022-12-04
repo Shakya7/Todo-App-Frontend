@@ -3,3 +3,47 @@
   text-align: center;
 }
 
+::-webkit-scrollbar {
+  overflow: overlay;
+}
+
+
+::-webkit-scrollbar-track {
+  background: rgb(6, 6, 141)
+}
+
+::-webkit-scrollbar-thumb {
+  background: #777575;
+  border-radius: 100vh;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c0a0b9;
+}
+
+
+/********LOADING SPINNERS*********/
+.lds-dual-ring {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 6px solid #cef;
+  border-color: white transparent #cef transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
