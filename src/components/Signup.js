@@ -6,6 +6,7 @@ import {faGithub, faLinkedin, faGoogle} from "@fortawesome/free-brands-svg-icons
 import SavingSpinner from "../loading-spinners/savingSpinner";
 import {useDispatch, useSelector} from "react-redux";
 import { signupFunction, removeError } from "../redux/features/login/loginSlice";
+import { fetchAccountData } from "../redux/features/profile/profileSlice";
 
 function Signup(){
      const navigation=useNavigate();
@@ -19,8 +20,10 @@ function Signup(){
      });
 
     useLayoutEffect(()=>{
-        if(isLogged)
+        if(isLogged){
+            dispatch(fetchAccountData());
             navigation("/");
+        }
     },[isLoading, isLogged, error])
     return(
         <div className="bg-zinc-800 flex flex-col min-h-screen justify-center">

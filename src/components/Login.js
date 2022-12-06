@@ -6,6 +6,7 @@ import {faGithub, faLinkedin, faGoogle} from "@fortawesome/free-brands-svg-icons
 import SavingSpinner from "../loading-spinners/savingSpinner";
 import {useDispatch, useSelector} from "react-redux";
 import { loginFunction, removeError } from "../redux/features/login/loginSlice";
+import { fetchAccountData } from "../redux/features/profile/profileSlice";
 
 
 function Login(){
@@ -40,6 +41,7 @@ function Login(){
    
     useEffect(()=>{
         if(isLogged){
+            dispatch(fetchAccountData());
             navigation("/");
         }
     },[isLoading, isLogged, error])

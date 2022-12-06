@@ -17,7 +17,7 @@ export const signupFunction=createAsyncThunk("/login/signupFunction",async({emai
         return rejectWithValue(err.message);
     }
 })
-// const loginFunction=createAsyncThunk("/login/loginFunction")
+
 export const loginFunction=createAsyncThunk("/login/loginFunction",async({email,password},{rejectWithValue})=>{
     try{
         const data=await account.createEmailSession(email, password);
