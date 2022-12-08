@@ -6,10 +6,14 @@ module.exports = {
   theme: {
     extend: {
       screens:{
-        "xxl":"1387px"
+        "xxl":"1387px",
+        "vsm":"560px"
       },
       fontFamily:{
         fascinate:['"Fascinate","ui-sans-serif"']
+      },
+      width:{
+        "w-auto": "75vw"
       }
     }
   },

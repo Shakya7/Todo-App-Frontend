@@ -47,7 +47,6 @@ const loginSlice=createSlice({
             state.isLogged=true;
             state.error="";
             state.isLoading=false;
-            console.log(action.payload);
         });
         builder.addCase(loginFunction.rejected, (state,action)=>{
             state.error=action.payload;

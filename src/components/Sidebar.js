@@ -1,8 +1,10 @@
 import {FontAwesomeIcon}from "@fortawesome/react-fontawesome"
 import {faHome, faCalendarDays, faListCheck, faNoteSticky, faGear, faUser} from "@fortawesome/free-solid-svg-icons";
 import logo from "../images/logo.png";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
+  const navigation=useNavigate();
   return (
     <>
       <div className="hidden md:block max-h-full basis-1/5 bg-zinc-800">
@@ -11,13 +13,13 @@ function Sidebar() {
           <span className="font-fascinate text-gray-200 md:text-xl lg:text-3xl">TraceBit</span>
         </div>
         <div className="flex flex-col">
-          <div className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+          <div onClick={()=>navigation("/")} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
             <div className="w-12">
               <FontAwesomeIcon className="text-xl" icon={faHome}/>
             </div>
-            <p className="">Dashboard</p>
+            <p>Dashboard</p>
           </div>
-          <div className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+          <div onClick={()=>navigation("/profile")} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
             <div className="w-12"><FontAwesomeIcon className="text-xl" icon={faUser}/></div>
             <p>Profile</p>
           </div>
@@ -25,7 +27,7 @@ function Sidebar() {
             <div className="w-12"><FontAwesomeIcon className="text-xl" icon={faListCheck}/></div>
             <p>Todo List</p>
           </div>
-          <div className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+          <div onClick={()=>navigation("/calendar")} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
             <div className="w-12"><FontAwesomeIcon className="text-xl" icon={faCalendarDays}/></div>
             <p>Calendar</p>
           </div>

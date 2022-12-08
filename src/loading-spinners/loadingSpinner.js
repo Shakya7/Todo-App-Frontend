@@ -8,7 +8,6 @@ function  LoadingSpinner(){
                     <div></div>
                     <div></div>
                 </div>
-                <div style={{color:"white"}}>Loading...</div>
             </div>
         </div>
     )
