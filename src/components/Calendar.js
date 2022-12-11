@@ -228,7 +228,9 @@ const MyCalendar = function(props){
 
     return(
         <div>
-            <div className="m-5 h-10"></div>
+            <div className="m-5 px-2 h-10 text-center md:text-start font-nunito text-4xl text-white">
+              Calendar
+            </div>
             <Calendar
               localizer={localizer}
               events={events}

@@ -6,6 +6,7 @@
 ::-webkit-scrollbar{
   width:11px;
   background-color: transparent;
+  overflow: overlay;
 }
 
 ::-webkit-scrollbar-thumb{

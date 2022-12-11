@@ -10,7 +10,8 @@ module.exports = {
         "vsm":"560px"
       },
       fontFamily:{
-        fascinate:['"Fascinate","ui-sans-serif"']
+        fascinate:['"Fascinate","ui-sans-serif"'],
+        nunito:['"Nunito","ui-sans-serif"']
       },
       width:{
         "w-auto": "75vw"
