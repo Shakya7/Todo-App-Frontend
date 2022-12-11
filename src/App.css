@@ -3,22 +3,13 @@
   text-align: center;
 }
 
-::-webkit-scrollbar {
-  overflow: overlay;
+::-webkit-scrollbar{
+  width:11px;
+  background-color: transparent;
 }
 
-
-::-webkit-scrollbar-track {
-  background: rgb(6, 6, 141)
-}
-
-::-webkit-scrollbar-thumb {
-  background: #777575;
-  border-radius: 100vh;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #c0a0b9;
+::-webkit-scrollbar-thumb{
+  background-color: rgba(204, 204, 209, 0.829)
 }
 
 

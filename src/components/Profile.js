@@ -38,8 +38,8 @@ function Profile() {
   },[profileDetails, name, email, mobile, isNameUpdating, isEmailUpdating, isNumberUpdating, updateEmailOverlay, updateMobileOverlay])
 
   return (
-    <div className="min-h-full overflow-y-auto">
-        <div className="min-h-full">
+    <div className="h-full">
+        <div className="h-full">
             <div className="flex pt-44 pl-10 items-center justify-center md:pt-20 md:justify-start ">
                 <div className="rounded-full w-60 h-60 mr-8 flex items-center justify-center bg-gradient-to-r from-gray-500 to-slate-500">
                     <FontAwesomeIcon className="text-5xl" icon={faUser}/>

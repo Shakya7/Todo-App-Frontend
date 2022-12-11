@@ -23,7 +23,7 @@ function Sidebar() {
             <div className="w-12"><FontAwesomeIcon className="text-xl" icon={faUser}/></div>
             <p>Profile</p>
           </div>
-          <div className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+          <div onClick={()=>navigation("/todo")} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
             <div className="w-12"><FontAwesomeIcon className="text-xl" icon={faListCheck}/></div>
             <p>Todo List</p>
           </div>
