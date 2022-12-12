@@ -8,7 +8,7 @@ function Header() {
   const isLoggedIn=useSelector((state)=>state.login.isLogged);
   const navigation=useNavigate();
   return (
-    <div className="bg-zinc-900 opacity-90 h-14 w-full mt-2 sticky top-0 left-0 flex justify-end items-center z-10">
+    <div className="bg-zinc-900 opacity-90 h-14 w-full mt-2 sticky top-0 left-0 flex justify-end items-center z-2">
       <div className="absolute top-4 left-4 md:hidden">
         <FontAwesomeIcon className="text-slate-400" icon={faBars}/>
       </div>

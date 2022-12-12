@@ -15,6 +15,13 @@ module.exports = {
       },
       width:{
         "w-auto": "75vw"
+      },
+      height:{
+        "modal":"80vh",
+        "8em":"8em"
+      },
+      minHeight:{
+        "20%":"10em"
       }
     }
   },
