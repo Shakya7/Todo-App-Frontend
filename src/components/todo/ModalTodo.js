@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
+import axios from "axios";
 
 function ModalTodo(props) {
   const [priority, setPriority]=useState("High");
@@ -47,7 +48,12 @@ function ModalTodo(props) {
           tasks.map((t,e)=><div className="bg-zinc-600 mb-2" key={e}>{t}</div>):""
         }
         </div>
-        <button className="self-end bg-green-400 cursor-pointer font-nunito py-1 rounded-md px-2">Create</button>
+        <button onClick={async()=>{
+          console.log(tasks);
+          console.log(priority);
+          const data=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/test`);
+          console.log(data.data);
+        }} className="self-end bg-green-400 cursor-pointer font-nunito py-1 rounded-md px-2">Create</button>
       </div>
     </div>
   )
