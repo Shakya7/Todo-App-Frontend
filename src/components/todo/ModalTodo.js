@@ -5,15 +5,20 @@ import axios from "axios";
 import {v4 as uuid} from "uuid";
 import {useSelector,useDispatch} from "react-redux";
 import { fetchTodos } from '../../redux/features/todos/todoSlice';
+import {SpinnerCircular} from "spinners-react";
 
 function ModalTodo(props) {
 
   const profileID=useSelector((state)=>state.profile.id);
+  const isFetchingTodos=useSelector((state)=>state.todo.isFetchingTodos);
   const dispatch=useDispatch();
 
   const [title,setTitle]=useState("");
+
   const [priority, setPriority]=useState("High");
+
   const [taskSaveMode, setTaskSaveMode]=useState(false);
+
   const [task, setTask]=useState({
     title:"",
     inProgress:true,
@@ -22,6 +27,8 @@ function ModalTodo(props) {
 
   const [tasks,setTasks]=useState([]);
 
+  const [isFetching, setIsFetching]=useState(false);
+
   const changePriority=(e)=>{
     console.log(e.target.value);
     setPriority(e.target.value);
@@ -29,7 +36,7 @@ function ModalTodo(props) {
 
   useEffect(()=>{
     console.log(tasks);
-  },[tasks,title])
+  },[tasks,title, isFetching])
   return (
     <div className='fixed top-0 left-0 w-screen h-screen backdrop-blur-sm z-5 flex justify-center items-center'>
       <div className="w-4/5 lg:w-1/2 sm:h-auto bg-slate-500 rounded-md flex flex-col justify-center items-center sm:items-start p-4 relative gap-2 m-5">
@@ -65,6 +72,7 @@ function ModalTodo(props) {
         }
         </div>
         <button onClick={async()=>{
+          setIsFetching(true);
           console.log(tasks);
           console.log(priority);
           try{
@@ -77,12 +85,15 @@ function ModalTodo(props) {
               priority
             });
             console.log(data.data);
-            dispatch(fetchTodos());
-            props.closeModal(false);
+            dispatch(fetchTodos(profileID));
+            setIsFetching(false);
+            if(!isFetchingTodos)
+              props.closeModal(false);
           }catch(err){
             console.log(err.message);
+            setIsFetching(false);
           }
-        }} className="self-end bg-green-400 cursor-pointer font-nunito py-1 rounded-md px-2">Create</button>
+        }} className="self-end bg-green-400 cursor-pointer font-nunito py-1 rounded-md px-2">{isFetching?<SpinnerCircular size={25}/>:"Create"}</button>
       </div>
     </div>
   )

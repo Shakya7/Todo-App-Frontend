@@ -1,16 +1,26 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort, faFilter, faSquarePlus } from "@fortawesome/free-solid-svg-icons";
-import {useState} from "react";
-import {useSelector} from "react-redux";
+import {useState, useEffect} from "react";
+import {useSelector, useDispatch} from "react-redux";
 import ModalTodo from "./ModalTodo";
+import TodoCard from "./TodoCard";
+import { fetchTodos } from "../../redux/features/todos/todoSlice";
 
 
 
 function TodoLayout() {
   const [selected, setSelected]=useState("all");
   const [showModal, setShowModal]=useState(false);
+  const dispatch=useDispatch();
 
   const isLoggedIn=useSelector((state)=>state.login.isLogged);
+  const profileID=useSelector((state)=>state.profile.id);
+  const todos=useSelector((state)=>state.todo.todos);
+
+  useEffect(()=>{
+    dispatch(fetchTodos(profileID));
+  },[])
+
   return (
     <div className="h-full m-4 px-4 flex flex-col">
       <div className="flex justify-between items-center mt-3">
@@ -42,10 +52,22 @@ function TodoLayout() {
           </button>
         </div>
       </div>
-      <div className={`mt-5 mb-5 h-2/5 rounded-md border-2 border-dashed border-zinc-400 ${!isLoggedIn?"flex justify-center items-center flex-col":""}`}>
-        {<>
+      <div className={`mt-5 mb-5 h-max rounded-md border-2 border-dashed border-zinc-400 flex items-start flex-wrap gap-2 p-2  ${!isLoggedIn?"justify-center items-center p-10 flex-col":""}`}>
+        {!isLoggedIn?<>
             <FontAwesomeIcon className="text-5xl text-gray-500" icon={faSquarePlus}/>
             <div className="text-gray-500">NO TODOS YET</div>
+        </>:
+        <>
+        {
+          todos.length===0?
+          <div className="flex w-full p-10 flex-col justify-center items-center self-center">
+            <FontAwesomeIcon className="text-5xl text-gray-500" icon={faSquarePlus}/>
+            <div className="text-gray-500">NO TODOS YET</div>
+          </div>:
+          todos.map((todo)=>{
+            return <TodoCard key={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks}/>
+          })
+        }
         </>
         }
       </div>

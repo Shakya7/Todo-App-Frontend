@@ -6,9 +6,10 @@ const todoState={
     todos:[],
     error:""
 }
-export const fetchTodos=createAsyncThunk("/todo/fetchTodos",async(_,{rejectWithValue})=>{
+export const fetchTodos=createAsyncThunk("/todo/fetchTodos",async(id,{rejectWithValue})=>{
+    console.log(id);
     try{
-        const data=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getAllTodos`);
+        const data=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getAllTodos/${id}`);
         return data.data;
     }catch(err){
         return rejectWithValue(err.message);
@@ -24,10 +25,12 @@ const todoSlice=createSlice({
         })
         builder.addCase(fetchTodos.fulfilled,(state,action)=>{
             state.todos=action.payload.data.todos;
+            state.error="";
             state.isFetchingTodos=false;
         })
         builder.addCase(fetchTodos.rejected, (state,action)=>{
             state.error=action.payload;
+            state.todos=[];
             state.isFetchingTodos=false;
         })
     }
