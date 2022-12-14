@@ -5,12 +5,15 @@ import {useSelector, useDispatch} from "react-redux";
 import ModalTodo from "./ModalTodo";
 import TodoCard from "./TodoCard";
 import { fetchTodos } from "../../redux/features/todos/todoSlice";
+import ModalTodoUpdate from "./ModalTodoUpdate";
 
 
 
 function TodoLayout() {
   const [selected, setSelected]=useState("all");
   const [showModal, setShowModal]=useState(false);
+
+  const [showTodo, setShowTodo]=useState(false);
   const dispatch=useDispatch();
 
   const isLoggedIn=useSelector((state)=>state.login.isLogged);
@@ -65,13 +68,15 @@ function TodoLayout() {
             <div className="text-gray-500">NO TODOS YET</div>
           </div>:
           todos.map((todo)=>{
-            return <TodoCard key={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks}/>
+            console.log(todo.title)
+            return <TodoCard key={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
           })
         }
         </>
         }
       </div>
       {showModal?<ModalTodo closeModal={setShowModal}/>:""}
+      {showTodo?<ModalTodoUpdate closeModal={setShowTodo}/>:""}
     </div>
   )
 }
