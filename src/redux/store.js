@@ -2,12 +2,24 @@ import { configureStore } from "@reduxjs/toolkit";
 import loginReducer from "./features/login/loginSlice";
 import profileReducer from "./features/profile/profileSlice";
 import todoReducer from "./features/todos/todoSlice";
+import updateTodoReducer from "./features/updateTodos/updateTodoSlice";
 
 
 export const store=configureStore({
     reducer:{
         login:loginReducer,
         profile:profileReducer,
-        todo:todoReducer
+        todo:todoReducer,
+        updateTodo:updateTodoReducer
+    },
+    middleware:(getDefaultMiddleware)=>{
+        return getDefaultMiddleware({
+            serializableCheck: {
+              // Ignore these action types
+              
+              ignoredActions: ['updateTodo/loadDataIntoRedux'],
+            },
+        })
     }
+    
 })

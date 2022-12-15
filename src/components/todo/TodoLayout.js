@@ -68,8 +68,7 @@ function TodoLayout() {
             <div className="text-gray-500">NO TODOS YET</div>
           </div>:
           todos.map((todo)=>{
-            console.log(todo.title)
-            return <TodoCard key={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
+            return <TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
           })
         }
         </>
