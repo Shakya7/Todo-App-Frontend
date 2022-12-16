@@ -22,7 +22,10 @@ function ModalTodoUpdate(props) {
     state:false,
     id:""
   });
-  const [saveloading, setSaveLoading]=useState(false);
+  const [saveloading, setSaveLoading]=useState({
+    state:false,
+    id:""
+  });
 
   //Todo state
   const [pr, setPr]= useState(priority);
@@ -32,15 +35,48 @@ function ModalTodoUpdate(props) {
   const [taskTitle, setTaskTitle]=useState("");
   const [addTask, setAddTask]=useState(false);
 
-  function updateTaskTitle(currentVal){
+
+  async function updateTaskTitle(currentVal, todoID, taskID){
+    const obj={
+      id:"",
+      title:"",
+      priority:"",
+      tasks:[]
+    };
     if(taskTitle===""){
+      setSaveLoading({
+        state:false,
+        id:""
+      })
       return;
     }
     else if(taskTitle.trim()===currentVal){
+      setSaveLoading({
+        state:false,
+        id:""
+      })
       return;
     }
     else{
       console.log("Okay now we can run updateDB operation");
+      try{
+        const todo=await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/updateTask/${todoID}`,{
+          taskID,
+          newTitle:taskTitle
+        })
+        dispatch(fetchTodos(profileID));
+        obj.id=todo.data.todo._id;
+        obj.title=todo.data.todo.title;
+        obj.priority=todo.data.todo.priority;
+        obj.tasks=todo.data.todo.tasks;
+        dispatch(loadDataIntoRedux(obj));
+        setSaveLoading({
+          state:false,
+          id:""
+        })
+      }catch(err){
+        console.log(err.message);
+      }
     }
   }
 
@@ -122,7 +158,13 @@ function ModalTodoUpdate(props) {
                       }} defaultValue={task.title}/>
                       </div>
                       <div className="flex gap-5 mt-1 xxxsm:mt-0">
-                        {!saveloading?<FontAwesomeIcon onClick={()=>updateTaskTitle(task.title)} className="text-green-400 cursor-pointer" icon={faCheck}/>:<SpinnerCircular size={13}/>}
+                        {saveloading.state && saveloading.id===task._id?<SpinnerCircular size={13}/>:<FontAwesomeIcon onClick={()=>{
+                          setSaveLoading({
+                            state:true,
+                            id:task._id
+                          })
+                          updateTaskTitle(task.title, todoID,task.id);
+                          }} className="text-green-400 cursor-pointer" icon={faCheck}/>}
                         {deleteloading.state && deleteloading.id===task._id?<SpinnerCircular size={13}/>:<FontAwesomeIcon onClick={()=>{
                           setDeleteLoading({
                             state:true,
