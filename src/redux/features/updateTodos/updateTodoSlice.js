@@ -18,7 +18,7 @@ const updateTodoSlice=createSlice({
             state.tasks=action.payload.tasks;
             state.id=action.payload.id;
         }
-    }
+    },
 });
 
 export const {loadDataIntoRedux}=updateTodoSlice.actions;

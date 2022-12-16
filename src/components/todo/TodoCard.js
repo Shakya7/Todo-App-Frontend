@@ -1,11 +1,7 @@
-import { useSelector, useDispatch } from "react-redux";
-import ModalTodoUpdate from "./ModalTodoUpdate";
-import {useState} from "react";
-import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { loadDataIntoRedux } from "../../redux/features/updateTodos/updateTodoSlice";
 
 function TodoCard(props) {
-    const profileID=useSelector((state)=>state.profile.id);
 
     const dispatch=useDispatch();
 
@@ -14,7 +10,7 @@ function TodoCard(props) {
             //console.log(props);
             dispatch(loadDataIntoRedux(props));
             return props.updateTodo(true);
-            }} className="flex flex-col bg-zinc-600 p-5 items-start gap-2 w-48 h-auto rounded-md">
+            }} className="flex flex-col bg-zinc-600 p-5 items-start gap-2 w-48 h-auto rounded-md cursor-pointer">
             <div className={`rounded-xl text-sm px-2 py-1 ${props.priority==="High"?"bg-red-400 text-red-900":"bg-green-400 text-green-900"}`}>{props.priority}</div>
             <div className="text-left text-white">{props.title}</div>
             <div className="w-full flex flex-col items-start ">

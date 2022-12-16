@@ -1,12 +1,28 @@
-import { useState, useLayoutEffect } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { faCheck, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import { fetchTodos } from "../../redux/features/todos/todoSlice";
+import { loadDataIntoRedux } from "../../redux/features/updateTodos/updateTodoSlice";
+import {SpinnerCircular} from "spinners-react";
 
 function ModalTodoUpdate(props) {
+
+  const dispatch=useDispatch();
+
   const title=useSelector((state)=>state.updateTodo.title);
+  const todoID=useSelector((state)=>state.updateTodo.id);
   const priority=useSelector((state)=>state.updateTodo.priority);
   const tasks=useSelector((state)=>state.updateTodo.tasks);
+  const profileID=useSelector((state)=>state.profile.id);
+
+  //loading state
+  const [deleteloading, setDeleteLoading]=useState({
+    state:false,
+    id:""
+  });
+  const [saveloading, setSaveLoading]=useState(false);
 
   //Todo state
   const [pr, setPr]= useState(priority);
@@ -27,6 +43,39 @@ function ModalTodoUpdate(props) {
       console.log("Okay now we can run updateDB operation");
     }
   }
+
+  async function deleteTask(todoID, taskID){
+    const obj={
+      id:"",
+      title:"",
+      priority:"",
+      tasks:[]
+    };
+    try{
+      const todo=await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/deleteTask/${todoID}`,{
+        taskID
+      });
+      console.log(todo.data.todo);
+      dispatch(fetchTodos(profileID));
+      obj.id=todo.data.todo._id;
+      obj.title=todo.data.todo.title;
+      obj.priority=todo.data.todo.priority;
+      obj.tasks=todo.data.todo.tasks;
+      dispatch(loadDataIntoRedux(obj))
+      setDeleteLoading({
+        state:false,
+        id:""
+      });
+      
+    }catch(err){
+      console.log(err.message);
+    }
+    
+  }
+
+  useEffect(()=>{
+
+  },[tasks])
 
  
 
@@ -50,7 +99,7 @@ function ModalTodoUpdate(props) {
             </div>
             <div className="w-full bg-zinc-900 h-px"></div>
             <div className="flex flex-col items-start">
-              <div className=" w-full flex justify-between mb-3 flex-col xxxsm:flex-row">
+              <div className=" w-full flex justify-between mb-3 flex-col xxxsm:flex-row xxxsm:gap-5">
                 <p className="text-xl text-gray-900">Tasks</p>
                 <button onClick={()=>setAddTask(true)} className="bg-blue-800 px-2 py-0 text-white rounded-md">+Add task</button>
               </div>
@@ -73,8 +122,14 @@ function ModalTodoUpdate(props) {
                       }} defaultValue={task.title}/>
                       </div>
                       <div className="flex gap-5 mt-1 xxxsm:mt-0">
-                        <FontAwesomeIcon onClick={()=>updateTaskTitle(task.title)} className="text-green-400 cursor-pointer" icon={faCheck}/>
-                        <FontAwesomeIcon className="text-red-400 cursor-pointer" icon={faTrash}/>
+                        {!saveloading?<FontAwesomeIcon onClick={()=>updateTaskTitle(task.title)} className="text-green-400 cursor-pointer" icon={faCheck}/>:<SpinnerCircular size={13}/>}
+                        {deleteloading.state && deleteloading.id===task._id?<SpinnerCircular size={13}/>:<FontAwesomeIcon onClick={()=>{
+                          setDeleteLoading({
+                            state:true,
+                            id:task._id
+                          });
+                          deleteTask(todoID,task._id);
+                        }} className="text-red-400 cursor-pointer" icon={faTrash}/>}
                       </div>
                     </div>
                   

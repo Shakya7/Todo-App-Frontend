@@ -56,10 +56,19 @@ function ModalTodo(props) {
           {!taskSaveMode?
           <button onClick={(e)=>setTaskSaveMode(true)} className="bg-blue-800 mt-4 px-2 py-1 text-white rounded-md">+ Add Tasks</button>:
           <button onClick={async(e)=>{
-              setTaskSaveMode(false);
-              //setTask({...task,id:uuid()})
-              console.log(task);
-              setTasks([...tasks,task]);
+              if(task.title.trim()===""){
+                return
+              }
+              else{
+                setTaskSaveMode(false);
+                console.log(task);
+                setTasks([...tasks,task]);
+                setTask({
+                  title:"",
+                  inProgress:true,
+                  id:""
+                })
+              }
           }} className="bg-green-800 mt-4 px-3 py-1 text-white rounded-md">✓ Save Task</button>}
           {taskSaveMode?<div className="relative"><input className="rounded-sm py-1 px-3 w-full sm:w-auto" onChange={(e)=>{
             setTask({...task,title:e.target.value, id:uuid()})
