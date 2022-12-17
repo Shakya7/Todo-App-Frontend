@@ -21,10 +21,13 @@ const updateTodoSlice=createSlice({
         updateTitleAndPriority:(state,action)=>{
             state.title=action.payload.title;
             state.priority=action.payload.priority;
+        },
+        addTasks:(state,action)=>{
+            state.tasks=action.payload.tasks;
         }
 
     },
 });
 
-export const {loadDataIntoRedux, updateTitleAndPriority}=updateTodoSlice.actions;
+export const {loadDataIntoRedux, updateTitleAndPriority, addTasks}=updateTodoSlice.actions;
 export default updateTodoSlice.reducer;

@@ -4,8 +4,9 @@ import { faCheck, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { fetchTodos } from "../../redux/features/todos/todoSlice";
-import { loadDataIntoRedux, updateTitleAndPriority } from "../../redux/features/updateTodos/updateTodoSlice";
+import { loadDataIntoRedux, updateTitleAndPriority, addTasks } from "../../redux/features/updateTodos/updateTodoSlice";
 import {SpinnerCircular} from "spinners-react";
+import {v4 as uuid} from "uuid";
 
 function ModalTodoUpdate(props) {
 
@@ -28,6 +29,7 @@ function ModalTodoUpdate(props) {
   });
 
   const [updateLoading, setUpdateLoading]=useState(false);
+  const [isCreatingNewTask, setIsCreatingNewTask]=useState(false);
 
   //Todo state
   const [pr, setPr]= useState(priority);
@@ -36,6 +38,7 @@ function ModalTodoUpdate(props) {
   //Task state
   const [taskTitle, setTaskTitle]=useState("");
   const [addTask, setAddTask]=useState(false);
+  const [newTaskTitle,setNewTaskTitle]=useState("");
 
 
   async function updateTodo(currTitleTodo, currPriority, todoID){
@@ -138,12 +141,27 @@ function ModalTodoUpdate(props) {
     
   }
 
+  async function createTask(todoID){
+    try{
+      const todo=await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/createTask/${todoID}`,{
+        title:newTaskTitle,
+        inProgress:true,
+        id:uuid()
+      })
+      //console.log(todo.data.todo)
+      dispatch(fetchTodos(profileID));
+      dispatch(addTasks(todo.data.todo));
+    }catch(err){
+      console.log(err.message);
+    }finally{
+      setIsCreatingNewTask(false);
+      setAddTask(false);
+    }
+  }
 
   useEffect(()=>{
 
   },[tasks, title, priority])
-
- 
 
 
   return (
@@ -170,9 +188,14 @@ function ModalTodoUpdate(props) {
                 <button onClick={()=>setAddTask(true)} className="bg-blue-800 px-2 py-0 text-white rounded-md">+Add task</button>
               </div>
               {addTask?<div className="flex justify-center items-baseline gap-3">
-                <input className="w-full mb-4" type={"text"}/>
+                <input className="w-full mb-4" onChange={(e)=>{
+                  setNewTaskTitle(e.target.value);
+                }} type={"text"}/>
                 <div className="flex gap-3">
-                  <FontAwesomeIcon className="text-green-400 cursor-pointer" icon={faCheck}/>
+                  {isCreatingNewTask?<SpinnerCircular size={13}/>:<FontAwesomeIcon onClick={()=>{
+                    setIsCreatingNewTask(true);
+                    createTask(todoID)
+                    }} className="text-green-400 cursor-pointer" icon={faCheck}/>}
                   <FontAwesomeIcon onClick={()=>setAddTask(false)} className="text-red-400 cursor-pointer" icon={faXmark}/>
                 </div>
               </div>:""}
