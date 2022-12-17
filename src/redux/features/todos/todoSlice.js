@@ -7,7 +7,6 @@ const todoState={
     error:""
 }
 export const fetchTodos=createAsyncThunk("/todo/fetchTodos",async(id,{rejectWithValue})=>{
-    console.log(id);
     try{
         const data=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getAllTodos/${id}`);
         return data.data;
