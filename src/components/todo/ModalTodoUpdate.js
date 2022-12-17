@@ -159,8 +159,31 @@ function ModalTodoUpdate(props) {
     }
   }
 
-  useEffect(()=>{
+  async function updateTaskCheckbox(todoID, uuid){
+    const obj={
+      id:"",
+      title:"",
+      priority:"",
+      tasks:[]
+    };
+    try{
+      const todo=await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/updateTaskCheckbox/${todoID}`,{
+        taskID:uuid
+      })
+      obj.id=todo.data.todo._id;
+      obj.title=todo.data.todo.title;
+      obj.priority=todo.data.todo.priority;
+      obj.tasks=todo.data.todo.tasks;
+      //console.log(todo.data.todo);
+      dispatch(fetchTodos(profileID));
+      dispatch(loadDataIntoRedux(obj));
+    }catch(err){
+      console.log(err.message);
+    }
+  }
 
+  useEffect(()=>{
+   
   },[tasks, title, priority])
 
 
@@ -205,7 +228,7 @@ function ModalTodoUpdate(props) {
                   return <div key={task._id} className="flex justify-center items-center gap-2">
                     <div className="flex justify-center items-center flex-col xxxsm:flex-row">
                       <div className="flex jutify-center items-center gap-2">
-                        <input type={"checkbox"}/>
+                        <input onChange={()=>updateTaskCheckbox(todoID,task.id)} checked={task.inProgress?false:true} type={"checkbox"}/>
                         <input className="bg-transparent text-slate-300 outline-none w-full mr-2" type={"text"} onChange={(e)=>{
                         setTaskTitle(e.target.value);
                       }} defaultValue={task.title}/>
