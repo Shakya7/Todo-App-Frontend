@@ -5,7 +5,7 @@ const selectedTodoState={
     title: "",
     priority:"",
     tasks:[],
-    id:""
+    id:"",
 }
 
 const updateTodoSlice=createSlice({
