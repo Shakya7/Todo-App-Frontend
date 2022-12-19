@@ -176,6 +176,7 @@ function ModalTodoUpdate(props) {
       obj.tasks=todo.data.todo.tasks;
       //console.log(todo.data.todo);
       dispatch(fetchTodos(profileID));
+      //dispatch()
       dispatch(loadDataIntoRedux(obj));
     }catch(err){
       console.log(err.message);

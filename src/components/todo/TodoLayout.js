@@ -6,6 +6,7 @@ import ModalTodo from "./ModalTodo";
 import TodoCard from "./TodoCard";
 import { fetchTodos } from "../../redux/features/todos/todoSlice";
 import ModalTodoUpdate from "./ModalTodoUpdate";
+import { loadInProgressTodos, loadCompletedTodos } from "../../redux/features/todos/todoSlice";
 
 
 
@@ -19,10 +20,17 @@ function TodoLayout() {
   const isLoggedIn=useSelector((state)=>state.login.isLogged);
   const profileID=useSelector((state)=>state.profile.id);
   const todos=useSelector((state)=>state.todo.todos);
+  const filterTodos=useSelector((state)=>state.todo.filteredTodos);
+
+  const [filter,setFiler]=useState("all");
 
   useEffect(()=>{
     dispatch(fetchTodos(profileID));
-  },[])
+  },[]);
+
+  useEffect(()=>{
+    
+  },[filter]);
 
   return (
     <div className="h-full m-4 px-4 flex flex-col">
@@ -35,13 +43,18 @@ function TodoLayout() {
       <div className="flex justify-between items-center mt-3">
         <div className="flex justify-along items-center">
           <span onClick={()=>{
+            setFiler("all");
             setSelected("all")
           }} className={`w-28 py-1 text-white hover:bg-orange-400 rounded-sm cursor-pointer ${selected==="all"?"bg-orange-400":""}`}>All</span>
           <span onClick={()=>{
-            setSelected("progress")
+            setFiler("inprogress");
+            setSelected("progress");
+            dispatch(loadInProgressTodos());
           }} className={`w-28 py-1 text-white hover:bg-purple-600 rounded-sm cursor-pointer ${selected==="progress"?"bg-purple-600":""}`}>In Progress</span>
           <span onClick={()=>{
-            setSelected("completed")
+            setFiler("completed");
+            setSelected("completed");
+            dispatch(loadCompletedTodos());
           }} className={`w-28 py-1 text-white hover:bg-sky-700 rounded-sm cursor-pointer ${selected==="completed"?"bg-sky-700":""}`}>Completed</span>
         </div>
         <div className="flex gap-2 text-white">
@@ -67,9 +80,10 @@ function TodoLayout() {
             <FontAwesomeIcon className="text-5xl text-gray-500" icon={faSquarePlus}/>
             <div className="text-gray-500">NO TODOS YET</div>
           </div>:
+          filter==="all"?
           todos.map((todo)=>{
             return <TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
-          })
+          }):(filter==="inprogress"||"completed"?filterTodos.map((todo)=><TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>):"")
         }
         </>
         }
