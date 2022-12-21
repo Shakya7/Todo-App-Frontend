@@ -159,6 +159,17 @@ function ModalTodoUpdate(props) {
       //console.log(todo.data.todo)
       dispatch(fetchTodos(profileID));
       dispatch(addTasks(todo.data.todo));
+      if(filter==="inProgress"){
+        const filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getInProgressTodos/${profileID}`);
+        //console.log(filterTodos.data.filteredTodos);
+        dispatch(setInProgress());
+        dispatch(loadInProgressTodos(filterTodos.data.filteredTodos));
+      }
+      else if(filter==="completed"){
+        const filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getCompletedTodos/${profileID}`);
+        dispatch(setCompleted());
+        dispatch(loadCompletedTodos(filterTodos.data.filteredTodos));
+      }
     }catch(err){
       console.log(err.message);
     }finally{
