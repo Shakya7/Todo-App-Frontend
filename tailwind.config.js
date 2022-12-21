@@ -7,8 +7,11 @@ module.exports = {
     extend: {
       screens:{
         "xxl":"1387px",
+        "msm":"650px",
         "vsm":"560px",
-        "xxxsm":"250px"
+        "xxsm":"350px",
+        "xxxsm":"250px",
+        
       },
       fontFamily:{
         fascinate:['"Fascinate","ui-sans-serif"'],
@@ -23,6 +26,10 @@ module.exports = {
       },
       minHeight:{
         "3/5":"40%"
+      },
+      fontSize:{
+        filter:"2.5vw",
+        title:"14vw"
       }
     }
   },

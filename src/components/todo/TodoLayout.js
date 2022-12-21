@@ -40,19 +40,19 @@ function TodoLayout() {
   // },[filter, filterTodos, todos]);
 
   return (
-    <div className="h-full m-4 px-4 flex flex-col">
+    <div className="h-full xxsm:m-4 px-4 flex flex-col">
       <div className="flex justify-between items-center mt-3">
-        <h2 className="self-start font-nunito text-4xl text-white ">Todo</h2>
+        <h2 className="self-start font-nunito text-white text-title xxxsm:text-4xl">Todo</h2>
         <button onClick={()=>{
           setShowModal((prev)=>!prev);
-        }} className="bg-blue-800 px-3 py-2 text-white rounded-md">+ Add Todo</button>
+        }} className="bg-blue-800 p-1.5 msm:px-3 msm:py-2 text-white text-filter msm:text-base rounded-md">+ Add Todo</button>
       </div>
-      <div className="flex justify-between items-center mt-3">
-        <div className="flex justify-along items-center">
+      <div className="flex justify-between gap-1 xxsm:gap-0 items-start xxsm:items-center mt-3 flex-col xxsm:flex-row">
+        <div className="w-auto flex justify-along items-center">
           <span onClick={()=>{
             dispatch(setAll());
             setSelected("all")
-          }} className={`w-28 py-1 text-white hover:bg-orange-400 rounded-sm cursor-pointer ${selected==="all"?"bg-orange-400":""}`}>All</span>
+          }} className={`text-filter px-4 msm:text-base msm:px-0 msm:w-28 py-1 text-white hover:bg-orange-400 rounded-sm cursor-pointer ${selected==="all"?"bg-orange-400":""}`}>All</span>
           <span onClick={async()=>{
             dispatch(setInProgress());
             setSelected("progress");
@@ -64,7 +64,7 @@ function TodoLayout() {
               console.log(err.message);
             }
             
-          }} className={`w-28 py-1 text-white hover:bg-purple-600 rounded-sm cursor-pointer ${selected==="progress"?"bg-purple-600":""}`}>In Progress</span>
+          }} className={`text-filter msm:text-base msm:w-28 px-1.5 msm:px-0 py-1 text-white hover:bg-purple-600 rounded-sm cursor-pointer ${selected==="progress"?"bg-purple-600":""}`}>In Progress</span>
           <span onClick={async()=>{
             dispatch(setCompleted());
             setSelected("completed");
@@ -75,14 +75,14 @@ function TodoLayout() {
             }catch(err){
               console.log(err.message);
             }
-          }} className={`w-28 py-1 text-white hover:bg-sky-700 rounded-sm cursor-pointer ${selected==="completed"?"bg-sky-700":""}`}>Completed</span>
+          }} className={`text-filter msm:text-base msm:w-28 px-1.5 msm:px-0 py-1 text-white hover:bg-sky-700 rounded-sm cursor-pointer ${selected==="completed"?"bg-sky-700":""}`}>Completed</span>
         </div>
-        <div className="flex gap-2 text-white">
-          <button className="w-20 bg-zinc-600 px-2 py-1 rounded-md flex gap-1 justify-center items-center">
-            <FontAwesomeIcon className="text-xl" icon={faSort}/>
+        <div className="flex gap-0.5 msm:gap-2 text-white">
+          <button className="text-filter msm:text-base msm:w-20 bg-zinc-600 px-2 py-1 rounded-md flex gap-1 justify-center items-center">
+            <FontAwesomeIcon className="text-filter msm:text-xl" icon={faSort}/>
             Sort
           </button>
-          <button className="w-20 bg-zinc-600 px-2 py-1 rounded-md flex gap-1 justify-center items-center">
+          <button className="text-filter msm:text-base msm:w-20 bg-zinc-600 px-2 py-1 rounded-md flex gap-1 justify-center items-center">
             <FontAwesomeIcon icon={faFilter}/>
             Filter
           </button>
