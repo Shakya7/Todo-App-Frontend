@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios";
 
 const todoState={
@@ -30,7 +30,6 @@ function inProgressTodos(todos){
         else
             updatedTodos.push(todos[i]);
     }
-    console.log(updatedTodos);
     return updatedTodos;
 }
 
@@ -55,7 +54,6 @@ function completedTodos(todos){
         }
 
     }
-    console.log(updatedTodos);
     return updatedTodos;
 }
 
@@ -65,11 +63,12 @@ const todoSlice=createSlice({
     initialState:todoState,
     reducers:{
         loadInProgressTodos:(state,action)=>{
-            state.filteredTodos=inProgressTodos(current(state.todos));
+            //console.log(action.payload);
+            state.filteredTodos=inProgressTodos(action.payload);
 
         },
-        loadCompletedTodos:(state)=>{
-            state.filteredTodos=completedTodos(current(state.todos));
+        loadCompletedTodos:(state, action)=>{
+            state.filteredTodos=completedTodos(action.payload);
         },
     },
     extraReducers: (builder)=>{

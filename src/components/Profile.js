@@ -34,7 +34,7 @@ function Profile() {
 
   const dispatch=useDispatch();
   useEffect(()=>{
-    console.log(profileDetails.mobile);
+    
   },[profileDetails, name, email, mobile, isNameUpdating, isEmailUpdating, isNumberUpdating, updateEmailOverlay, updateMobileOverlay])
 
   return (

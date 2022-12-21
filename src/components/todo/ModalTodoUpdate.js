@@ -7,6 +7,8 @@ import { fetchTodos } from "../../redux/features/todos/todoSlice";
 import { loadDataIntoRedux, updateTitleAndPriority, addTasks } from "../../redux/features/updateTodos/updateTodoSlice";
 import {SpinnerCircular} from "spinners-react";
 import {v4 as uuid} from "uuid";
+import { setAll, setInProgress, setCompleted } from "../../redux/features/filter/filterTodos";
+import { loadInProgressTodos, loadCompletedTodos } from "../../redux/features/todos/todoSlice";
 
 function ModalTodoUpdate(props) {
 
@@ -17,6 +19,9 @@ function ModalTodoUpdate(props) {
   const priority=useSelector((state)=>state.updateTodo.priority);
   const tasks=useSelector((state)=>state.updateTodo.tasks);
   const profileID=useSelector((state)=>state.profile.id);
+  const todos=useSelector((state)=>state.todo.todos);
+
+  const filter=useSelector((state)=>state.filterTodo.filter);
 
   //loading state
   const [deleteloading, setDeleteLoading]=useState({
@@ -57,6 +62,9 @@ function ModalTodoUpdate(props) {
           priority:pr,
           updatedDate:new Date(Date.now())
         });
+        const filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getInProgressTodos/${profileID}`);
+        console.log(filterTodos.data.filteredTodos);
+
         dispatch(fetchTodos(profileID));
         obj.title=todo.data.todo.title;
         obj.priority=todo.data.todo.priority;
@@ -170,14 +178,24 @@ function ModalTodoUpdate(props) {
       const todo=await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/updateTaskCheckbox/${todoID}`,{
         taskID:uuid
       })
+
       obj.id=todo.data.todo._id;
       obj.title=todo.data.todo.title;
       obj.priority=todo.data.todo.priority;
       obj.tasks=todo.data.todo.tasks;
-      //console.log(todo.data.todo);
       dispatch(fetchTodos(profileID));
-      //dispatch()
       dispatch(loadDataIntoRedux(obj));
+      if(filter==="inProgress"){
+        const filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getInProgressTodos/${profileID}`);
+        //console.log(filterTodos.data.filteredTodos);
+        dispatch(setInProgress());
+        dispatch(loadInProgressTodos(filterTodos.data.filteredTodos));
+      }
+      else if(filter==="completed"){
+        const filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getCompletedTodos/${profileID}`);
+        dispatch(setCompleted());
+        dispatch(loadCompletedTodos(filterTodos.data.filteredTodos));
+      }
     }catch(err){
       console.log(err.message);
     }
@@ -185,7 +203,7 @@ function ModalTodoUpdate(props) {
 
   useEffect(()=>{
    
-  },[tasks, title, priority])
+  },[tasks, title, priority, todos])
 
 
   return (

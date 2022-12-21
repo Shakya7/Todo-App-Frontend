@@ -1,12 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSort, faFilter, faSquarePlus } from "@fortawesome/free-solid-svg-icons";
-import {useState, useEffect} from "react";
+import { faSort, faFilter, faSquarePlus, faExclamationTriangle, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import {useState, useEffect, useLayoutEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import ModalTodo from "./ModalTodo";
 import TodoCard from "./TodoCard";
 import { fetchTodos } from "../../redux/features/todos/todoSlice";
 import ModalTodoUpdate from "./ModalTodoUpdate";
 import { loadInProgressTodos, loadCompletedTodos } from "../../redux/features/todos/todoSlice";
+import { setAll, setInProgress, setCompleted } from "../../redux/features/filter/filterTodos";
+import axios from "axios";
 
 
 
@@ -22,15 +24,20 @@ function TodoLayout() {
   const todos=useSelector((state)=>state.todo.todos);
   const filterTodos=useSelector((state)=>state.todo.filteredTodos);
 
-  const [filter,setFiler]=useState("all");
+  const filter=useSelector((state)=>state.filterTodo.filter);
+
 
   useEffect(()=>{
     dispatch(fetchTodos(profileID));
   },[]);
 
-  useEffect(()=>{
+  useLayoutEffect(()=>{
+
+  },[filterTodos])
+
+  // useEffect(()=>{
     
-  },[filter]);
+  // },[filter, filterTodos, todos]);
 
   return (
     <div className="h-full m-4 px-4 flex flex-col">
@@ -43,18 +50,31 @@ function TodoLayout() {
       <div className="flex justify-between items-center mt-3">
         <div className="flex justify-along items-center">
           <span onClick={()=>{
-            setFiler("all");
+            dispatch(setAll());
             setSelected("all")
           }} className={`w-28 py-1 text-white hover:bg-orange-400 rounded-sm cursor-pointer ${selected==="all"?"bg-orange-400":""}`}>All</span>
-          <span onClick={()=>{
-            setFiler("inprogress");
+          <span onClick={async()=>{
+            dispatch(setInProgress());
             setSelected("progress");
-            dispatch(loadInProgressTodos());
+            try{
+              const filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getInProgressTodos/${profileID}`)
+              //console.log(filterTodos.data.filteredTodos);
+              dispatch(loadInProgressTodos(filterTodos.data.filteredTodos));
+            }catch(err){
+              console.log(err.message);
+            }
+            
           }} className={`w-28 py-1 text-white hover:bg-purple-600 rounded-sm cursor-pointer ${selected==="progress"?"bg-purple-600":""}`}>In Progress</span>
-          <span onClick={()=>{
-            setFiler("completed");
+          <span onClick={async()=>{
+            dispatch(setCompleted());
             setSelected("completed");
-            dispatch(loadCompletedTodos());
+            try{
+              const filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getCompletedTodos/${profileID}`)
+              //console.log(filterTodos.data.filteredTodos);
+              dispatch(loadCompletedTodos(filterTodos.data.filteredTodos));
+            }catch(err){
+              console.log(err.message);
+            }
           }} className={`w-28 py-1 text-white hover:bg-sky-700 rounded-sm cursor-pointer ${selected==="completed"?"bg-sky-700":""}`}>Completed</span>
         </div>
         <div className="flex gap-2 text-white">
@@ -69,7 +89,8 @@ function TodoLayout() {
         </div>
       </div>
       <div className={`mt-5 mb-5 h-max rounded-md border-2 border-dashed border-zinc-400 flex items-start flex-wrap gap-2 p-2  ${!isLoggedIn?"justify-center items-center p-10 flex-col":""}`}>
-        {!isLoggedIn?<>
+      {!isLoggedIn?
+        <>
             <FontAwesomeIcon className="text-5xl text-gray-500" icon={faSquarePlus}/>
             <div className="text-gray-500">NO TODOS YET</div>
         </>:
@@ -83,10 +104,25 @@ function TodoLayout() {
           filter==="all"?
           todos.map((todo)=>{
             return <TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
-          }):(filter==="inprogress"||"completed"?filterTodos.map((todo)=><TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>):"")
+          }):
+          filter==="inProgress"?(
+          filterTodos.length===0?
+          <div className="flex w-full p-10 flex-col justify-center items-center self-center">
+            <FontAwesomeIcon className="text-5xl text-gray-500" icon={faExclamationCircle}/>
+            <div className="text-gray-500">No Todos here</div>
+          </div>:
+          filterTodos.map((todo)=><TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>)):
+          filter==="completed"?(
+          filterTodos.length===0?
+          <div className="flex w-full p-10 flex-col justify-center items-center self-center">
+            <FontAwesomeIcon className="text-5xl text-gray-500" icon={faExclamationCircle}/>
+            <div className="text-gray-500">No Todos here</div>
+          </div>:
+          filterTodos.map((todo)=><TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>)):
+          ""
         }
         </>
-        }
+      }
       </div>
       {showModal?<ModalTodo closeModal={setShowModal}/>:""}
       {showTodo?<ModalTodoUpdate closeModal={setShowTodo}/>:""}

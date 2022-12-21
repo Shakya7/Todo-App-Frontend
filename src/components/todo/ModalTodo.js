@@ -35,7 +35,7 @@ function ModalTodo(props) {
   }
 
   useEffect(()=>{
-    console.log(tasks);
+    
   },[tasks,title, isFetching])
   return (
     <div className='fixed top-0 left-0 w-screen h-screen backdrop-blur-sm z-5 flex justify-center items-center'>
