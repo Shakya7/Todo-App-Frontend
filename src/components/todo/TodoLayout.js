@@ -45,6 +45,7 @@ function TodoLayout() {
 
 
   useEffect(()=>{
+    dispatch(setAll());
     dispatch(fetchTodos(profileID));
   },[]);
 

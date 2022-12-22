@@ -62,8 +62,6 @@ function ModalTodoUpdate(props) {
           priority:pr,
           updatedDate:new Date(Date.now())
         });
-        const filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getInProgressTodos/${profileID}`);
-        console.log(filterTodos.data.filteredTodos);
 
         dispatch(fetchTodos(profileID));
         obj.title=todo.data.todo.title;
@@ -261,7 +259,7 @@ function ModalTodoUpdate(props) {
                         <input onChange={()=>updateTaskCheckbox(todoID,task.id)} checked={task.inProgress?false:true} type={"checkbox"}/>
                         <input className="bg-transparent text-slate-300 outline-none w-full mr-2" type={"text"} onChange={(e)=>{
                         setTaskTitle(e.target.value);
-                      }} defaultValue={task.title}/>
+                        }} defaultValue={task.title}/>
                       </div>
                       <div className="flex gap-5 mt-1 xxxsm:mt-0">
                         {saveloading.state && saveloading.id===task._id?<SpinnerCircular size={13}/>:<FontAwesomeIcon onClick={()=>{

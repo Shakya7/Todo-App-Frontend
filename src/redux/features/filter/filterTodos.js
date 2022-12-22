@@ -17,6 +17,12 @@ const filterTodoSlice=createSlice({
         },
         setAll:(state)=>{
             state.filter="all"
+        },
+        setLowPriority:(state)=>{
+            state.filter="lowPr"
+        },
+        setHighPriority:(state)=>{
+            state.filter="highPr"
         }
     }
 })
