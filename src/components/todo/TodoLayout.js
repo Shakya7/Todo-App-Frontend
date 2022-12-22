@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort, faFilter, faSquarePlus, faExclamationTriangle, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import {useState, useEffect, useLayoutEffect} from "react";
+import {useState, useEffect, useLayoutEffect, useRef} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import ModalTodo from "./ModalTodo";
 import TodoCard from "./TodoCard";
@@ -11,12 +11,18 @@ import { setAll, setInProgress, setCompleted } from "../../redux/features/filter
 import axios from "axios";
 
 
-
 function TodoLayout() {
+  const sortRef=useRef(null);
+  const filterRef=useRef(null);
+
   const [selected, setSelected]=useState("all");
   const [showModal, setShowModal]=useState(false);
 
   const [showTodo, setShowTodo]=useState(false);
+
+  const [dropdwnSort, setDropdwnSort]=useState(false);
+  const [dropdwnFilter, setDropdwnFilter]=useState(false);
+
   const dispatch=useDispatch();
 
   const isLoggedIn=useSelector((state)=>state.login.isLogged);
@@ -25,6 +31,17 @@ function TodoLayout() {
   const filterTodos=useSelector((state)=>state.todo.filteredTodos);
 
   const filter=useSelector((state)=>state.filterTodo.filter);
+
+  const closeSortMenus = (e)=>{
+    if(sortRef.current && dropdwnSort && !sortRef.current.contains(e.target)){
+      setDropdwnSort(false)
+    }
+  }
+  const closeFilterMenus=(e)=>{
+    if(filterRef.current && dropdwnFilter && !filterRef.current.contains(e.target)){
+      setDropdwnFilter(false)
+    }
+  }
 
 
   useEffect(()=>{
@@ -38,6 +55,8 @@ function TodoLayout() {
   // useEffect(()=>{
     
   // },[filter, filterTodos, todos]);
+  document.addEventListener('mousedown',closeSortMenus);
+  document.addEventListener('mousedown',closeFilterMenus);
 
   return (
     <div className="h-full xxsm:m-4 px-4 flex flex-col">
@@ -77,18 +96,43 @@ function TodoLayout() {
             }
           }} className={`text-filter msm:text-base msm:w-28 px-1.5 msm:px-0 py-1 text-white hover:bg-sky-700 rounded-sm cursor-pointer ${selected==="completed"?"bg-sky-700":""}`}>Completed</span>
         </div>
-        <div className="flex gap-0.5 msm:gap-2 text-white">
-          <button className="text-filter msm:text-base msm:w-20 bg-zinc-600 px-2 py-1 rounded-md flex gap-1 justify-center items-center">
+        <div className="flex gap-0.5 msm:gap-2 text-white relative">
+          <button onClick={()=>{
+            setDropdwnFilter(false);
+            if(dropdwnSort===false)
+              setDropdwnSort(true);
+            else
+              setDropdwnSort(false);
+            }} ref={sortRef} className="text-filter msm:text-base msm:w-20 bg-zinc-600 px-2 py-1 rounded-md flex gap-1 justify-center items-center">
             <FontAwesomeIcon className="text-filter msm:text-xl" icon={faSort}/>
             Sort
           </button>
-          <button className="text-filter msm:text-base msm:w-20 bg-zinc-600 px-2 py-1 rounded-md flex gap-1 justify-center items-center">
+          <button onClick={()=>{
+            setDropdwnSort(false);
+            if(dropdwnFilter===false)
+              setDropdwnFilter(true);
+            else
+              setDropdwnFilter(false);
+            }} ref={filterRef} className="text-filter msm:text-base msm:w-20 bg-zinc-600 px-2 py-1 rounded-md flex gap-1 justify-center items-center">
             <FontAwesomeIcon icon={faFilter}/>
             Filter
           </button>
+          {dropdwnSort && <div className="bg-zinc-700 absolute top-8 left-0 xsm:top-10 flex flex-col justify-center text-left rounded-sm">
+             <p className="px-3 py-2 cursor-pointer hover:bg-zinc-800">By Date</p>
+             <p className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Low to High</p>
+             <p className="px-3 py-2 cursor-pointer hover:bg-zinc-800">High to Low</p>
+          </div>}
+          {dropdwnFilter && <div className="bg-zinc-700 absolute top-8 right-0 xsm:top-10 flex flex-col justify-center text-right rounded-sm">
+             <p className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Low priority</p>
+             <p className="px-3 py-2 cursor-pointer hover:bg-zinc-800">High priority</p>
+             <p className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Ageing Todos</p>
+          </div>}
         </div>
       </div>
-      <div className={`mt-5 mb-5 h-max rounded-md border-2 border-dashed border-zinc-400 flex items-start flex-wrap gap-2 p-2  ${!isLoggedIn?"justify-center items-center p-10 flex-col":""}`}>
+      <div className="p-5 mt-3 border h-auto border-dashed">
+
+      </div>
+      <div className={`mt-5 mb-5 h-max rounded-md border-2 border-dashed  border-zinc-400 flex items-start flex-wrap gap-2 p-2  ${!isLoggedIn?"justify-center items-center p-10 flex-col":""}`}>
       {!isLoggedIn?
         <>
             <FontAwesomeIcon className="text-5xl text-gray-500" icon={faSquarePlus}/>

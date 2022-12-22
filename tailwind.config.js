@@ -9,6 +9,7 @@ module.exports = {
         "xxl":"1387px",
         "msm":"650px",
         "vsm":"560px",
+        "xsm":"480px",
         "xxsm":"350px",
         "xxxsm":"250px",
         
@@ -30,7 +31,8 @@ module.exports = {
       fontSize:{
         filter:"2.5vw",
         title:"14vw"
-      }
+      },
+  
     }
   },
   plugins: [],
