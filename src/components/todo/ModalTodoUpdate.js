@@ -7,7 +7,7 @@ import { fetchTodos } from "../../redux/features/todos/todoSlice";
 import { loadDataIntoRedux, updateTitleAndPriority, addTasks } from "../../redux/features/updateTodos/updateTodoSlice";
 import {SpinnerCircular} from "spinners-react";
 import {v4 as uuid} from "uuid";
-import { setAll, setInProgress, setCompleted } from "../../redux/features/filter/filterTodos";
+import { setInProgress, setCompleted } from "../../redux/features/filter/filterTodosSlice";
 import { loadInProgressTodos, loadCompletedTodos } from "../../redux/features/todos/todoSlice";
 
 function ModalTodoUpdate(props) {

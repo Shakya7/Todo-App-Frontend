@@ -3,7 +3,7 @@ import loginReducer from "./features/login/loginSlice";
 import profileReducer from "./features/profile/profileSlice";
 import todoReducer from "./features/todos/todoSlice";
 import updateTodoReducer from "./features/updateTodos/updateTodoSlice";
-import filterTodoRecucer from "./features/filter/filterTodos";
+import filterTodoRecucer from "./features/filter/filterTodosSlice";
 
 
 export const store=configureStore({

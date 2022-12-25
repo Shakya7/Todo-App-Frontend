@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSort, faFilter, faSquarePlus, faExclamationTriangle, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { faSort, faFilter, faSquarePlus, faExclamationCircle, faXmark } from "@fortawesome/free-solid-svg-icons";
 import {useState, useEffect, useLayoutEffect, useRef} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import ModalTodo from "./ModalTodo";
@@ -7,7 +7,7 @@ import TodoCard from "./TodoCard";
 import { fetchTodos } from "../../redux/features/todos/todoSlice";
 import ModalTodoUpdate from "./ModalTodoUpdate";
 import { loadInProgressTodos, loadCompletedTodos } from "../../redux/features/todos/todoSlice";
-import { setAll, setInProgress, setCompleted } from "../../redux/features/filter/filterTodos";
+import { setAll, setInProgress, setCompleted, filterTodosOnLowPr, filterTodosOnHighPr, filterTodosOn5Ageing, resetFilter } from "../../redux/features/filter/filterTodosSlice";
 import axios from "axios";
 
 
@@ -28,36 +28,43 @@ function TodoLayout() {
   const isLoggedIn=useSelector((state)=>state.login.isLogged);
   const profileID=useSelector((state)=>state.profile.id);
   const todos=useSelector((state)=>state.todo.todos);
-  const filterTodos=useSelector((state)=>state.todo.filteredTodos);
 
+  const filterTodos=useSelector((state)=>state.todo.filteredTodos);
   const filter=useSelector((state)=>state.filterTodo.filter);
+  const secondary_filter=useSelector((state)=>state.filterTodo.second_filter);
+  const sort=useSelector((state)=>state.filterTodo.sort);
+  const second_filterTodos=useSelector((state)=>state.filterTodo.filteredTodos);
 
   const closeSortMenus = (e)=>{
     if(sortRef.current && dropdwnSort && !sortRef.current.contains(e.target)){
-      setDropdwnSort(false)
+      setDropdwnSort(false);
     }
   }
   const closeFilterMenus=(e)=>{
     if(filterRef.current && dropdwnFilter && !filterRef.current.contains(e.target)){
-      setDropdwnFilter(false)
+      setDropdwnFilter(false);
     }
   }
-
+  
 
   useEffect(()=>{
     dispatch(setAll());
     dispatch(fetchTodos(profileID));
+    
   },[]);
 
   useLayoutEffect(()=>{
 
-  },[filterTodos])
+  },[filterTodos]);
+
 
   // useEffect(()=>{
     
   // },[filter, filterTodos, todos]);
+
   document.addEventListener('mousedown',closeSortMenus);
   document.addEventListener('mousedown',closeFilterMenus);
+
 
   return (
     <div className="h-full xxsm:m-4 px-4 flex flex-col">
@@ -71,7 +78,13 @@ function TodoLayout() {
         <div className="w-auto flex justify-along items-center">
           <span onClick={()=>{
             dispatch(setAll());
-            setSelected("all")
+            setSelected("all");
+            if(secondary_filter==="low-priority")
+              dispatch(filterTodosOnLowPr(todos));
+            else if(secondary_filter==="high-priority")
+              dispatch(filterTodosOnHighPr(todos));
+            else if(secondary_filter==="ageing >= 5")
+              dispatch(filterTodosOn5Ageing(todos));
           }} className={`text-filter px-4 msm:text-base msm:px-0 msm:w-28 py-1 text-white hover:bg-orange-400 rounded-sm cursor-pointer ${selected==="all"?"bg-orange-400":""}`}>All</span>
           <span onClick={async()=>{
             dispatch(setInProgress());
@@ -80,6 +93,12 @@ function TodoLayout() {
               const filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getInProgressTodos/${profileID}`)
               //console.log(filterTodos.data.filteredTodos);
               dispatch(loadInProgressTodos(filterTodos.data.filteredTodos));
+              if(secondary_filter==="low-priority")
+                dispatch(filterTodosOnLowPr(filterTodos.data.filteredTodos));
+              else if(secondary_filter==="high-priority")
+                dispatch(filterTodosOnHighPr(filterTodos.data.filteredTodos));
+              else if(secondary_filter==="ageing >= 5")
+                dispatch(filterTodosOn5Ageing(filterTodos.data.filteredTodos));
             }catch(err){
               console.log(err.message);
             }
@@ -92,6 +111,12 @@ function TodoLayout() {
               const filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getCompletedTodos/${profileID}`)
               //console.log(filterTodos.data.filteredTodos);
               dispatch(loadCompletedTodos(filterTodos.data.filteredTodos));
+              if(secondary_filter==="low-priority")
+                dispatch(filterTodosOnLowPr(filterTodos.data.filteredTodos));
+              else if(secondary_filter==="high-priority")
+                dispatch(filterTodosOnHighPr(filterTodos.data.filteredTodos));
+              else if(secondary_filter==="ageing >= 5")
+                dispatch(filterTodosOn5Ageing(filterTodos.data.filteredTodos));
             }catch(err){
               console.log(err.message);
             }
@@ -100,10 +125,10 @@ function TodoLayout() {
         <div className="flex gap-0.5 msm:gap-2 text-white relative">
           <button onClick={()=>{
             setDropdwnFilter(false);
-            if(dropdwnSort===false)
-              setDropdwnSort(true);
-            else
+            if(dropdwnSort)
               setDropdwnSort(false);
+            else  
+              setDropdwnSort(true);
             }} ref={sortRef} className="text-filter msm:text-base msm:w-20 bg-zinc-600 px-2 py-1 rounded-md flex gap-1 justify-center items-center">
             <FontAwesomeIcon className="text-filter msm:text-xl" icon={faSort}/>
             Sort
@@ -118,20 +143,58 @@ function TodoLayout() {
             <FontAwesomeIcon icon={faFilter}/>
             Filter
           </button>
-          {dropdwnSort && <div className="bg-zinc-700 absolute top-8 left-0 xsm:top-10 flex flex-col justify-center text-left rounded-sm">
-             <p className="px-3 py-2 cursor-pointer hover:bg-zinc-800">By Date</p>
-             <p className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Low to High</p>
-             <p className="px-3 py-2 cursor-pointer hover:bg-zinc-800">High to Low</p>
+          {dropdwnSort && <div ref={sortRef} className="bg-zinc-700 absolute top-8 left-0 xsm:top-10 flex flex-col justify-center text-left rounded-sm">
+             <p onClick={()=>setDropdwnSort(false)} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">By Date</p>
+             <p onClick={()=>setDropdwnSort(false)} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Low to High</p>
+             <p onClick={()=>setDropdwnSort(false)} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">High to Low</p>
           </div>}
-          {dropdwnFilter && <div className="bg-zinc-700 absolute top-8 right-0 xsm:top-10 flex flex-col justify-center text-right rounded-sm">
-             <p className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Low priority</p>
-             <p className="px-3 py-2 cursor-pointer hover:bg-zinc-800">High priority</p>
-             <p className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Ageing Todos</p>
+          {dropdwnFilter && <div ref={filterRef} className="bg-zinc-700 absolute top-8 right-0 xsm:top-10 flex flex-col justify-center text-right rounded-sm">
+             <p onClick={()=>{
+              if(filter==="all")
+                dispatch(filterTodosOnLowPr(todos));
+              else
+                dispatch(filterTodosOnLowPr(filterTodos))
+              setDropdwnFilter(false)
+              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Low priority</p>
+             <p onClick={()=>{
+              if(filter==="all")
+                dispatch(filterTodosOnHighPr(todos));
+              else
+                dispatch(filterTodosOnHighPr(filterTodos))
+              setDropdwnFilter(false)
+              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">High priority</p>
+             <p onClick={()=>{
+              if(filter==="all")
+                dispatch(filterTodosOn5Ageing(todos));
+              else
+                dispatch(filterTodosOn5Ageing(filterTodos))
+              setDropdwnFilter(false)
+              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Ageing &#62;&#61; 5days</p>
           </div>}
         </div>
       </div>
-      <div className="p-5 mt-3 border h-auto border-dashed">
-
+      <div className="mt-3 border h-auto border-dashed flex flex-col items-start rounded-sm">
+        <div className="p-2 flex items-center">
+          <p className="font-bold text-white bg-zinc-500 rounded-full px-2 py-1 flex items-center gap-1">
+            <FontAwesomeIcon className="text-zinc-300" icon={faExclamationCircle}/>
+            FILTER
+          </p>
+          {secondary_filter?<p className={`ml-2 flex gap-2 items-center text-white px-2 py-1 ${secondary_filter==="low-priority"?"bg-green-600":secondary_filter==="high-priority"?"bg-red-600":secondary_filter==="ageing >= 5"?"bg-yellow-600":""} rounded-md`}>
+            {secondary_filter}
+            <FontAwesomeIcon onClick={()=>dispatch(resetFilter())} className="cursor-pointer" icon={faXmark}/>
+          </p>:""}
+        </div>
+        <div className="w-full h-px border-dashed bg-zinc-400"/>
+        <div className="p-2 flex items-center">
+          <p className="font-bold text-white bg-zinc-500 rounded-full px-2 py-1 flex items-center gap-1">
+            <FontAwesomeIcon className="text-zinc-300" icon={faExclamationCircle}/>
+            SORT
+          </p>
+          {sort?<p className="ml-2 flex gap-2 items-center bg-blue-700 rounded-md text-white px-2 py-1">
+            Hello
+            <FontAwesomeIcon className="cursor-pointer" icon={faXmark}/>
+          </p>:""}
+        </div>
       </div>
       <div className={`mt-5 mb-5 h-max rounded-md border-2 border-dashed  border-zinc-400 flex items-start flex-wrap gap-2 p-2  ${!isLoggedIn?"justify-center items-center p-10 flex-col":""}`}>
       {!isLoggedIn?
@@ -146,24 +209,55 @@ function TodoLayout() {
             <FontAwesomeIcon className="text-5xl text-gray-500" icon={faSquarePlus}/>
             <div className="text-gray-500">NO TODOS YET</div>
           </div>:
-          filter==="all"?
-          todos.map((todo)=>{
-            return <TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
-          }):
+          filter==="all"?(
+            secondary_filter?(
+              second_filterTodos.length!==0?
+              second_filterTodos.map((todo)=>{
+                return <TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
+              }):
+              <div className="flex w-full p-10 flex-col justify-center items-center self-center">
+                <FontAwesomeIcon className="text-5xl text-gray-500" icon={faExclamationCircle}/>
+                <div className="text-gray-500">No Todos here</div>
+              </div>
+            )
+            :todos.map((todo)=>{
+              return <TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
+            })
+          ):
           filter==="inProgress"?(
           filterTodos.length===0?
           <div className="flex w-full p-10 flex-col justify-center items-center self-center">
             <FontAwesomeIcon className="text-5xl text-gray-500" icon={faExclamationCircle}/>
             <div className="text-gray-500">No Todos here</div>
           </div>:
-          filterTodos.map((todo)=><TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>)):
+          (secondary_filter?(
+            second_filterTodos.length!==0?
+            second_filterTodos.map((todo)=>{
+              return <TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
+            }):
+            <div className="flex w-full p-10 flex-col justify-center items-center self-center">
+              <FontAwesomeIcon className="text-5xl text-gray-500" icon={faExclamationCircle}/>
+              <div className="text-gray-500">No Todos here</div>
+            </div>
+            )
+          :filterTodos.map((todo)=><TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>))):
           filter==="completed"?(
           filterTodos.length===0?
           <div className="flex w-full p-10 flex-col justify-center items-center self-center">
             <FontAwesomeIcon className="text-5xl text-gray-500" icon={faExclamationCircle}/>
             <div className="text-gray-500">No Todos here</div>
           </div>:
-          filterTodos.map((todo)=><TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>)):
+          (secondary_filter?(
+            second_filterTodos.length!==0?
+            second_filterTodos.map((todo)=>{
+              return <TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
+            }):
+            <div className="flex w-full p-10 flex-col justify-center items-center self-center">
+              <FontAwesomeIcon className="text-5xl text-gray-500" icon={faExclamationCircle}/>
+              <div className="text-gray-500">No Todos here</div>
+            </div>
+            )
+          :filterTodos.map((todo)=><TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>))):
           ""
         }
         </>
