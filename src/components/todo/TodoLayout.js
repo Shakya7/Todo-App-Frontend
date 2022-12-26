@@ -90,15 +90,15 @@ function TodoLayout() {
             dispatch(setInProgress());
             setSelected("progress");
             try{
-              const filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getInProgressTodos/${profileID}`)
+              const _filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getInProgressTodos/${profileID}`)
               //console.log(filterTodos.data.filteredTodos);
-              dispatch(loadInProgressTodos(filterTodos.data.filteredTodos));
+              dispatch(loadInProgressTodos(_filterTodos.data.filteredTodos));
               if(secondary_filter==="low-priority")
-                dispatch(filterTodosOnLowPr(filterTodos.data.filteredTodos));
+                dispatch(filterTodosOnLowPr(_filterTodos.data.filteredTodos));
               else if(secondary_filter==="high-priority")
-                dispatch(filterTodosOnHighPr(filterTodos.data.filteredTodos));
+                dispatch(filterTodosOnHighPr(_filterTodos.data.filteredTodos));
               else if(secondary_filter==="ageing >= 5")
-                dispatch(filterTodosOn5Ageing(filterTodos.data.filteredTodos));
+                dispatch(filterTodosOn5Ageing(_filterTodos.data.filteredTodos));
             }catch(err){
               console.log(err.message);
             }
@@ -108,15 +108,15 @@ function TodoLayout() {
             dispatch(setCompleted());
             setSelected("completed");
             try{
-              const filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getCompletedTodos/${profileID}`)
+              const _filterTodos=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getCompletedTodos/${profileID}`)
               //console.log(filterTodos.data.filteredTodos);
-              dispatch(loadCompletedTodos(filterTodos.data.filteredTodos));
+              dispatch(loadCompletedTodos(_filterTodos.data.filteredTodos));
               if(secondary_filter==="low-priority")
-                dispatch(filterTodosOnLowPr(filterTodos.data.filteredTodos));
+                dispatch(filterTodosOnLowPr(_filterTodos.data.filteredTodos));
               else if(secondary_filter==="high-priority")
-                dispatch(filterTodosOnHighPr(filterTodos.data.filteredTodos));
+                dispatch(filterTodosOnHighPr(_filterTodos.data.filteredTodos));
               else if(secondary_filter==="ageing >= 5")
-                dispatch(filterTodosOn5Ageing(filterTodos.data.filteredTodos));
+                dispatch(filterTodosOn5Ageing(_filterTodos.data.filteredTodos));
             }catch(err){
               console.log(err.message);
             }
