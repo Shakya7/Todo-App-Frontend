@@ -30,7 +30,9 @@ module.exports = {
       },
       fontSize:{
         filter:"2.5vw",
-        title:"14vw"
+        title:"14vw",
+        date:"5vw",
+        todoTitle:"7vw"
       },
   
     }

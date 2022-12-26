@@ -9,10 +9,12 @@ import {SpinnerCircular} from "spinners-react";
 import {v4 as uuid} from "uuid";
 import { setInProgress, setCompleted } from "../../redux/features/filter/filterTodosSlice";
 import { loadInProgressTodos, loadCompletedTodos } from "../../redux/features/todos/todoSlice";
+import {useNavigate} from "react-router-dom";
 
 function ModalTodoUpdate(props) {
 
   const dispatch=useDispatch();
+  const navigation=useNavigate();
 
   const title=useSelector((state)=>state.updateTodo.title);
   const todoID=useSelector((state)=>state.updateTodo.id);
@@ -70,6 +72,7 @@ function ModalTodoUpdate(props) {
       }catch(err){
         console.log(err.message);
       }finally{
+        navigation("/")
         setUpdateLoading(false);
       }
     }
@@ -286,6 +289,7 @@ function ModalTodoUpdate(props) {
             {updateLoading?<SpinnerCircular size={20} className="self-end"/>:<button onClick={()=>{
               setUpdateLoading(true);
               updateTodo(title,priority,todoID);
+              //navigation("/")
             }} className="self-end bg-yellow-400 cursor-pointer font-nunito py-1 rounded-md px-2">
               Update
             </button>}

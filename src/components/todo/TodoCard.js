@@ -29,20 +29,20 @@ function TodoCard(props) {
             //console.log(props);
             dispatch(loadDataIntoRedux(props));
             return props.updateTodo(true);
-            }} className="flex flex-col bg-zinc-600 p-5 items-start gap-2 w-48 h-auto rounded-md cursor-pointer">
-            <div className={`rounded-xl text-sm px-2 py-1 ${props.priority==="High"?"bg-red-400 text-red-900":"bg-green-400 text-green-900"}`}>{props.priority}</div>
-            <div className="text-left text-white">{props.title}</div>
-            <div className="text-left text-xs flex flex-col">
-                <div>
-                    Created Date:
-                    <div className="flex gap-3 items-center text-gray-400">
+            }} className="flex flex-col bg-zinc-600 p-5 items-start gap-2 w-full xxsm:w-48 h-auto rounded-md cursor-pointer">
+            <div className={`rounded-xl text-date xxxsm:text-sm px-2 py-1 self-end xxxsm:self-auto ${props.priority==="High"?"bg-red-400 text-red-900":"bg-green-400 text-green-900"}`}>{props.priority}</div>
+            <div className="text-left text-white self-center text-todoTitle xxxsm:text-base  text-center xxxsm:self-auto ">{props.title}</div>
+            <div className="text-left text-xs flex flex-col self-center xxxsm:self-auto">
+                <div className="flex flex-col">
+                    <p className="font-bold text-date xxxsm:text-xs text-gray-800">Created Date:</p>
+                    <div className="flex flex-col text-date xxxsm:text-xs xxxsm:flex-row gap-0 xxxsm:gap-3 items-center text-gray-400">
                         <p>{new Date(props.cd).toLocaleDateString()}</p>
                         <p>{new Date(props.cd).toLocaleTimeString()}</p>
                     </div>
                 </div>
                 <div>
-                    Updated Date:
-                    <div className="flex gap-3 items-center text-gray-400">
+                    <p className="font-bold text-date xxxsm:text-xs text-gray-800">Updated Date:</p>
+                    <div className="flex gap-0 xxxsm:gap-3 text-date xxxsm:text-xs flex-col xxxsm:flex-row  items-center text-gray-400">
                         <p>{new Date(props.ud).toLocaleDateString()}</p>
                         <p>{new Date(props.ud).toLocaleTimeString()}</p>
                     </div>

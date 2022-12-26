@@ -320,28 +320,28 @@ function TodoLayout() {
       </div>
       <div className="mt-3 border h-auto border-dashed flex flex-col items-start rounded-sm">
         <div className="p-2 flex items-center">
-          <p className="font-bold text-white bg-zinc-500 rounded-full px-2 py-1 flex items-center gap-1">
+          <p className="font-bold text-white bg-zinc-500 text-filter msm:text-base rounded-full px-2 py-1 flex items-center gap-1">
             <FontAwesomeIcon className="text-zinc-300" icon={faExclamationCircle}/>
             FILTER
           </p>
-          {secondary_filter?<p className={`ml-2 flex gap-2 items-center text-white px-2 py-1 ${secondary_filter==="low-priority"?"bg-green-600":secondary_filter==="high-priority"?"bg-red-600":secondary_filter==="ageing >= 5"?"bg-yellow-600":""} rounded-md`}>
+          {secondary_filter?<p className={`ml-2 text-filter msm:text-base flex gap-2 items-center text-white px-2 py-1 ${secondary_filter==="low-priority"?"bg-green-600":secondary_filter==="high-priority"?"bg-red-600":secondary_filter==="ageing >= 5"?"bg-yellow-600":""} rounded-md`}>
             {secondary_filter}
             <FontAwesomeIcon onClick={()=>dispatch(resetFilter())} className="cursor-pointer" icon={faXmark}/>
           </p>:""}
         </div>
         <div className="w-full h-px border-dashed bg-zinc-400"/>
         <div className="p-2 flex items-center">
-          <p className="font-bold text-white bg-zinc-500 rounded-full px-2 py-1 flex items-center gap-1">
+          <p className="font-bold text-white bg-zinc-500 text-filter msm:text-base rounded-full px-2 py-1 flex items-center gap-1">
             <FontAwesomeIcon className="text-zinc-300" icon={faExclamationCircle}/>
             SORT
           </p>
-          {sort?<p className="ml-2 flex gap-2 items-center bg-blue-700 rounded-md text-white px-2 py-1">
+          {sort?<p className="ml-2 text-filter msm:text-base flex gap-2 items-center bg-blue-700 rounded-md text-white px-2 py-1">
             {sort}
             <FontAwesomeIcon onClick={()=>dispatch(resetSort())} className="cursor-pointer" icon={faXmark}/>
           </p>:""}
         </div>
       </div>
-      <div className={`mt-5 mb-5 h-max rounded-md border-2 border-dashed  border-zinc-400 flex items-start flex-wrap gap-2 p-2  ${!isLoggedIn?"justify-center items-center p-10 flex-col":""}`}>
+      <div className={`mt-5 mb-5 h-max rounded-md border-2 border-dashed border-zinc-400 flex justify-center xxsm:justify-start flex-wrap gap-2 p-2  ${!isLoggedIn?"justify-center items-center p-10 flex-col":""}`}>
       {!isLoggedIn?
         <>
             <FontAwesomeIcon className="text-5xl text-gray-500" icon={faSquarePlus}/>
