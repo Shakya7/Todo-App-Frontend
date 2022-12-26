@@ -32,6 +32,23 @@ function TodoCard(props) {
             }} className="flex flex-col bg-zinc-600 p-5 items-start gap-2 w-48 h-auto rounded-md cursor-pointer">
             <div className={`rounded-xl text-sm px-2 py-1 ${props.priority==="High"?"bg-red-400 text-red-900":"bg-green-400 text-green-900"}`}>{props.priority}</div>
             <div className="text-left text-white">{props.title}</div>
+            <div className="text-left text-xs flex flex-col">
+                <div>
+                    Created Date:
+                    <div className="flex gap-3 items-center text-gray-400">
+                        <p>{new Date(props.cd).toLocaleDateString()}</p>
+                        <p>{new Date(props.cd).toLocaleTimeString()}</p>
+                    </div>
+                </div>
+                <div>
+                    Updated Date:
+                    <div className="flex gap-3 items-center text-gray-400">
+                        <p>{new Date(props.ud).toLocaleDateString()}</p>
+                        <p>{new Date(props.ud).toLocaleTimeString()}</p>
+                    </div>
+                </div>
+
+            </div>
             <div className="w-full flex flex-col items-start ">
                 <div className="w-full justify-between flex text-xs flex-col text-left xxxsm:flex-row">
                     <p className="text-gray-400">Progress</p>

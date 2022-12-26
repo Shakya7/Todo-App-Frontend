@@ -18,8 +18,8 @@ const filterTodoSlice=createSlice({
         setCompleted:(state)=>{
             state.filter="completed"
         },
-        setAll:(state)=>{
-            state.filter="all"
+        setAll:(state,action)=>{
+            state.filter="all";
         },
         resetFilter:(state)=>{
             state.second_filter="";

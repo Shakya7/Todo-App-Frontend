@@ -7,7 +7,7 @@ import TodoCard from "./TodoCard";
 import { fetchTodos } from "../../redux/features/todos/todoSlice";
 import ModalTodoUpdate from "./ModalTodoUpdate";
 import { loadInProgressTodos, loadCompletedTodos } from "../../redux/features/todos/todoSlice";
-import { setAll, setInProgress, setCompleted, filterTodosOnLowPr, filterTodosOnHighPr, filterTodosOn5Ageing, resetFilter } from "../../redux/features/filter/filterTodosSlice";
+import { setAll, setInProgress, setCompleted, filterTodosOnLowPr, filterTodosOnHighPr, filterTodosOn5Ageing, resetFilter, sortByUpdatedDateOldest, sortByUpdatedDateLatest, sortByCreatedDateOldest, sortByCreatedDateLatest, resetSort } from "../../redux/features/filter/filterTodosSlice";
 import axios from "axios";
 
 
@@ -26,14 +26,17 @@ function TodoLayout() {
   const dispatch=useDispatch();
 
   const isLoggedIn=useSelector((state)=>state.login.isLogged);
-  const profileID=useSelector((state)=>state.profile.id);
-  const todos=useSelector((state)=>state.todo.todos);
 
+  const profileID=useSelector((state)=>state.profile.id);
+
+  const todos=useSelector((state)=>state.todo.todos);
   const filterTodos=useSelector((state)=>state.todo.filteredTodos);
+
   const filter=useSelector((state)=>state.filterTodo.filter);
   const secondary_filter=useSelector((state)=>state.filterTodo.second_filter);
   const sort=useSelector((state)=>state.filterTodo.sort);
   const second_filterTodos=useSelector((state)=>state.filterTodo.filteredTodos);
+  const sortedTodos=useSelector((state)=>state.filterTodo.sortedTodos);
 
   const closeSortMenus = (e)=>{
     if(sortRef.current && dropdwnSort && !sortRef.current.contains(e.target)){
@@ -53,9 +56,49 @@ function TodoLayout() {
     
   },[]);
 
-  useLayoutEffect(()=>{
+  useEffect(()=>{
+    if(secondary_filter){
+      if(sort==="updated-date-oldest")
+        dispatch(sortByUpdatedDateOldest(second_filterTodos));
+      else if(sort==="updated-date-latest")
+        dispatch(sortByUpdatedDateLatest(second_filterTodos));
+      else if(sort==="created-date-oldest")
+        dispatch(sortByCreatedDateOldest(second_filterTodos));
+      else if(sort==="created-date-latest")
+        dispatch(sortByCreatedDateLatest(second_filterTodos));
+    }
+    else{
+      if(filter==="all"){
+        if(sort==="updated-date-oldest")
+          dispatch(sortByUpdatedDateOldest(todos));
+        else if(sort==="updated-date-latest")
+          dispatch(sortByUpdatedDateLatest(todos));
+        else if(sort==="created-date-oldest")
+          dispatch(sortByCreatedDateOldest(todos));
+        else if(sort==="created-date-latest")
+          dispatch(sortByCreatedDateLatest(todos));
+      }else{
+        if(sort==="updated-date-oldest")
+          dispatch(sortByUpdatedDateOldest(filterTodos));
+        else if(sort==="updated-date-latest")
+          dispatch(sortByUpdatedDateLatest(filterTodos));
+        else if(sort==="created-date-oldest")
+          dispatch(sortByCreatedDateOldest(filterTodos));
+        else if(sort==="created-date-latest")
+          dispatch(sortByCreatedDateLatest(filterTodos));
+      }
+      
+    }
 
-  },[filterTodos]);
+  },[filterTodos, second_filterTodos, secondary_filter]);
+
+  // useEffect(()=>{
+  //   if(filter==="all"){
+
+  //   }else {
+  //    //dispatch(setInProgress(todos));
+  //   }
+  // },[todos])
 
 
   // useEffect(()=>{
@@ -79,12 +122,24 @@ function TodoLayout() {
           <span onClick={()=>{
             dispatch(setAll());
             setSelected("all");
-            if(secondary_filter==="low-priority")
+            if(secondary_filter==="low-priority"){
               dispatch(filterTodosOnLowPr(todos));
+            }
             else if(secondary_filter==="high-priority")
               dispatch(filterTodosOnHighPr(todos));
             else if(secondary_filter==="ageing >= 5")
               dispatch(filterTodosOn5Ageing(todos));
+            else if(secondary_filter===""){
+              if(sort==="updated-date-oldest")
+                dispatch(sortByUpdatedDateOldest(todos));
+              else if(sort==="updated-date-latest")
+                dispatch(sortByUpdatedDateLatest(todos));
+              else if(sort==="created-date-oldest")
+                dispatch(sortByCreatedDateOldest(todos));
+              else if(sort==="created-date-latest")
+                dispatch(sortByCreatedDateLatest(todos));
+            }
+
           }} className={`text-filter px-4 msm:text-base msm:px-0 msm:w-28 py-1 text-white hover:bg-orange-400 rounded-sm cursor-pointer ${selected==="all"?"bg-orange-400":""}`}>All</span>
           <span onClick={async()=>{
             dispatch(setInProgress());
@@ -144,9 +199,99 @@ function TodoLayout() {
             Filter
           </button>
           {dropdwnSort && <div ref={sortRef} className="bg-zinc-700 absolute top-8 left-0 xsm:top-10 flex flex-col justify-center text-left rounded-sm">
-             <p onClick={()=>setDropdwnSort(false)} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">By Date</p>
-             <p onClick={()=>setDropdwnSort(false)} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Low to High</p>
-             <p onClick={()=>setDropdwnSort(false)} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">High to Low</p>
+             <p onClick={()=>{
+              if(filter==="all"){
+                if(secondary_filter==="low-priority")
+                  dispatch(sortByUpdatedDateLatest(second_filterTodos));
+                else if(secondary_filter==="high-priority")
+                  dispatch(sortByUpdatedDateLatest(second_filterTodos));
+                else if(secondary_filter==="ageing >= 5")
+                  dispatch(sortByUpdatedDateLatest(second_filterTodos));
+                else if(secondary_filter==="")
+                  dispatch(sortByUpdatedDateLatest(todos))
+              }
+              else{
+                if(secondary_filter==="low-priority")
+                  dispatch(sortByUpdatedDateLatest(second_filterTodos));
+                else if(secondary_filter==="high-priority")
+                  dispatch(sortByUpdatedDateLatest(second_filterTodos));
+                else if(secondary_filter==="ageing >= 5")
+                  dispatch(sortByUpdatedDateLatest(second_filterTodos));
+                else if(secondary_filter==="")
+                  dispatch(sortByUpdatedDateLatest(filterTodos));
+              }
+              setDropdwnSort(false);
+              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Updated Date Latest</p>
+             <p onClick={
+              ()=>{
+                if(filter==="all"){
+                  if(secondary_filter==="low-priority")
+                    dispatch(sortByUpdatedDateOldest(second_filterTodos));
+                  else if(secondary_filter==="high-priority")
+                    dispatch(sortByUpdatedDateOldest(second_filterTodos));
+                  else if(secondary_filter==="ageing >= 5")
+                    dispatch(sortByUpdatedDateOldest(second_filterTodos));
+                  else if(secondary_filter==="")
+                    dispatch(sortByUpdatedDateOldest(todos))
+                }
+                else{
+                  if(secondary_filter==="low-priority")
+                    dispatch(sortByUpdatedDateOldest(second_filterTodos));
+                  else if(secondary_filter==="high-priority")
+                    dispatch(sortByUpdatedDateOldest(second_filterTodos));
+                  else if(secondary_filter==="ageing >= 5")
+                    dispatch(sortByUpdatedDateOldest(second_filterTodos));
+                  else if(secondary_filter==="")
+                    dispatch(sortByUpdatedDateOldest(filterTodos));
+                }
+                setDropdwnSort(false)
+              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Updated Date Oldest</p>
+             <p onClick={()=>{
+                if(filter==="all"){
+                  if(secondary_filter==="low-priority")
+                    dispatch(sortByCreatedDateLatest(second_filterTodos));
+                  else if(secondary_filter==="high-priority")
+                    dispatch(sortByCreatedDateLatest(second_filterTodos));
+                  else if(secondary_filter==="ageing >= 5")
+                    dispatch(sortByCreatedDateLatest(second_filterTodos));
+                  else if(secondary_filter==="")
+                    dispatch(sortByCreatedDateLatest(todos))
+                }
+                else{
+                  if(secondary_filter==="low-priority")
+                    dispatch(sortByCreatedDateLatest(second_filterTodos));
+                  else if(secondary_filter==="high-priority")
+                    dispatch(sortByCreatedDateLatest(second_filterTodos));
+                  else if(secondary_filter==="ageing >= 5")
+                    dispatch(sortByCreatedDateLatest(second_filterTodos));
+                  else if(secondary_filter==="")
+                    dispatch(sortByCreatedDateLatest(filterTodos));
+                }
+                setDropdwnSort(false)
+              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Created Date Latest</p>
+             <p onClick={()=>{
+                if(filter==="all"){
+                  if(secondary_filter==="low-priority")
+                    dispatch(sortByCreatedDateOldest(second_filterTodos));
+                  else if(secondary_filter==="high-priority")
+                    dispatch(sortByCreatedDateOldest(second_filterTodos));
+                  else if(secondary_filter==="ageing >= 5")
+                    dispatch(sortByCreatedDateOldest(second_filterTodos));
+                  else if(secondary_filter==="")
+                    dispatch(sortByCreatedDateOldest(todos))
+                }
+                else{
+                  if(secondary_filter==="low-priority")
+                    dispatch(sortByCreatedDateOldest(second_filterTodos));
+                  else if(secondary_filter==="high-priority")
+                    dispatch(sortByCreatedDateOldest(second_filterTodos));
+                  else if(secondary_filter==="ageing >= 5")
+                    dispatch(sortByCreatedDateOldest(second_filterTodos));
+                  else if(secondary_filter==="")
+                    dispatch(sortByCreatedDateOldest(filterTodos));
+                }
+                setDropdwnSort(false);
+              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Created Date Oldest</p>
           </div>}
           {dropdwnFilter && <div ref={filterRef} className="bg-zinc-700 absolute top-8 right-0 xsm:top-10 flex flex-col justify-center text-right rounded-sm">
              <p onClick={()=>{
@@ -191,8 +336,8 @@ function TodoLayout() {
             SORT
           </p>
           {sort?<p className="ml-2 flex gap-2 items-center bg-blue-700 rounded-md text-white px-2 py-1">
-            Hello
-            <FontAwesomeIcon className="cursor-pointer" icon={faXmark}/>
+            {sort}
+            <FontAwesomeIcon onClick={()=>dispatch(resetSort())} className="cursor-pointer" icon={faXmark}/>
           </p>:""}
         </div>
       </div>
@@ -211,18 +356,22 @@ function TodoLayout() {
           </div>:
           filter==="all"?(
             secondary_filter?(
-              second_filterTodos.length!==0?
+              second_filterTodos.length!==0?(
+              sort?
+              sortedTodos.map((todo)=><TodoCard cd={todo.createDate} ud={todo.updatedDate} key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>):
               second_filterTodos.map((todo)=>{
-                return <TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
-              }):
+                return <TodoCard cd={todo.createDate} ud={todo.updatedDate} key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
+              })):
               <div className="flex w-full p-10 flex-col justify-center items-center self-center">
                 <FontAwesomeIcon className="text-5xl text-gray-500" icon={faExclamationCircle}/>
                 <div className="text-gray-500">No Todos here</div>
               </div>
             )
-            :todos.map((todo)=>{
-              return <TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
-            })
+            :(sort?
+              sortedTodos.map((todo)=><TodoCard cd={todo.createDate} ud={todo.updatedDate} key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>):
+              todos.map((todo)=>{
+              return <TodoCard cd={todo.createDate} ud={todo.updatedDate} key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
+              }))
           ):
           filter==="inProgress"?(
           filterTodos.length===0?
@@ -231,16 +380,20 @@ function TodoLayout() {
             <div className="text-gray-500">No Todos here</div>
           </div>:
           (secondary_filter?(
-            second_filterTodos.length!==0?
+            second_filterTodos.length!==0?(
+            sort?
+            sortedTodos.map((todo)=><TodoCard cd={todo.createDate} ud={todo.updatedDate} key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>):
             second_filterTodos.map((todo)=>{
-              return <TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
-            }):
+              return <TodoCard cd={todo.createDate} ud={todo.updatedDate} key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
+            })):
             <div className="flex w-full p-10 flex-col justify-center items-center self-center">
               <FontAwesomeIcon className="text-5xl text-gray-500" icon={faExclamationCircle}/>
               <div className="text-gray-500">No Todos here</div>
             </div>
             )
-          :filterTodos.map((todo)=><TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>))):
+          :(sort?
+            sortedTodos.map((todo)=><TodoCard cd={todo.createDate} ud={todo.updatedDate} key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>):
+            filterTodos.map((todo)=><TodoCard cd={todo.createDate} ud={todo.updatedDate} key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>)))):
           filter==="completed"?(
           filterTodos.length===0?
           <div className="flex w-full p-10 flex-col justify-center items-center self-center">
@@ -248,16 +401,21 @@ function TodoLayout() {
             <div className="text-gray-500">No Todos here</div>
           </div>:
           (secondary_filter?(
-            second_filterTodos.length!==0?
+            second_filterTodos.length!==0?(
+            sort?
+            sortedTodos.map((todo)=><TodoCard cd={todo.createDate} ud={todo.updatedDate} key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>):
             second_filterTodos.map((todo)=>{
-              return <TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
-            }):
+              return <TodoCard cd={todo.createDate} ud={todo.updatedDate} key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>
+            })):
             <div className="flex w-full p-10 flex-col justify-center items-center self-center">
               <FontAwesomeIcon className="text-5xl text-gray-500" icon={faExclamationCircle}/>
               <div className="text-gray-500">No Todos here</div>
             </div>
             )
-          :filterTodos.map((todo)=><TodoCard key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>))):
+          :(
+            sort?
+            sortedTodos.map((todo)=><TodoCard cd={todo.createDate} ud={todo.updatedDate} key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>):
+            filterTodos.map((todo)=><TodoCard cd={todo.createDate} ud={todo.updatedDate} key={todo._id} id={todo._id} title={todo.title} priority={todo.priority} tasks={todo.tasks} updateTodo={setShowTodo}/>)))):
           ""
         }
         </>
