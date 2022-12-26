@@ -30,8 +30,10 @@ module.exports = {
       },
       fontSize:{
         filter:"2.5vw",
+        updateTodoText:"4vw",
         title:"14vw",
         date:"5vw",
+        addTask:"4vw",
         todoTitle:"7vw"
       },
   

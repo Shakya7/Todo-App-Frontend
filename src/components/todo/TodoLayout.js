@@ -198,7 +198,7 @@ function TodoLayout() {
             <FontAwesomeIcon icon={faFilter}/>
             Filter
           </button>
-          {dropdwnSort && <div ref={sortRef} className="bg-zinc-700 absolute top-8 left-0 xsm:top-10 flex flex-col justify-center text-left rounded-sm">
+          {dropdwnSort && <div ref={sortRef} className="bg-zinc-700 absolute top-8 left-0 xsm:top-10 flex flex-col justify-center text-left rounded-sm text-filter msm:text-base">
              <p onClick={()=>{
               if(filter==="all"){
                 if(secondary_filter==="low-priority")
@@ -293,7 +293,7 @@ function TodoLayout() {
                 setDropdwnSort(false);
               }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Created Date Oldest</p>
           </div>}
-          {dropdwnFilter && <div ref={filterRef} className="bg-zinc-700 absolute top-8 right-0 xsm:top-10 flex flex-col justify-center text-right rounded-sm">
+          {dropdwnFilter && <div ref={filterRef} className="bg-zinc-700 absolute top-8 right-0 xsm:top-10 flex flex-col justify-center text-right rounded-sm text-filter msm:text-base">
              <p onClick={()=>{
               if(filter==="all")
                 dispatch(filterTodosOnLowPr(todos));
