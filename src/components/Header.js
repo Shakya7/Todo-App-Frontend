@@ -2,15 +2,26 @@ import {FontAwesomeIcon}from "@fortawesome/react-fontawesome"
 import {faBars, faUser, faBell, faComment, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import logo from "../images/logo.png";
 import {faHome, faCalendarDays, faListCheck, faNoteSticky, faGear, faXmark} from "@fortawesome/free-solid-svg-icons";
 
 
 function Header() {
+
+  const profileDrpdwnRef=useRef(null);
+
   const isLoggedIn=useSelector((state)=>state.login.isLogged);
   const navigation=useNavigate();
   const [show, setShow]=useState(false);
+  const [profileDrpDwn, setProfileDrpDwn]=useState(false);
+
+  const closeProfileMenus = (e)=>{
+    if(profileDrpdwnRef.current && profileDrpDwn && !profileDrpdwnRef.current.contains(e.target)){
+      setProfileDrpDwn(false);
+    }
+  }
+  document.addEventListener('mousedown',closeProfileMenus);
   return (
     <div className="bg-zinc-900 opacity-100 h-14 w-full sticky top-0 left-0 flex justify-end items-center z-10">
 
@@ -76,10 +87,24 @@ function Header() {
         <div className="hidden vsm:flex rounded-full w-4 h-4 bg-zinc-700 justify-center items-center p-5 text-slate-400 hover:text-slate-100 cursor-pointer">
           <FontAwesomeIcon icon={faComment}/>
         </div>
-        {isLoggedIn?<div className="rounded-full w-4 h-4 flex bg-zinc-700 justify-center items-center p-5 text-slate-400 hover:text-slate-100 cursor-pointer">
+        {isLoggedIn?<div onClick={()=>setProfileDrpDwn(true)} className="rounded-full w-4 h-4 flex bg-zinc-700 justify-center items-center p-5 text-slate-400 hover:text-slate-100 cursor-pointer relative">
           <FontAwesomeIcon icon={faUser}/>
         </div>:<div onClick={()=>navigation("/login")} className="hidden vsm:flex rounded-md auto h-4 bg-stone-700 justify-center items-center p-5 text-slate-400 hover:text-slate-100 cursor-pointer">Login</div>}
       </div>
+      {profileDrpDwn &&
+        <div ref={profileDrpdwnRef} className="absolute bg-zinc-700 border text-white border-zinc-900 top-14 right-1 flex flex-col justify-center text-right rounded-sm text-filter msm:text-base">
+          <p onClick={()=>{
+            navigation("/profile");
+            setProfileDrpDwn(false);
+            }} className="px-4 py-2 cursor-pointer hover:bg-zinc-800">Profile</p>
+          <p onClick={()=>{
+            setProfileDrpDwn(false);
+            }} className="px-4 py-2 cursor-pointer hover:bg-zinc-800">Settings</p>
+          <p onClick={()=>{
+            setProfileDrpDwn(false);
+            }} className="px-4 py-2 cursor-pointer hover:bg-zinc-800 text-red-500">Logout</p>
+        </div>
+      }
     </div>
   )
 }
