@@ -110,7 +110,7 @@ function TodoLayout() {
 
 
   return (
-    <div className="h-full xxsm:m-4 px-4 flex flex-col">
+    <div className="h-full xxsm:m-4 px-4 flex flex-col z-[-100]">
       <div className="flex justify-between items-center mt-3">
         <h2 className="self-start font-nunito text-white text-title xxxsm:text-4xl">Todo</h2>
         <button onClick={()=>{

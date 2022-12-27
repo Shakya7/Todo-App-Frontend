@@ -2,17 +2,70 @@ import {FontAwesomeIcon}from "@fortawesome/react-fontawesome"
 import {faBars, faUser, faBell, faComment, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import logo from "../images/logo.png";
+import {faHome, faCalendarDays, faListCheck, faNoteSticky, faGear, faXmark} from "@fortawesome/free-solid-svg-icons";
 
 
 function Header() {
   const isLoggedIn=useSelector((state)=>state.login.isLogged);
   const navigation=useNavigate();
+  const [show, setShow]=useState(false);
   return (
-    <div className="bg-zinc-900 opacity-100 h-14 w-full mt-2 sticky top-0 left-0 flex justify-end items-center z-10">
-      <div className="absolute top-4 left-4 md:hidden">
-        <FontAwesomeIcon className="text-slate-400" icon={faBars}/>
+    <div className="bg-zinc-900 opacity-100 h-14 w-full sticky top-0 left-0 flex justify-end items-center z-10">
+
+      {/*TAB, MOBILE SIDEBAR COMPONENT*/}
+      <div className={`absolute transition-all duration-500 ease-in-out z-10 top-0 ${show?"left-0":"left-[-100vw]"} w-3/6 xxsm:w-2/6 h-screen bg-zinc-800  md:hidden`}>
+          <FontAwesomeIcon onClick={()=>setShow(false)} className="text-xl absolute top-4 left-4 text-slate-400" icon={faXmark}/>
+          <div className="mt-14 h-full">
+            <div className="flex flex-col items-start text-filter vsm:text-base">
+              <div className="h-1/6 gap-x-3 flex justify-start xxsm:justify-center items-center px-4">
+                <img className="w-1/6 vsm:w-10" src={logo} alt="logo"/>
+                <span className="font-fascinate text-gray-200 text-addTask vsm:text-xl">TraceBit</span>
+              </div>
+              <div onClick={()=>{
+                setShow(false);
+                navigation("/");
+                }} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+                <div className="vsm:w-12">
+                  <FontAwesomeIcon className="text-filter vsm:text-xl" icon={faHome}/>
+                </div>
+                <p>Dashboard</p>
+              </div>
+              <div onClick={()=>{
+                setShow(false);
+                navigation("/profile")}} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+                <div className="vsm:w-12"><FontAwesomeIcon className="text-filter vsm:text-xl" icon={faUser}/></div>
+                <p>Profile</p>
+              </div>
+              <div onClick={()=>{
+                setShow(false);
+                navigation("/todo")}} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+                <div className="vsm:w-12"><FontAwesomeIcon className="text-filter vsm:text-xl" icon={faListCheck}/></div>
+                <p>Todo List</p>
+              </div>
+              <div onClick={()=>{
+                setShow(false);
+                navigation("/calendar")}} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+                <div className="vsm:w-12"><FontAwesomeIcon className="text-filter vsm:text-xl" icon={faCalendarDays}/></div>
+                <p>Calendar</p>
+              </div>
+              <div className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+                <div className="vsm:w-12"><FontAwesomeIcon className="text-filter vsm:text-xl" icon={faNoteSticky}/></div>
+                <p>Notes</p>
+              </div>
+              <div className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+                <div className="vsm:w-12"><FontAwesomeIcon className="text-filter vsm:text-xl" icon={faGear}/></div>
+                <p>Settings</p>
+              </div>
+          </div>
+        </div>
       </div>
-      <div className="hidden vsm:block xxl:basis-2/5 2xl:basis-3/5 mr-2.5 relative">
+      {!show && <div onClick={()=>setShow(true)} className="absolute top-4 z-100 left-4 md:hidden">
+        <FontAwesomeIcon className="text-slate-400" icon={faBars}/>
+      </div>}
+      
+      <div className="hidden relative vsm:block xxl:basis-2/5 2xl:basis-3/5 mr-2.5">
           <input placeholder="Search something here" className="rounded-md w-full px-3.5 py-2 bg-zinc-700 text-slate-200 outline-none " type={"text"}/>
           <FontAwesomeIcon className="absolute top-3 right-3 text-slate-400 hover:text-slate-100 cursor-pointer" icon={faMagnifyingGlass}/>
       </div>

@@ -219,7 +219,7 @@ function ModalTodoUpdate(props) {
 
 
   return (
-    <div className='fixed top-0 left-0 w-screen h-screen backdrop-blur-sm z-5 flex justify-center items-center'>
+    <div className='fixed top-0 left-0 w-screen h-screen backdrop-blur-sm z-10 flex justify-center items-center'>
         <div className="w-4/5 lg:w-1/2 sm:h-auto bg-neutral-700 rounded-md flex flex-col justify-center items-center sm:items-start p-4 relative gap-2 m-5">
             <div onClick={()=>props.closeModal(false)} className="self-end cursor-pointer text-updateTodoText xxsm:text-2xl text-white">X</div>
             <div className="flex flex-col items-center sm:items-start font-nunito text-2xl">

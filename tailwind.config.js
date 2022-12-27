@@ -34,7 +34,7 @@ module.exports = {
         title:"14vw",
         date:"5vw",
         addTask:"4vw",
-        todoTitle:"7vw"
+        todoTitle:"7vw",
       },
   
     }
