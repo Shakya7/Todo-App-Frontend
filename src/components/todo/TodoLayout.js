@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort, faFilter, faSquarePlus, faExclamationCircle, faXmark } from "@fortawesome/free-solid-svg-icons";
 import {useState, useEffect, useLayoutEffect, useRef} from "react";
 import {useSelector, useDispatch} from "react-redux";
+import { useNavigate } from "react-router-dom";
 import ModalTodo from "./ModalTodo";
 import TodoCard from "./TodoCard";
 import { fetchTodos } from "../../redux/features/todos/todoSlice";
@@ -14,6 +15,8 @@ import axios from "axios";
 function TodoLayout() {
   const sortRef=useRef(null);
   const filterRef=useRef(null);
+
+  const navigation=useNavigate();
 
   const [selected, setSelected]=useState("all");
   const [showModal, setShowModal]=useState(false);
@@ -114,7 +117,7 @@ function TodoLayout() {
       <div className="flex justify-between items-center mt-3">
         <h2 className="self-start font-nunito text-white text-title xxxsm:text-4xl">Todo</h2>
         <button onClick={()=>{
-          setShowModal((prev)=>!prev);
+          isLoggedIn?setShowModal((prev)=>!prev):navigation("/login");
         }} className="bg-blue-800 p-1.5 msm:px-3 msm:py-2 text-white text-filter msm:text-base rounded-md">+ Add Todo</button>
       </div>
       <div className="flex justify-between gap-1 xxsm:gap-0 items-start xxsm:items-center mt-3 flex-col xxsm:flex-row">

@@ -17,7 +17,7 @@ const profileState={
 export const fetchAccountData=createAsyncThunk("/profile/fetchAccountData",async(_,{rejectWithValue})=>{
     try{
         const data=await account.get();
-        console.log(data);
+        //console.log(data);
         return data;
     }catch(err){
         return rejectWithValue(err.message);
@@ -55,6 +55,19 @@ export const updateMobile=createAsyncThunk("/profile/updateMobile",async ([passw
 const profileSlice=createSlice({
     name:"profile",
     initialState:profileState,
+    reducers:{
+        resetData:(state)=>{
+            state.isFetching=false;
+            state.isNameUpdating=false;
+            state.isEmailUpdating=false;
+            state.isMobileUpdating=false;
+            state.id="";
+            state.error="";
+            state.name="";
+            state.email="";
+            state.mobile="";
+        }
+    },
     extraReducers:(builder)=>{
 
         //fetch account data
@@ -108,4 +121,5 @@ const profileSlice=createSlice({
     }
 })
 
+export const {resetData}=profileSlice.actions;
 export default profileSlice.reducer;

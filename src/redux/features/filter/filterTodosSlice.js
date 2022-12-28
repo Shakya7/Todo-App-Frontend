@@ -67,9 +67,16 @@ const filterTodoSlice=createSlice({
         resetSort:(state)=>{
             state.sort="";
             state.sortedTodos=[];
+        },
+        resetFilterSortTodos:(state)=>{
+            state.filter="all";
+            state.sort="";
+            state.second_filter="";
+            state.filteredTodos=[];
+            state.sortedTodos=[];
         }
     }
 })
 
-export const {setInProgress, setCompleted, setAll, filterTodosOnLowPr, filterTodosOnHighPr, filterTodosOn5Ageing, resetFilter, sortByUpdatedDateOldest, sortByUpdatedDateLatest, sortByCreatedDateOldest, sortByCreatedDateLatest, resetSort}=filterTodoSlice.actions;
+export const {setInProgress, setCompleted, setAll, filterTodosOnLowPr, filterTodosOnHighPr, filterTodosOn5Ageing, resetFilter, sortByUpdatedDateOldest, sortByUpdatedDateLatest, sortByCreatedDateOldest, sortByCreatedDateLatest, resetSort, resetFilterSortTodos}=filterTodoSlice.actions;
 export default filterTodoSlice.reducer;

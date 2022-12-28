@@ -70,6 +70,13 @@ const todoSlice=createSlice({
         loadCompletedTodos:(state, action)=>{
             state.filteredTodos=completedTodos(action.payload);
         },
+
+        resetTodosData:(state)=>{
+            state.isFetchingTodos=false;
+            state.todos=[];
+            state.error="";
+            state.filteredTodos=[];
+        }
     },
     extraReducers: (builder)=>{
         builder.addCase(fetchTodos.pending,(state)=>{
@@ -88,5 +95,5 @@ const todoSlice=createSlice({
     }
 })
 
-export const {loadInProgressTodos, loadCompletedTodos}=todoSlice.actions;
+export const {loadInProgressTodos, loadCompletedTodos, resetTodosData}=todoSlice.actions;
 export default todoSlice.reducer;

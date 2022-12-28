@@ -1,13 +1,19 @@
 import {FontAwesomeIcon}from "@fortawesome/react-fontawesome"
 import {faBars, faUser, faBell, faComment, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef } from "react";
 import logo from "../images/logo.png";
 import {faHome, faCalendarDays, faListCheck, faNoteSticky, faGear, faXmark} from "@fortawesome/free-solid-svg-icons";
-
+import { logout } from "../redux/features/login/loginSlice";
+import {SpinnerCircular} from "spinners-react";
+import { resetData } from "../redux/features/profile/profileSlice";
+import { resetTodosData } from "../redux/features/todos/todoSlice";
+import { resetFilterSortTodos } from "../redux/features/filter/filterTodosSlice";
 
 function Header() {
+
+  const dispatch=useDispatch();
 
   const profileDrpdwnRef=useRef(null);
 
@@ -15,6 +21,8 @@ function Header() {
   const navigation=useNavigate();
   const [show, setShow]=useState(false);
   const [profileDrpDwn, setProfileDrpDwn]=useState(false);
+
+  const isLoading=useSelector((state)=>state.login.isLoading);
 
   const closeProfileMenus = (e)=>{
     if(profileDrpdwnRef.current && profileDrpDwn && !profileDrpdwnRef.current.contains(e.target)){
@@ -45,7 +53,11 @@ function Header() {
               </div>
               <div onClick={()=>{
                 setShow(false);
-                navigation("/profile")}} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+                if(isLoggedIn)
+                  navigation("/profile");
+                else  
+                  navigation("/login");
+                }} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
                 <div className="vsm:w-12"><FontAwesomeIcon className="text-filter vsm:text-xl" icon={faUser}/></div>
                 <p>Profile</p>
               </div>
@@ -96,13 +108,18 @@ function Header() {
           <p onClick={()=>{
             navigation("/profile");
             setProfileDrpDwn(false);
-            }} className="px-4 py-2 cursor-pointer hover:bg-zinc-800">Profile</p>
+            }} className="px-4 py-2 cursor-pointer hover:bg-zinc-800 justify-end">Profile</p>
           <p onClick={()=>{
             setProfileDrpDwn(false);
-            }} className="px-4 py-2 cursor-pointer hover:bg-zinc-800">Settings</p>
+            }} className="px-4 py-2 cursor-pointer hover:bg-zinc-800 justify-end">Settings</p>
           <p onClick={()=>{
+            dispatch(logout());
+            dispatch(resetData());
+            dispatch(resetTodosData());
+            dispatch(resetFilterSortTodos());
             setProfileDrpDwn(false);
-            }} className="px-4 py-2 cursor-pointer hover:bg-zinc-800 text-red-500">Logout</p>
+            navigation("/");
+            }} className="px-4 py-2 cursor-pointer hover:bg-zinc-800 text-red-500 flex justify-end">{isLoading?<SpinnerCircular size={20}/>:"Logout"}</p>
         </div>
       }
     </div>

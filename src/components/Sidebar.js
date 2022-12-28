@@ -2,9 +2,11 @@ import {FontAwesomeIcon}from "@fortawesome/react-fontawesome"
 import {faHome, faCalendarDays, faListCheck, faNoteSticky, faGear, faUser} from "@fortawesome/free-solid-svg-icons";
 import logo from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Sidebar() {
   const navigation=useNavigate();
+  const isLoggedIn=useSelector((state)=>state.login.isLogged);
   return (
     <>
       <div className="hidden md:block max-h-full basis-1/5 bg-zinc-800">
@@ -19,7 +21,7 @@ function Sidebar() {
             </div>
             <p>Dashboard</p>
           </div>
-          <div onClick={()=>navigation("/profile")} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+          <div onClick={()=>isLoggedIn?navigation("/profile"):navigation("/login")} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
             <div className="w-12"><FontAwesomeIcon className="text-xl" icon={faUser}/></div>
             <p>Profile</p>
           </div>

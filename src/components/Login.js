@@ -47,15 +47,15 @@ function Login(){
     },[isLoading, isLogged, error])
     return(
         <div className="bg-zinc-800 flex flex-col min-h-screen justify-center">
-            <div className="flex flex-col bg-zinc-800 items-center">
+            <div className="flex flex-col bg-zinc-800 items-center basis-full">
                 <div className="flex justify-center items-center gap-1 my-6">
-                    <img className="w-20" src={logo} alt="logo"/>
-                    <p className="text-white font-fascinate text-5xl">TraceBit</p>
+                    <img className="w-1/5 xxsm:w-20" src={logo} alt="logo"/>
+                    <p className="text-white font-fascinate text-title xxsm:text-5xl">TraceBit</p>
                 </div>
-                <p className="text-slate-500">To access TraceBit, please Login</p>
+                <p className="text-slate-500 text-updateTodoText xxsm:text-base">To access TraceBit, please Login</p>
             </div>
-            <div className="min-h-full flex flex-col justify-center items-center ">
-                <form className="flex flex-col w-2/4 max-w-xl p-4 gap-5 bg-stone-900 rounded-lg">
+            <div className="min-h-full flex flex-col justify-center items-center basis-full">
+                <form className="flex flex-col w-3/4 vsm:w-2/4 max-w-xl p-4 gap-5 bg-stone-900 rounded-lg">
                     <div className="flex flex-col">
                         <label className="self-start text-white" htmlFor="email">Email address</label>
                         <input className="p-2 rounded-sm outline-none" onFocus={()=>dispatch(removeError())}  id="email" type={"email"} placeholder="Email address" onChange={(e)=>setCredentials({
@@ -87,7 +87,7 @@ function Login(){
                         }</button>
 
                     </div>
-                    {error?<p style={{color:"red",textAlign:"center"}}>Please enter valid email and password</p>:""}
+                    {error?<p className="text-updateTodoText xxsm:text-base" style={{color:"red",textAlign:"center"}}>Please enter valid email and password</p>:""}
                     <div className="text-white">OR</div>
                     <div className="flex gap-x-2">
                         <div className="basis-full py-1 cursor-pointer border border-slate-600 rounded-md">
@@ -101,7 +101,7 @@ function Login(){
                         </div>
                     </div>
                 </form>
-                <div className="mt-12 text-white flex flex-col items-center mb-10">
+                <div className="mt-12 text-white flex flex-col items-center mb-10 text-updateTodoText xxsm:text-base">
                     <b>Don't have an account yet?</b>
                     <button className="w-64 cursor-pointer" onClick={(e)=>{
                         e.preventDefault();
