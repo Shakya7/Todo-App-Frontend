@@ -46,67 +46,71 @@ function Login(){
         }
     },[isLoading, isLogged, error])
     return(
-        <div className="bg-zinc-800 flex flex-col min-h-screen justify-center">
-            <div className="flex flex-col bg-zinc-800 items-center basis-full">
-                <div className="flex justify-center items-center gap-1 my-6">
-                    <img className="w-1/5 xxsm:w-20" src={logo} alt="logo"/>
-                    <p className="text-white font-fascinate text-title xxsm:text-5xl">TraceBit</p>
-                </div>
-                <p className="text-slate-500 text-updateTodoText xxsm:text-base">To access TraceBit, please Login</p>
-            </div>
-            <div className="min-h-full flex flex-col justify-center items-center basis-full">
-                <form className="flex flex-col w-3/4 vsm:w-2/4 max-w-xl p-4 gap-5 bg-stone-900 rounded-lg">
-                    <div className="flex flex-col">
-                        <label className="self-start text-white" htmlFor="email">Email address</label>
-                        <input className="p-2 rounded-sm outline-none" onFocus={()=>dispatch(removeError())}  id="email" type={"email"} placeholder="Email address" onChange={(e)=>setCredentials({
-                            ...credentials,
-                            email:e.target.value
-                        })}/>
+        <div className="bg-zinc-800 h-screen flex flex-col justify-center">
+            <div className="basis-full h-full overflow-y-scroll overflow-x-hidden">
+                <div className="h-full">
+                    <div className="flex flex-col bg-zinc-800 justify-center items-center">
+                        <div className="flex justify-center items-center gap-1 my-6">
+                            <img className="w-1/5 xxsm:w-20" src={logo} alt="logo"/>
+                            <p className="text-white font-fascinate text-title xxsm:text-5xl">TraceBit</p>
+                        </div>
+                        <p className="text-slate-500 text-updateTodoText xxsm:text-base">To access TraceBit, please Login</p>
                     </div>
-                    <div className="flex flex-col">
-                        <label className="self-start text-white" htmlFor="pw">Password</label>
-                        <input className="p-2 rounded-sm outline-none" onFocus={()=>dispatch(removeError())} id="pw" type={"password"} placeholder="Password" onChange={(e)=>setCredentials({
-                            ...credentials,
-                            password:e.target.value
-                        })}/>
-                    </div>
-                    <div>
-                        <button className="bg-green-800 cursor-pointer text-white w-full rounded-sm py-1.5" onClick={
-                            (e)=>{
-                                e.preventDefault();
-                                dispatch(loginFunction(credentials));
-                            }
-                        }>
-                        {
-                            !isLoading?
-                            "Login":
-                            <div className="flex justify-center items-center gap-1">
-                                 <p>Logging in...</p>
-                                 <div className="relative top-2"><SavingSpinner/></div>
+                    <div className="flex flex-col justify-center items-center">
+                        <form className="flex flex-col w-3/4 vsm:w-2/4 max-w-xl p-4 gap-5 bg-stone-900 rounded-lg">
+                            <div className="flex flex-col">
+                                <label className="self-start text-white" htmlFor="email">Email address</label>
+                                <input className="p-2 rounded-sm outline-none" onFocus={()=>dispatch(removeError())}  id="email" type={"email"} placeholder="Email address" onChange={(e)=>setCredentials({
+                                    ...credentials,
+                                    email:e.target.value
+                                })}/>
                             </div>
-                        }</button>
+                            <div className="flex flex-col">
+                                <label className="self-start text-white" htmlFor="pw">Password</label>
+                                <input className="p-2 rounded-sm outline-none" onFocus={()=>dispatch(removeError())} id="pw" type={"password"} placeholder="Password" onChange={(e)=>setCredentials({
+                                    ...credentials,
+                                    password:e.target.value
+                                })}/>
+                            </div>
+                            <div>
+                                <button className="bg-green-800 cursor-pointer text-white w-full rounded-sm py-1.5" onClick={
+                                    (e)=>{
+                                        e.preventDefault();
+                                        dispatch(loginFunction(credentials));
+                                    }
+                                }>
+                                {
+                                    !isLoading?
+                                    "Login":
+                                    <div className="flex justify-center items-center gap-1">
+                                        <p>Logging in...</p>
+                                        <div className="relative top-2"><SavingSpinner/></div>
+                                    </div>
+                                }</button>
 
-                    </div>
-                    {error?<p className="text-updateTodoText xxsm:text-base" style={{color:"red",textAlign:"center"}}>Please enter valid email and password</p>:""}
-                    <div className="text-white">OR</div>
-                    <div className="flex gap-x-2">
-                        <div className="basis-full py-1 cursor-pointer border border-slate-600 rounded-md">
-                            <FontAwesomeIcon className="text-slate-600" icon={faGithub}/>
+                            </div>
+                            {error?<p className="text-updateTodoText xxsm:text-base" style={{color:"red",textAlign:"center"}}>Please enter valid email and password</p>:""}
+                            <div className="text-white">OR</div>
+                            <div className="flex gap-x-2">
+                                <div className="basis-full py-1 cursor-pointer border border-slate-600 rounded-md">
+                                    <FontAwesomeIcon className="text-slate-600" icon={faGithub}/>
+                                </div>
+                                <div className="basis-full py-1 cursor-pointer border border-slate-600 rounded-md">
+                                    <FontAwesomeIcon className="text-slate-600" icon={faGoogle}/>
+                                </div>
+                                <div className="basis-full py-1 border cursor-pointer border-slate-600 rounded-md">
+                                    <FontAwesomeIcon className="text-slate-600" icon={faLinkedin}/>
+                                </div>
+                            </div>
+                        </form>
+                        <div className="mt-12 text-white flex flex-col items-center mb-10 text-updateTodoText xxsm:text-base">
+                            <b>Don't have an account yet?</b>
+                            <button className="w-64 cursor-pointer" onClick={(e)=>{
+                                e.preventDefault();
+                                navigation("/signup");
+                            }}>Signup</button>
                         </div>
-                        <div className="basis-full py-1 cursor-pointer border border-slate-600 rounded-md">
-                            <FontAwesomeIcon className="text-slate-600" icon={faGoogle}/>
-                        </div>
-                        <div className="basis-full py-1 border cursor-pointer border-slate-600 rounded-md">
-                            <FontAwesomeIcon className="text-slate-600" icon={faLinkedin}/>
-                        </div>
-                    </div>
-                </form>
-                <div className="mt-12 text-white flex flex-col items-center mb-10 text-updateTodoText xxsm:text-base">
-                    <b>Don't have an account yet?</b>
-                    <button className="w-64 cursor-pointer" onClick={(e)=>{
-                        e.preventDefault();
-                        navigation("/signup");
-                    }}>Signup</button>
+                    </div> 
                 </div>
             </div>
         </div>
