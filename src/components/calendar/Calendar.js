@@ -232,8 +232,8 @@ const MyCalendar = function(props){
   }, [])
 
     return(
-        <div>
-            <div className="m-5 px-2 h-10 text-center md:text-start font-nunito text-4xl text-white">
+        <div className="overflow-x-hidden mb-8">
+            <div className="m-5 px-2 h-10 text-center md:text-start font-nunito text-title xxxsm:text-4xl text-white">
               Calendar
             </div>
             <Calendar
@@ -241,12 +241,12 @@ const MyCalendar = function(props){
               events={events}
               startAccessor="start"
               endAccessor="end"
-              style={{ height: 500 }}
+              style={{height: 500}}
               showMultiDayTimes={true}
               showAllEvents={true}
               selectable
               onSelectSlot={onSelectSlot}
-              className="px-8 text-slate-400"
+              className="calendar px-8 text-slate-400 text-filter xsm:text-base "
               dayPropGetter={calendarStyle}
               
             />
