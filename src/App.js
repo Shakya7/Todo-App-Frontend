@@ -1,6 +1,6 @@
 
 import './App.css';
-import MyCalendar from './components/Calendar';
+import MyCalendar from './components/calendar/Calendar';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import HomeLayout from './components/home/HomeLayout';
 import HomePage from './components/home/HomePage';

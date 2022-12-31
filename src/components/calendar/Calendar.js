@@ -2,9 +2,10 @@
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import { Calendar, momentLocalizer } from 'react-big-calendar';
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 import moment from 'moment';
 
+import CreateEventModal from "./CreateEventModal";
 
 const events=[
     {
@@ -188,6 +189,8 @@ const localizer = momentLocalizer(moment)
 const MyCalendar = function(props){
   const clickRef = useRef(null)
 
+  const [createEventModal, setCreateEventModal]=useState(false);
+
   const calendarStyle = (date) => {
     let currentDate = `${new Date().getDate()} ${new Date().getMonth()+1} ${new Date().getFullYear()}`
     let allDate = `${date.getDate()} ${date.getMonth()+1} ${date.getFullYear()}`
@@ -222,7 +225,9 @@ const MyCalendar = function(props){
      */
     window.clearTimeout(clickRef?.current)
     clickRef.current = window.setTimeout(() => {
-      window.alert(JSON.stringify(slotInfo))
+      console.log(slotInfo);
+      //window.alert(JSON.stringify(slotInfo));
+      setCreateEventModal(true);
     }, 250)
   }, [])
 
@@ -245,6 +250,7 @@ const MyCalendar = function(props){
               dayPropGetter={calendarStyle}
               
             />
+            {createEventModal && <CreateEventModal closeModal={setCreateEventModal}/>}
         </div>
     )
 }
