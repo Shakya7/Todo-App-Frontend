@@ -4,6 +4,7 @@ import profileReducer from "./features/profile/profileSlice";
 import todoReducer from "./features/todos/todoSlice";
 import updateTodoReducer from "./features/updateTodos/updateTodoSlice";
 import filterTodoRecucer from "./features/filter/filterTodosSlice";
+import eventReducer from "./features/calendar/eventSlice";
 
 
 export const store=configureStore({
@@ -12,7 +13,8 @@ export const store=configureStore({
         profile:profileReducer,
         todo:todoReducer,
         updateTodo:updateTodoReducer,
-        filterTodo:filterTodoRecucer
+        filterTodo:filterTodoRecucer,
+        event:eventReducer
     },
     middleware:(getDefaultMiddleware)=>{
         return getDefaultMiddleware({
