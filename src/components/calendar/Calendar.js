@@ -37,18 +37,22 @@ const MyCalendar = function(props){
       }
     }
   }
+  
     
   useEffect(() => {
-    dispatch(loadEvents(profileID))
+    if(profileID){
+      dispatch(loadEvents(profileID))
+    }
+    else{
+      console.log("Unable to fetch events; no Profile ID found");
+     
+    }
     /**
      * What Is This?
      * This is to prevent a memory leak, in the off chance that you
      * teardown your interface prior to the timed method being called.
      */
-    return () => {
-      window.clearTimeout(clickRef?.current)
-    }
-  }, [])
+  }, [profileID])
 
   const onSelectSlot = useCallback((slotInfo) => {
     /**
