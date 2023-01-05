@@ -40,6 +40,10 @@
   }
 }
 
+.note-sec::-webkit-scrollbar{
+  display:none
+}
+
 
 /* MEDIA QUERIES */
 

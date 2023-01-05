@@ -5,6 +5,7 @@ import todoReducer from "./features/todos/todoSlice";
 import updateTodoReducer from "./features/updateTodos/updateTodoSlice";
 import filterTodoRecucer from "./features/filter/filterTodosSlice";
 import eventReducer from "./features/calendar/eventSlice";
+import noteReducer from "./features/note/noteSlice";
 
 
 export const store=configureStore({
@@ -14,14 +15,15 @@ export const store=configureStore({
         todo:todoReducer,
         updateTodo:updateTodoReducer,
         filterTodo:filterTodoRecucer,
-        event:eventReducer
+        event:eventReducer,
+        note:noteReducer
     },
     middleware:(getDefaultMiddleware)=>{
         return getDefaultMiddleware({
             serializableCheck: {
               // Ignore these action types
               
-              ignoredActions: ['updateTodo/loadDataIntoRedux'],
+              ignoredActions: ['updateTodo/loadDataIntoRedux', 'note/loadUpdateNote'],
             },
         })
     }

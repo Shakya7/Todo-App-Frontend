@@ -45,7 +45,7 @@ function Header() {
               <div onClick={()=>{
                 setShow(false);
                 navigation("/");
-                }} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+                }} className="flex gap-x-3 w-full justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
                 <div className="vsm:w-12">
                   <FontAwesomeIcon className="text-filter vsm:text-xl" icon={faHome}/>
                 </div>
@@ -57,27 +57,29 @@ function Header() {
                   navigation("/profile");
                 else  
                   navigation("/login");
-                }} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+                }} className="flex gap-x-3 w-full justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
                 <div className="vsm:w-12"><FontAwesomeIcon className="text-filter vsm:text-xl" icon={faUser}/></div>
                 <p>Profile</p>
               </div>
               <div onClick={()=>{
                 setShow(false);
-                navigation("/todo")}} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+                navigation("/todo")}} className="flex gap-x-3 w-full justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
                 <div className="vsm:w-12"><FontAwesomeIcon className="text-filter vsm:text-xl" icon={faListCheck}/></div>
                 <p>Todo List</p>
               </div>
               <div onClick={()=>{
                 setShow(false);
-                navigation("/calendar")}} className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+                navigation("/calendar")}} className="flex gap-x-3 w-full justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
                 <div className="vsm:w-12"><FontAwesomeIcon className="text-filter vsm:text-xl" icon={faCalendarDays}/></div>
                 <p>Calendar</p>
               </div>
-              <div className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+              <div onClick={()=>{
+                setShow(false);
+                navigation("/note")}} className="flex gap-x-3 w-full justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
                 <div className="vsm:w-12"><FontAwesomeIcon className="text-filter vsm:text-xl" icon={faNoteSticky}/></div>
                 <p>Notes</p>
               </div>
-              <div className="flex gap-x-3 justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
+              <div className="flex gap-x-3 w-full justify-start items-center p-4 ease-in-out duration-500 cursor-pointer text-gray-400 2xl:p-5 hover:bg-stone-900 hover:text-slate-100">
                 <div className="vsm:w-12"><FontAwesomeIcon className="text-filter vsm:text-xl" icon={faGear}/></div>
                 <p>Settings</p>
               </div>
