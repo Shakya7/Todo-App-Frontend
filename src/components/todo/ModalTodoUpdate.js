@@ -23,6 +23,8 @@ function ModalTodoUpdate(props) {
   const profileID=useSelector((state)=>state.profile.id);
   const todos=useSelector((state)=>state.todo.todos);
 
+  const theme=useSelector((state)=>state.settings.darkMode);
+
   const filter=useSelector((state)=>state.filterTodo.filter);
 
   //loading state
@@ -220,17 +222,17 @@ function ModalTodoUpdate(props) {
 
   return (
     <div className='fixed top-0 left-0 w-screen h-screen backdrop-blur-sm z-10 flex justify-center items-center'>
-        <div className="w-4/5 lg:w-1/2 sm:h-auto bg-neutral-700 rounded-md flex flex-col justify-center items-center sm:items-start p-4 relative gap-2 m-5">
-            <div onClick={()=>props.closeModal(false)} className="self-end cursor-pointer text-updateTodoText xxsm:text-2xl text-white">X</div>
+        <div className={`w-4/5 lg:w-1/2 sm:h-auto ${!theme?"bg-neutral-700":"bg-neutral-300"} border border-gray-500 rounded-md flex flex-col justify-center items-center sm:items-start p-4 relative gap-2 m-5`}>
+            <div onClick={()=>props.closeModal(false)} className={`self-end cursor-pointer text-updateTodoText xxsm:text-2xl ${!theme?"text-white":"text-zinc-800"}`}>X</div>
             <div className="flex flex-col items-center sm:items-start font-nunito text-2xl">
-                <h1 className="text-white text-todoTitle xsm:text-4xl">Todo title</h1>
-                <input className="rounded-sm w-full text-date xsm:text-xl" defaultValue={updateTitle} onChange={(e)=>setUpdateTitle(e.target.value)} type="text"/>
+                <h1 className={`${theme?"text-zinc-800":"text-white"} text-todoTitle xsm:text-4xl`}>Todo title</h1>
+                <input className={`${theme?"bg-zinc-600 text-white":"bg-white text-zinc-800"} rounded-sm w-full text-date  xsm:text-xl px-1`} defaultValue={updateTitle} onChange={(e)=>setUpdateTitle(e.target.value)} type="text"/>
             </div>
             <div className="flex flex-col gap-1 text-filter xsm:text-base sm:flex-row sm:gap-5">
-              <label className="text-slate-300" htmlFor="priority">Priority :</label>
+              <label className={`${!theme?"text-slate-300":"text-zinc-800"}`} htmlFor="priority">Priority :</label>
               <select defaultValue={pr} onChange={(e)=>{
                 setPr(e.target.value);
-              }} className="rounded-sm px-5" name="priority" id="priority">
+              }} className={`${!theme?"bg-neutral-300":"bg-neutral-400"} rounded-sm px-5`} name="priority" id="priority">
                 <option value="High">High</option>
                 <option value="Low">Low</option>
               </select>
@@ -238,7 +240,7 @@ function ModalTodoUpdate(props) {
             <div className="w-full bg-zinc-900 h-px"></div>
             <div className="flex flex-col items-start">
               <div className="w-full flex justify-between mb-3 flex-col xxxsm:flex-row xxxsm:gap-5 text-updateTodoText xxxsm:text-base">
-                <p className="text-date xsm:text-xl  text-white">Tasks</p>
+                <p className={`text-date xsm:text-xl  ${theme?"text-zinc-800":"text-white"}`}>Tasks</p>
                 <button onClick={()=>setAddTask(true)} className="bg-blue-800 px-2 py-0 text-white text-addTask xxsm:text-sm rounded-md">+Add task</button>
               </div>
               {addTask?<div className="flex justify-center items-baseline gap-3">
@@ -260,7 +262,7 @@ function ModalTodoUpdate(props) {
                     <div className="flex justify-center items-center flex-col xxxsm:flex-row">
                       <div className="flex jutify-center items-center gap-2">
                         <input className="" onChange={()=>updateTaskCheckbox(todoID,task.id)} checked={task.inProgress?false:true} type={"checkbox"}/>
-                        <input className="bg-transparent text-updateTodoText xxsm:text-base text-slate-300 outline-none w-full mr-2" type={"text"} onChange={(e)=>{
+                        <input className={`bg-transparent text-updateTodoText xxsm:text-base ${!theme?"text-slate-300":"text-stone-600"} outline-none w-full mr-2`} type={"text"} onChange={(e)=>{
                         setTaskTitle(e.target.value);
                         }} defaultValue={task.title}/>
                       </div>
@@ -271,7 +273,7 @@ function ModalTodoUpdate(props) {
                             id:task._id
                           })
                           updateTaskTitle(task.title, todoID,task.id);
-                          }} className="text-green-400 cursor-pointer text-updateTodoText xxsm:text-base" icon={faCheck}/>}
+                          }} className={`${!theme?"text-green-400":"text-green-600"} cursor-pointer text-updateTodoText xxsm:text-base`} icon={faCheck}/>}
                         {deleteloading.state && deleteloading.id===task._id?<SpinnerCircular size={13}/>:<FontAwesomeIcon onClick={()=>{
                           setDeleteLoading({
                             state:true,

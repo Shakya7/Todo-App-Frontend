@@ -22,6 +22,8 @@ const MyCalendar = function(props){
   const events=useSelector((state)=>state.event.events);
   const profileID=useSelector((state)=>state.profile.id);
 
+  const theme=useSelector((state)=>state.settings.darkMode);
+
   const [createEventModal, setCreateEventModal]=useState(false);
   const [updateEventModal, setUpdateEventModal]=useState(false);
 
@@ -91,7 +93,7 @@ const MyCalendar = function(props){
 
     return(
         <div className="overflow-x-hidden mb-8">
-            <div className="m-5 px-2 h-10 text-center md:text-start font-nunito text-title xxxsm:text-4xl text-white">
+            <div className={`m-5 px-2 h-10 text-center md:text-start font-nunito text-title xxxsm:text-4xl ${theme?"text-zinc-800":"text-white"}`}>
               Calendar
             </div>
             <Calendar

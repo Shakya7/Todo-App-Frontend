@@ -12,6 +12,7 @@ function CreateEventModal(props) {
 
   const profileID=useSelector((state)=>state.profile.id);
   const isLoading=useSelector((state)=>state.event.isLoading);
+  const theme=useSelector((state)=>state.settings.darkMode);
   
 
   const [currentState,setCurrentState]=useState({
@@ -25,33 +26,33 @@ function CreateEventModal(props) {
   })
   return (
     <div className='fixed top-0 left-0 w-screen h-screen backdrop-blur-sm z-10 flex justify-center items-center'>
-        <div className="w-4/5 lg:w-1/2 xsm:min-w-fit sm:h-auto bg-neutral-700 rounded-md flex flex-col justify-center items-center sm:items-start p-4 relative gap-4 m-5">
+        <div className={`w-4/5 lg:w-1/2 xsm:min-w-fit sm:h-auto ${theme?"bg-neutral-300":"bg-neutral-700"} border border-gray-500 rounded-md flex flex-col justify-center items-center sm:items-start p-4 relative gap-4 m-5`}>
             <FontAwesomeIcon onClick={()=>props.closeModal(false)} className="text-red-400 cursor-pointer absolute top-3 right-3" icon={faXmark}/>
-            <h1 className="text-updateTodoText xsm:text-xl text-white font-nunito">Create Event</h1>
+            <h1 className={`text-updateTodoText xsm:text-xl ${theme?"text-zinc-800":"text-white"} font-nunito`}>Create Event</h1>
             <div className="bg-gray-500 h-px w-full"/>
             <div className="flex flex-col items-start w-full gap-2 text-filter xsm:text-base">
-                <label className="text-white">Title</label>
+                <label className={`${theme?"text-zinc-800":"text-white"}`}>Title</label>
                 <input type="text" onChange={(e)=>{
                     setCurrentState({
                         ...currentState,
                         title:e.target.value
                     })
-                }} className="text-gray-400 w-full bg-zinc-800 rounded-md px-2 py-1 outline-none"/>
+                }} className={`w-full ${theme?"bg-zinc-400 text-zinc-800":"bg-zinc-800 text-gray-400"} rounded-md px-2 py-1 outline-none`}/>
             </div>
             <div className="flex w-full gap-2 text-gray-400 flex-col msm:flex-row">
                 <div className="flex gap-2 flex-col xxsm:flex-row">
                     <div className="flex flex-col items-start gap-2 text-filter xsm:text-base">
-                        <label className="text-white">Start Date</label>
+                        <label className={`${theme?"text-zinc-800":"text-white"}`}>Start Date</label>
                         <input onChange={(e)=>{
                             console.log(e.target.value);
                             setCurrentState({
                                 ...currentState,
                                 start_date:e.target.value
                             })
-                            }} style={{colorScheme:"dark"}} className="bg-zinc-800 rounded-md px-1.5 py-1" type="date"/>
+                            }} style={{colorScheme:`${theme?"bright":"dark"}`}} className={`${theme?"bg-zinc-400 text-zinc-800":"bg-zinc-800 text-gray-400"} rounded-md px-1.5 py-1`} type="date"/>
                     </div>
                     <div className="flex flex-col items-start gap-2 text-filter xsm:text-base">
-                        <label className="text-white">End Date</label>
+                        <label className={`${theme?"text-zinc-800":"text-white"}`}>End Date</label>
                         <input onChange={(e)=>{
                             
                             setCurrentState({
@@ -59,29 +60,29 @@ function CreateEventModal(props) {
                                 end_date:e.target.value
                             });
                         }} 
-                        style={{colorScheme:"dark"}} className="bg-zinc-800 rounded-md px-1.5 py-1" type="date"/>
+                        style={{colorScheme:`${theme?"bright":"dark"}`}} className={`${theme?"bg-zinc-400 text-zinc-800":"bg-zinc-800 text-gray-400"} rounded-md px-1.5 py-1`} type="date"/>
                     </div>
                 </div>
                 <div className="flex gap-2">
                     <div className="flex flex-col items-start gap-2 text-filter xsm:text-base">
-                        <label className="text-white">Start Time</label>
+                        <label className={`${theme?"text-zinc-800":"text-white"}`}>Start Time</label>
                         <input onInput={e=>{
                             //console.log(e.target.value)
                             setCurrentState({
                                 ...currentState,
                                 start_time:e.target.value
                             })
-                        }} style={{colorScheme:"dark"}} className="bg-zinc-800 rounded-md w-full px-1.5 py-1" type="time"/>
+                        }} style={{colorScheme:`${theme?"bright":"dark"}`}} className={`${theme?"bg-zinc-400 text-zinc-800":"bg-zinc-800 text-gray-400"} rounded-md w-full px-1.5 py-1`} type="time"/>
                     </div>
                     <div className="flex flex-col items-start gap-2 text-filter xsm:text-base">
-                        <label className="text-white">End Time</label>
+                        <label className={`${theme?"text-zinc-800":"text-white"}`}>End Time</label>
                         <input onInput={e=>{
                             console.log(e.target.value)
                             setCurrentState({
                                 ...currentState,
                                 end_time:e.target.value
                             })
-                        }} style={{colorScheme:"dark"}} className="bg-zinc-800 rounded-md w-full px-1.5 py-1" type="time"/>
+                        }} style={{colorScheme:`${theme?"bright":"dark"}`}} className={`${theme?"bg-zinc-400 text-zinc-800":"bg-zinc-800 text-gray-400"} rounded-md w-full px-1.5 py-1`} type="time"/>
                     </div>
                 </div>
             </div>
@@ -89,18 +90,18 @@ function CreateEventModal(props) {
                 <div className="flex w-3 xsm:w-4 h-3 xsm:h-4 justify-center items-center rounded-full bg-green-400">
                     <FontAwesomeIcon className="text-filter xsm:text-base" icon={faCheck}/>
                 </div>
-                <p className="text-zinc-400 text-filter xsm:text-xs">{currentState.start_date===currentState.end_date?`This event will take place on ${currentState.start_date?new Date(currentState.start_date).toLocaleDateString('en-us',{ year: 'numeric', month: 'short', day:"numeric" }):"00-00-0000"} 
+                <p className={`${theme?"text-zinc-600":"text-zinc-400"} text-filter xsm:text-xs`}>{currentState.start_date===currentState.end_date?`This event will take place on ${currentState.start_date?new Date(currentState.start_date).toLocaleDateString('en-us',{ year: 'numeric', month: 'short', day:"numeric" }):"00-00-0000"} 
                 from ${currentState.start_time?currentState.start_time:"00:00"} to ${currentState.end_time?currentState.end_time:"00:00"}`:`This event will take place on ${currentState.start_date?new Date(currentState.start_date).toLocaleDateString('en-us',{ year: 'numeric', month: 'short', day:"numeric" }):"00-00-0000"} 
                 from ${currentState.start_time?currentState.start_time:"00:00"} until ${currentState.end_date?new Date(currentState.end_date).toLocaleDateString('en-us',{ year: 'numeric', month: 'short', day:"numeric" }):"00-00-0000"} on ${currentState.end_time?currentState.end_time:"00:00"}`}</p>
             </div>
             <div className="flex flex-col items-start w-full gap-2 text-filter xsm:text-base">
-                <label className="text-white">Link for joining</label>
+                <label className={`${theme?"text-zinc-800":"text-white"}`}>Link for joining</label>
                 <input onChange={e=>{
                     setCurrentState({
                         ...currentState,
                         link:e.target.value
                     })
-                }} type="text" className="text-gray-400 w-full bg-zinc-800 rounded-md px-2 py-1 outline-none"/>
+                }} type="text" className={`w-full ${theme?"bg-zinc-400 text-zinc-800":"bg-zinc-800 text-gray-400"} rounded-md px-2 py-1 outline-none`}/>
             </div>
             <div className="w-full border border-t-zinc-400 border-dashed"/>
             {/* <div className="flex flex-col items-start gap-2 w-full">

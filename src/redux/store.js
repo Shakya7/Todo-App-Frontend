@@ -6,6 +6,7 @@ import updateTodoReducer from "./features/updateTodos/updateTodoSlice";
 import filterTodoRecucer from "./features/filter/filterTodosSlice";
 import eventReducer from "./features/calendar/eventSlice";
 import noteReducer from "./features/note/noteSlice";
+import settingsReducer from "./features/settings/settingSlice";
 
 
 export const store=configureStore({
@@ -16,7 +17,8 @@ export const store=configureStore({
         updateTodo:updateTodoReducer,
         filterTodo:filterTodoRecucer,
         event:eventReducer,
-        note:noteReducer
+        note:noteReducer,
+        settings:settingsReducer
     },
     middleware:(getDefaultMiddleware)=>{
         return getDefaultMiddleware({

@@ -20,6 +20,8 @@ function NoteLayout() {
   const [showCreateModal, setShowCreateModal]=useState(false);
   const [showUpdateModal, setShowUpdateModal]=useState(false);
 
+  const theme=useSelector((state)=>state.settings.darkMode);
+
   useEffect(()=>{
     dispatch(loadNotes(profileID))
   },[profileID])
@@ -27,12 +29,12 @@ function NoteLayout() {
   return (
     <div className="h-full xxsm:m-4 px-4 flex flex-col z-[-100]">
         <div className="flex justify-between items-center mt-3">
-            <h2 className="self-start font-nunito text-white text-title xxxsm:text-4xl">Note</h2>
+            <h2 className={`self-start font-nunito ${theme?"text-zinc-800":"text-white"} text-title xxxsm:text-4xl`}>Note</h2>
             <button onClick={()=>{
             isLoggedIn?setShowCreateModal((prev)=>!prev):navigation("/login");
             }} className="bg-blue-800 p-1.5 msm:px-3 msm:py-2 text-white text-filter msm:text-base rounded-full">+ Add Note</button>
         </div>
-        <div className={`mt-5 mb-5 h-max rounded-md border-2 border-dashed border-zinc-400 flex justify-center xxsm:justify-start flex-wrap gap-2 p-2  ${!isLoggedIn?"justify-center items-center p-10 flex-col":""}`}>
+        <div className={`mt-5 mb-5 h-max rounded-md border-2 border-dashed ${theme?"border-zinc-800":"border-zinc-400"} flex justify-center xxsm:justify-start flex-wrap gap-2 p-2  ${!isLoggedIn?"justify-center items-center p-10 flex-col":""}`}>
         {!isLoggedIn?
             <>
                 <FontAwesomeIcon className="text-5xl text-gray-500" icon={faSquarePlus}/>

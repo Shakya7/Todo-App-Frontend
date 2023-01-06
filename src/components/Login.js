@@ -13,6 +13,8 @@ function Login(){
      const navigation=useNavigate();
      const dispatch=useDispatch();
      const {isLoading, isLogged, error}=useSelector((state)=>state.login);
+
+     const theme=useSelector((state)=>state.settings.darkMode);
      
      const [credentials,setCredentials]=useState({
          email:"",
@@ -46,13 +48,13 @@ function Login(){
         }
     },[isLoading, isLogged, error])
     return(
-        <div className="bg-zinc-800 h-screen flex flex-col justify-center">
+        <div className={`${theme?"bg-zinc-50":"bg-zinc-800"} h-screen flex flex-col justify-center`}>
             <div className="basis-full h-full overflow-y-scroll overflow-x-hidden">
                 <div className="h-full">
-                    <div className="flex flex-col bg-zinc-800 justify-center items-center">
+                    <div className={`flex flex-col ${theme?"bg-zinc-50":"bg-zinc-800"} justify-center items-center`}>
                         <div className="flex justify-center items-center gap-1 my-6">
                             <img className="w-1/5 xxsm:w-20" src={logo} alt="logo"/>
-                            <p className="text-white font-fascinate text-title xxsm:text-5xl">TraceBit</p>
+                            <p className={`${theme?"text-zinc-800":"text-white"} font-fascinate text-title xxsm:text-5xl`}>TraceBit</p>
                         </div>
                         <p className="text-slate-500 text-updateTodoText xxsm:text-base">To access TraceBit, please Login</p>
                     </div>
@@ -103,7 +105,7 @@ function Login(){
                                 </div>
                             </div>
                         </form>
-                        <div className="mt-12 text-white flex flex-col items-center mb-10 text-updateTodoText xxsm:text-base">
+                        <div className={`mt-12 ${theme?"text-zinc-800":"text-white"} flex flex-col items-center mb-10 text-updateTodoText xxsm:text-base`}>
                             <b>Don't have an account yet?</b>
                             <button className="w-64 cursor-pointer" onClick={(e)=>{
                                 e.preventDefault();

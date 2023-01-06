@@ -21,6 +21,7 @@ function ModalNoteUpdate(props) {
   const isLoading=useSelector((state)=>state.note.isLoading);
 
   const profileID=useSelector((state)=>state.profile.id);
+  const theme=useSelector((state)=>state.settings.darkMode);
 
 
   const [currentState, setCurrentState]=useState({
@@ -35,15 +36,15 @@ function ModalNoteUpdate(props) {
 
   return (
     <div className='fixed top-0 left-0 w-screen h-screen backdrop-blur-sm z-10 flex justify-center items-center'>
-        <div className="w-4/5 lg:w-1/2 xsm:min-w-fit h-5/6 bg-zinc-700 rounded-md flex flex-col justify-center items-center sm:items-start p-4 relative gap-4 m-5">
+        <div className={`w-4/5 lg:w-1/2 xsm:min-w-fit h-5/6 ${theme?"bg-neutral-300":"bg-zinc-700"} rounded-md border border-gray-500 flex flex-col justify-center items-center sm:items-start p-4 relative gap-4 m-5`}>
             <FontAwesomeIcon onClick={()=>props.closeModal(false)} className="text-red-400 cursor-pointer self-end" icon={faXmark}/>
             <input onChange={(e)=>{
                 setCurrentState({
                     ...currentState,
                     title:e.target.value
                 })
-            }} type="text" className="text-center sm:text-left text-date xsm:text-xl bg-transparent outline-none text-white font-nunito" defaultValue={title}/>
-            <div className="text-filter xxxsm:text-xs text-gray-400 flex flex-col">
+            }} type="text" className={`text-center sm:text-left text-date xsm:text-xl bg-transparent outline-none ${theme?"text-zinc-800":"text-white"} font-nunito`} defaultValue={title}/>
+            <div className={`text-filter xxxsm:text-xs ${theme?"text-zinc-600":"text-gray-400"} flex flex-col`}>
                 <p>{`Updated Date: ${new Date(udate).toLocaleDateString("en-US",{year: 'numeric', month: 'short',day: 'numeric'})}`}</p>
                 <p>{`Created Date: ${new Date(cdate).toLocaleDateString("en-US",{year: 'numeric', month: 'short',day: 'numeric'})}`}</p>
             </div>
@@ -58,7 +59,7 @@ function ModalNoteUpdate(props) {
                     ...currentState,
                     note:e.target.value
                 })
-            }} defaultValue={note} style={{resize:"none"}} className="note-sec w-full h-full bg-transparent outline-none overflow-y-scroll text-white text-filter xsm:text-base"/>
+            }} defaultValue={note} style={{resize:"none"}} className={`note-sec w-full h-full bg-transparent outline-none overflow-y-scroll ${theme?"text-zinc-800":"text-white"} text-filter xsm:text-base`}/>
             <div className="flex w-full gap-1">
                 <button onClick={()=>{
                     try{

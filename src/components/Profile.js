@@ -14,6 +14,7 @@ function Profile() {
   const isNameUpdating=useSelector((state)=>state.profile.isNameUpdating);
   const isEmailUpdating=useSelector((state)=>state.profile.isEmailUpdating);
   const isNumberUpdating=useSelector((state)=>state.profile.isMobileUpdating);
+  const theme=useSelector((state)=>state.settings.darkMode);
 
   const [profileDetails,setProfileDetails]=useState({
     name_edit:false,
@@ -41,19 +42,19 @@ function Profile() {
     <div className="h-full">
         <div className="h-full">
             <div className="flex pt-44 pl-10 items-center justify-center md:pt-20 md:justify-start ">
-                <div className="rounded-full w-60 h-60 mr-8 flex items-center justify-center bg-gradient-to-r from-gray-500 to-slate-500">
+                <div className={`rounded-full w-60 h-60 mr-8 flex items-center justify-center  ${theme?"bg-zinc-300":"bg-gradient-to-r from-gray-500 to-slate-500"}`}>
                     <FontAwesomeIcon className="text-5xl" icon={faUser}/>
                 </div>
                 <div className="hidden md:block">
-                    <p className="text-left text-xs text-white">Hello,</p>
-                    <p className="text-5xl text-white">{name?(name.split(" ")[0]):"User_name"}</p>
+                    <p className={`text-left text-xs ${theme?"text-zinc-800":"text-white"}`}>Hello,</p>
+                    <p className={`text-5xl ${theme?"text-zinc-800":"text-white"}`}>{name?(name.split(" ")[0]):"User_name"}</p>
                 </div>
             </div>
             <div className="md:hidden">
                 <p className="text-5xl text-white mt-3">{name?name:"User_name"}</p>
             </div>
             <div className="vsm:pl-10 mt-20 flex gap-5 flex-col items-center md:items-start">
-                <div className="text-left"><span className="mr-20 text-white">Name</span> {profileDetails.name_edit?<span onClick={()=>{
+                <div className="text-left"><span className={`mr-20 ${theme?"text-zinc-800":"text-white"}`}>Name</span> {profileDetails.name_edit?<span onClick={()=>{
                     setProfileDetails({
                         ...profileDetails,
                         name_edit:!profileDetails.name_edit
@@ -65,14 +66,14 @@ function Profile() {
                             name_edit:!profileDetails.name_edit
                         })
                     }
-                } className="text-yellow-500 cursor-pointer">Edit</span>}</div>
+                } className={`${theme?"text-green-500":"text-yellow-500"} cursor-pointer`}>Edit</span>}</div>
                 <div>
                     <input onChange={(e)=>{
                         setProfileDetails({
                             ...profileDetails,
                             name:e.target.value
                         })
-                    }} defaultValue={profileDetails.name} disabled={profileDetails.name_edit?false:true} className="w-auto vsm:w-80 outline-none rounded-md p-2" type="text"/>
+                    }} defaultValue={profileDetails.name} disabled={profileDetails.name_edit?false:true} className={`w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2`} type="text"/>
                     {profileDetails.name_edit?<button onClick={()=>{
                         dispatch(updateName(profileDetails));
                         setProfileDetails({
@@ -84,7 +85,7 @@ function Profile() {
                 </div>
             </div>
             <div className="vsm:pl-10 mt-5 flex gap-5 flex-col items-center md:items-start">
-                <div className="text-left"><span className="mr-20 text-white">Email address</span> {profileDetails.email_edit?<span onClick={()=>{
+                <div className="text-left"><span className={`mr-20 ${theme?"text-zinc-800":"text-white"}`}>Email address</span> {profileDetails.email_edit?<span onClick={()=>{
                     setProfileDetails({
                         ...profileDetails,
                         email_edit:!profileDetails.email_edit
@@ -95,14 +96,14 @@ function Profile() {
                         ...profileDetails,
                         email_edit:!profileDetails.email_edit
                     })
-                }} className="text-yellow-500 cursor-pointer">Edit</span>}</div>
+                }} className={`${theme?"text-green-500":"text-yellow-500"} cursor-pointer`}>Edit</span>}</div>
                 <div>
                     <input onChange={(e)=>{
                         setProfileDetails({
                             ...profileDetails,
                             email:e.target.value
                         })
-                    }} defaultValue={profileDetails.email} disabled={profileDetails.email_edit?false:true} className=" w-auto vsm:w-80 outline-none rounded-md p-2" type="email"/>
+                    }} defaultValue={profileDetails.email} disabled={profileDetails.email_edit?false:true} className={`w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2`} type="email"/>
                     {profileDetails.email_edit?<button onClick={()=>{
                         setUpdateEmailOverlay(true);
                         setProfileDetails({
@@ -114,10 +115,10 @@ function Profile() {
                 </div>
                 {updateEmailOverlay?
                 <div className="flex flex-col justify-center items-center md:items-start p-2 rounded-md">
-                    <p className="text-yellow-200">**Please enter password to update the email address**</p>
+                    <p className={`${theme?"text-orange-500":"text-yellow-200"}`}>**Please enter password to update the email address**</p>
                     <input onChange={(e)=>{
                         setPasswordForEmail(e.target.value);
-                    }} className="mx-4 vsm:mx-0 w-auto vsm:w-80 outline-none rounded-md p-2" type="password"/>
+                    }} className={`mx-4 vsm:mx-0 w-auto vsm:w-80 ${!theme?"bg-zinc-100":"bg-zinc-400"} outline-none rounded-md p-2`} type="password"/>
                     <div className="flex gap-2">
                         <button onClick={()=>{
                             console.log(passwordForEmail);
@@ -130,7 +131,7 @@ function Profile() {
                 {isEmailUpdating?<SpinnerCircular/>:""}
             </div>
             <div className="vsm:pl-10 mt-5 flex gap-5 flex-col pb-20 items-center md:items-start">
-                <div className="text-left"><span className="mr-20 text-white">Mobile Number</span> {profileDetails.mobile_edit?<span onClick={()=>{
+                <div className="text-left"><span className={`mr-20 ${theme?"text-zinc-800":"text-white"}`}>Mobile Number</span> {profileDetails.mobile_edit?<span onClick={()=>{
                     setProfileDetails({
                         ...profileDetails,
                         mobile_edit:!profileDetails.mobile_edit
@@ -141,14 +142,14 @@ function Profile() {
                         ...profileDetails,
                         mobile_edit:!profileDetails.mobile_edit
                     })
-                }} className="text-yellow-500 cursor-pointer">Edit</span>}</div>
+                }} className={`${theme?"text-green-500":"text-yellow-500"} cursor-pointer`}>Edit</span>}</div>
                 <div>
                     <input onChange={(e)=>{
                         setProfileDetails({
                             ...profileDetails,
                             mobile:e.target.value
                         })
-                    }} defaultValue={mobile} disabled={profileDetails.mobile_edit?false:true} className="w-auto vsm:w-80 outline-none rounded-md p-2" type="text"/>
+                    }} defaultValue={mobile} disabled={profileDetails.mobile_edit?false:true} className={`w-auto vsm:w-80 ${!theme?"bg-zinc-100":"bg-zinc-400"} outline-none rounded-md p-2`} type="text"/>
                     {profileDetails.mobile_edit?<button onClick={()=>{
                         setUpdateMobileOverlay(true);
                         setProfileDetails({
@@ -159,10 +160,10 @@ function Profile() {
                 </div>
                 {updateMobileOverlay?
                 <div className="flex flex-col justify-center items-center md:items-start p-2 rounded-md">
-                    <p className="text-yellow-200">**Please enter password to update the mobile**</p>
+                    <p className={`${theme?"text-orange-500":"text-yellow-200"}`}>**Please enter password to update the mobile**</p>
                     <input onChange={(e)=>{
                         setPasswordForMobile(e.target.value);
-                    }} className="mx-4 vsm:mx-0 w-auto vsm:w-80 outline-none rounded-md p-2" type="password"/>
+                    }} className={`mx-4 vsm:mx-0 w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2`} type="password"/>
                     <div className="flex gap-2">
                         <button onClick={()=>{
                             console.log(passwordForMobile);

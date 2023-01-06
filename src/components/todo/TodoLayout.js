@@ -18,6 +18,8 @@ function TodoLayout() {
 
   const navigation=useNavigate();
 
+  const theme=useSelector((state)=>state.settings.darkMode);
+
   const [selected, setSelected]=useState("all");
   const [showModal, setShowModal]=useState(false);
 
@@ -115,7 +117,7 @@ function TodoLayout() {
   return (
     <div className="h-full xxsm:m-4 px-4 flex flex-col z-[-100]">
       <div className="flex justify-between items-center mt-3">
-        <h2 className="self-start font-nunito text-white text-title xxxsm:text-4xl">Todo</h2>
+        <h2 className={`self-start font-nunito ${!theme?"text-zinc-800":"text-white"}text-title xxxsm:text-4xl`}>Todo</h2>
         <button onClick={()=>{
           isLoggedIn?setShowModal((prev)=>!prev):navigation("/login");
         }} className="bg-blue-800 p-1.5 msm:px-3 msm:py-2 text-white text-filter msm:text-base rounded-md">+ Add Todo</button>
@@ -143,7 +145,7 @@ function TodoLayout() {
                 dispatch(sortByCreatedDateLatest(todos));
             }
 
-          }} className={`text-filter px-4 msm:text-base msm:px-0 msm:w-28 py-1 text-white hover:bg-orange-400 rounded-sm cursor-pointer ${selected==="all"?"bg-orange-400":""}`}>All</span>
+          }} className={`text-filter px-4 msm:text-base msm:px-0 msm:w-28 py-1 ${!theme?"text-white":"text-zinc-800"} hover:bg-orange-400 rounded-sm cursor-pointer ${selected==="all"?"bg-orange-400":""}`}>All</span>
           <span onClick={async()=>{
             dispatch(setInProgress());
             setSelected("progress");
@@ -161,7 +163,7 @@ function TodoLayout() {
               console.log(err.message);
             }
             
-          }} className={`text-filter msm:text-base msm:w-28 px-1.5 msm:px-0 py-1 text-white hover:bg-purple-600 rounded-sm cursor-pointer ${selected==="progress"?"bg-purple-600":""}`}>In Progress</span>
+          }} className={`text-filter msm:text-base msm:w-28 px-1.5 msm:px-0 py-1 ${!theme?"text-white":"text-zinc-800"} hover:bg-purple-600 rounded-sm cursor-pointer ${selected==="progress"?"bg-purple-600":""}`}>In Progress</span>
           <span onClick={async()=>{
             dispatch(setCompleted());
             setSelected("completed");
@@ -178,16 +180,16 @@ function TodoLayout() {
             }catch(err){
               console.log(err.message);
             }
-          }} className={`text-filter msm:text-base msm:w-28 px-1.5 msm:px-0 py-1 text-white hover:bg-sky-700 rounded-sm cursor-pointer ${selected==="completed"?"bg-sky-700":""}`}>Completed</span>
+          }} className={`text-filter msm:text-base msm:w-28 px-1.5 msm:px-0 py-1 ${!theme?"text-white":"text-zinc-800"} hover:bg-sky-700 rounded-sm cursor-pointer ${selected==="completed"?"bg-sky-700":""}`}>Completed</span>
         </div>
-        <div className="flex gap-0.5 msm:gap-2 text-white relative">
+        <div className={`flex gap-0.5 msm:gap-2 ${!theme?"text-white":"text-zinc-800"} relative`}>
           <button onClick={()=>{
             setDropdwnFilter(false);
             if(dropdwnSort)
               setDropdwnSort(false);
             else  
               setDropdwnSort(true);
-            }} ref={sortRef} className="text-filter msm:text-base msm:w-20 bg-zinc-600 px-2 py-1 rounded-md flex gap-1 justify-center items-center">
+            }} ref={sortRef} className={`text-filter msm:text-base msm:w-20 ${!theme?"bg-zinc-600":"bg-zinc-300"} px-2 py-1 rounded-md flex gap-1 justify-center items-center`}>
             <FontAwesomeIcon className="text-filter msm:text-xl" icon={faSort}/>
             Sort
           </button>
@@ -197,11 +199,11 @@ function TodoLayout() {
               setDropdwnFilter(true);
             else
               setDropdwnFilter(false);
-            }} ref={filterRef} className="text-filter msm:text-base msm:w-20 bg-zinc-600 px-2 py-1 rounded-md flex gap-1 justify-center items-center">
+            }} ref={filterRef} className={`text-filter msm:text-base msm:w-20 ${!theme?"bg-zinc-600":"bg-zinc-300"} px-2 py-1 rounded-md flex gap-1 justify-center items-center`}>
             <FontAwesomeIcon icon={faFilter}/>
             Filter
           </button>
-          {dropdwnSort && <div ref={sortRef} className="bg-zinc-700 border border-zinc-900 absolute top-8 left-0 xsm:top-10 flex flex-col justify-center text-left rounded-sm text-filter msm:text-base">
+          {dropdwnSort && <div ref={sortRef} className={`${!theme?"bg-zinc-700":"bg-zinc-300"} border border-zinc-900 absolute top-8 left-0 xsm:top-10 flex flex-col justify-center text-left rounded-sm text-filter msm:text-base`}>
              <p onClick={()=>{
               if(filter==="all"){
                 if(secondary_filter==="low-priority")
@@ -224,7 +226,7 @@ function TodoLayout() {
                   dispatch(sortByUpdatedDateLatest(filterTodos));
               }
               setDropdwnSort(false);
-              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Updated Date Latest</p>
+              }} className={`px-3 py-2 cursor-pointer ${theme?"hover:bg-zinc-400":"hover:bg-zinc-800"}`}>Updated Date Latest</p>
              <p onClick={
               ()=>{
                 if(filter==="all"){
@@ -248,7 +250,7 @@ function TodoLayout() {
                     dispatch(sortByUpdatedDateOldest(filterTodos));
                 }
                 setDropdwnSort(false)
-              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Updated Date Oldest</p>
+              }} className={`px-3 py-2 cursor-pointer ${theme?"hover:bg-zinc-400":"hover:bg-zinc-800"}`}>Updated Date Oldest</p>
              <p onClick={()=>{
                 if(filter==="all"){
                   if(secondary_filter==="low-priority")
@@ -271,7 +273,7 @@ function TodoLayout() {
                     dispatch(sortByCreatedDateLatest(filterTodos));
                 }
                 setDropdwnSort(false)
-              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Created Date Latest</p>
+              }} className={`px-3 py-2 cursor-pointer ${theme?"hover:bg-zinc-400":"hover:bg-zinc-800"}`}>Created Date Latest</p>
              <p onClick={()=>{
                 if(filter==="all"){
                   if(secondary_filter==="low-priority")
@@ -294,37 +296,37 @@ function TodoLayout() {
                     dispatch(sortByCreatedDateOldest(filterTodos));
                 }
                 setDropdwnSort(false);
-              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Created Date Oldest</p>
+              }} className={`px-3 py-2 cursor-pointer ${theme?"hover:bg-zinc-400":"hover:bg-zinc-800"}`}>Created Date Oldest</p>
           </div>}
-          {dropdwnFilter && <div ref={filterRef} className="bg-zinc-700 border border-zinc-900 absolute top-8 right-0 xsm:top-10 flex flex-col justify-center text-right rounded-sm text-filter msm:text-base">
+          {dropdwnFilter && <div ref={filterRef} className={`${!theme?"bg-zinc-700":"bg-zinc-300"} border border-zinc-900 absolute top-8 right-0 xsm:top-10 flex flex-col justify-center text-right rounded-sm text-filter msm:text-base`}>
              <p onClick={()=>{
               if(filter==="all")
                 dispatch(filterTodosOnLowPr(todos));
               else
                 dispatch(filterTodosOnLowPr(filterTodos))
               setDropdwnFilter(false)
-              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Low priority</p>
+              }} className={`px-3 py-2 cursor-pointer ${theme?"hover:bg-zinc-400":"hover:bg-zinc-800"}`}>Low priority</p>
              <p onClick={()=>{
               if(filter==="all")
                 dispatch(filterTodosOnHighPr(todos));
               else
                 dispatch(filterTodosOnHighPr(filterTodos))
               setDropdwnFilter(false)
-              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">High priority</p>
+              }} className={`px-3 py-2 cursor-pointer ${theme?"hover:bg-zinc-400":"hover:bg-zinc-800"}`}>High priority</p>
              <p onClick={()=>{
               if(filter==="all")
                 dispatch(filterTodosOn5Ageing(todos));
               else
                 dispatch(filterTodosOn5Ageing(filterTodos))
               setDropdwnFilter(false)
-              }} className="px-3 py-2 cursor-pointer hover:bg-zinc-800">Ageing &#62;&#61; 5days</p>
+              }} className={`px-3 py-2 cursor-pointer ${theme?"hover:bg-zinc-400":"hover:bg-zinc-800"}`}>Ageing &#62;&#61; 5days</p>
           </div>}
         </div>
       </div>
-      <div className="mt-3 border h-auto border-dashed flex flex-col items-start rounded-sm">
+      <div className={`mt-3 border h-auto border-dashed ${theme?"border-zinc-800":""}  flex flex-col items-start rounded-sm`}>
         <div className="p-2 flex items-center">
-          <p className="font-bold text-white bg-zinc-500 text-filter msm:text-base rounded-full px-2 py-1 flex items-center gap-1">
-            <FontAwesomeIcon className="text-zinc-300" icon={faExclamationCircle}/>
+          <p className={`font-bold ${!theme?"text-white":"text-zinc-800"} ${!theme?"bg-zinc-500":"bg-zinc-300"} text-filter msm:text-base rounded-full px-2 py-1 flex items-center gap-1`}>
+            <FontAwesomeIcon className={`${!theme?"bg-zinc-500":"bg-zinc-300"}`} icon={faExclamationCircle}/>
             FILTER
           </p>
           {secondary_filter?<p className={`ml-2 text-filter msm:text-base flex gap-2 items-center text-white px-2 py-1 ${secondary_filter==="low-priority"?"bg-green-600":secondary_filter==="high-priority"?"bg-red-600":secondary_filter==="ageing >= 5"?"bg-yellow-600":""} rounded-md`}>
@@ -334,8 +336,8 @@ function TodoLayout() {
         </div>
         <div className="w-full h-px border-dashed bg-zinc-400"/>
         <div className="p-2 flex items-center">
-          <p className="font-bold text-white bg-zinc-500 text-filter msm:text-base rounded-full px-2 py-1 flex items-center gap-1">
-            <FontAwesomeIcon className="text-zinc-300" icon={faExclamationCircle}/>
+          <p className={`font-bold ${!theme?"text-white":"text-zinc-800"} ${!theme?"bg-zinc-500":"bg-zinc-300"} text-filter msm:text-base rounded-full px-2 py-1 flex items-center gap-1`}>
+            <FontAwesomeIcon className={`${!theme?"bg-zinc-500":"bg-zinc-300"}`} icon={faExclamationCircle}/>
             SORT
           </p>
           {sort?<p className="ml-2 text-filter msm:text-base flex gap-2 items-center bg-blue-700 rounded-md text-white px-2 py-1">
@@ -344,7 +346,7 @@ function TodoLayout() {
           </p>:""}
         </div>
       </div>
-      <div className={`mt-5 mb-5 h-max rounded-md border-2 border-dashed border-zinc-400 flex justify-center xxsm:justify-start flex-wrap gap-2 p-2  ${!isLoggedIn?"justify-center items-center p-10 flex-col":""}`}>
+      <div className={`mt-5 mb-5 h-max rounded-md border-2 border-dashed ${theme?"border-zinc-800":"border-zinc-400"} flex justify-center xxsm:justify-start flex-wrap gap-2 p-2  ${!isLoggedIn?"justify-center items-center p-10 flex-col":""}`}>
       {!isLoggedIn?
         <>
             <FontAwesomeIcon className="text-5xl text-gray-500" icon={faSquarePlus}/>
