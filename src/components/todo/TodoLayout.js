@@ -59,7 +59,7 @@ function TodoLayout() {
     dispatch(setAll());
     dispatch(fetchTodos(profileID));
     
-  },[]);
+  },[profileID]);
 
   useEffect(()=>{
     if(secondary_filter){
@@ -117,7 +117,7 @@ function TodoLayout() {
   return (
     <div className="h-full xxsm:m-4 px-4 flex flex-col z-[-100]">
       <div className="flex justify-between items-center mt-3">
-        <h2 className={`self-start font-nunito ${!theme?"text-zinc-800":"text-white"}text-title xxxsm:text-4xl`}>Todo</h2>
+        <h2 className={`self-start font-nunito ${!theme?"text-white":"text-zinc-800"} text-title xxxsm:text-4xl`}>Todo</h2>
         <button onClick={()=>{
           isLoggedIn?setShowModal((prev)=>!prev):navigation("/login");
         }} className="bg-blue-800 p-1.5 msm:px-3 msm:py-2 text-white text-filter msm:text-base rounded-md">+ Add Todo</button>

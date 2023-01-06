@@ -110,7 +110,7 @@ const MyCalendar = function(props){
               dayPropGetter={calendarStyle}
               longPressThreshold={20}
               onSelectEvent={onSelectEvent}
-              views={['month', 'day', 'agenda']}
+              views={['month', 'agenda']}
               
             />
             {createEventModal && <CreateEventModal closeModal={setCreateEventModal}/>}

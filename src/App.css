@@ -53,11 +53,11 @@
   }
   .rbc-toolbar>:first-child{
     align-self: flex-start;
-    order: 3;
+    order: 1;
   }
   .rbc-toolbar>:last-child{
     align-self: flex-start;
-    order:1;
+    order:3;
   }
   .rbc-toolbar-label{
     align-self: flex-end;

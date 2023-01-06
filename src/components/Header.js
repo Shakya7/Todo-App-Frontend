@@ -10,6 +10,7 @@ import {SpinnerCircular} from "spinners-react";
 import { resetData } from "../redux/features/profile/profileSlice";
 import { resetTodosData } from "../redux/features/todos/todoSlice";
 import { resetFilterSortTodos } from "../redux/features/filter/filterTodosSlice";
+import { changeTheme } from "../redux/features/settings/settingSlice";
 
 function Header() {
 
@@ -90,8 +91,14 @@ function Header() {
       {!show && <div onClick={()=>setShow(true)} className="absolute top-4 z-100 left-4 md:hidden">
         <FontAwesomeIcon className="text-slate-400" icon={faBars}/>
       </div>}
+
+      <div onClick={()=>{
+          dispatch(changeTheme())
+      }} className={`${theme?"bg-zinc-700":"bg-zinc-200"} ease-in-out duration-500 w-6 xxsm:w-12 h-3 xxsm:h-5 mr-4 rounded-full flex items-center ${theme?"justify-start":"justify-end"} p-1 cursor-pointer`}>
+        <div className={`${theme?"bg-zinc-200":"bg-zinc-700"} w-2 h-2 xxsm:w-4 xxsm:h-4 rounded-full`}></div>
+      </div>
       
-      <div className="hidden relative vsm:block xxl:basis-2/5 2xl:basis-3/5 mr-2.5">
+      <div className={`hidden relative vsm:${isLoggedIn?"block":"hidden"} xxl:basis-2/5 2xl:basis-3/5 mr-2.5`}>
           <input placeholder="Search something here" className={`rounded-md w-full px-3.5 py-2 ${theme?"bg-zinc-300 text-zinc-800":"bg-zinc-700 text-slate-200"} outline-none`} type={"text"}/>
           <FontAwesomeIcon className={`absolute top-3 right-3 ${theme?"text-zinc-700":"text-slate-400"} hover:text-slate-100 cursor-pointer`} icon={faMagnifyingGlass}/>
       </div>

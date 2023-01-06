@@ -33,7 +33,7 @@ function TodoCard(props) {
             return props.updateTodo(true);
             }} className={`flex flex-col ${!theme?"bg-zinc-600":"bg-neutral-300"} p-5 items-start gap-2 w-full xxsm:w-48 h-auto rounded-md cursor-pointer`}>
             <div className={`rounded-xl text-date xxxsm:text-sm px-2 py-1 self-end xxxsm:self-auto ${props.priority==="High"?"bg-red-400 text-red-900":"bg-green-400 text-green-900"}`}>{props.priority}</div>
-            <div className={`text-left ${theme?"text-white":"text-zinc-800"}self-center text-todoTitle xxxsm:text-base  text-center xxxsm:self-auto `}>{props.title}</div>
+            <div className={`text-left ${!theme?"text-white":"text-zinc-800"} self-center text-todoTitle xxxsm:text-base  text-center xxxsm:self-auto `}>{props.title}</div>
             <div className="text-left text-xs flex flex-col self-center xxxsm:self-auto">
                 <div className="flex flex-col">
                     <p className="font-bold text-date xxxsm:text-xs text-gray-800">Created Date:</p>
