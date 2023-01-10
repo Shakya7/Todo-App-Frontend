@@ -44,6 +44,10 @@
   display:none
 }
 
+.apexcharts-tooltip{
+  z-index: 3;
+}
+
 
 /* MEDIA QUERIES */
 

@@ -12,6 +12,7 @@ module.exports = {
         "xsm":"480px",
         "xxsm":"350px",
         "xxxsm":"250px",
+        "apex-xsm":"230px"
         
       },
       fontFamily:{
