@@ -42,8 +42,8 @@ function Profile() {
     <div className="h-full">
         <div className="h-full">
             <div className="flex pt-44 pl-10 items-center justify-center md:pt-20 md:justify-start ">
-                <div className={`rounded-full w-60 h-60 mr-8 flex items-center justify-center  ${theme?"bg-zinc-300":"bg-gradient-to-r from-gray-500 to-slate-500"}`}>
-                    <FontAwesomeIcon className="text-5xl" icon={faUser}/>
+                <div className={`rounded-full w-24 h-24 apex-xsm:w-[65vw] apex-xsm:h-[65vw]  xxsm:w-60 xxsm:h-60 mr-8 flex items-center justify-center  ${theme?"bg-zinc-300":"bg-gray-400"}`}>
+                    <FontAwesomeIcon className="text-xs apex-xsm:text-[14vw] xxsm:text-5xl" icon={faUser}/>
                 </div>
                 <div className="hidden md:block">
                     <p className={`text-left text-xs ${theme?"text-zinc-800":"text-white"}`}>Hello,</p>
@@ -51,126 +51,126 @@ function Profile() {
                 </div>
             </div>
             <div className="md:hidden">
-                <p className="text-5xl text-white mt-3">{name?name:"User_name"}</p>
+                <p className={`text-[10vw] xxsm:text-5xl ${theme?"text-zinc-800":"text-white"} mt-3`}>{name?name:"User_name"}</p>
             </div>
             <div className="vsm:pl-10 mt-20 flex gap-5 flex-col items-center md:items-start">
-                <div className="text-left"><span className={`mr-20 ${theme?"text-zinc-800":"text-white"}`}>Name</span> {profileDetails.name_edit?<span onClick={()=>{
+                <div className="text-left"><span className={`mr-20 ${theme?"text-zinc-800":"text-white"} text-[5vw] xxsm:text-base`}>Name</span> {profileDetails.name_edit?<span onClick={()=>{
                     setProfileDetails({
                         ...profileDetails,
                         name_edit:!profileDetails.name_edit
                     })
-                }} className="cursor-pointer text-red-700">Cancel</span>:<span onClick={
+                }} className="cursor-pointer text-red-700 text-[5vw] xxsm:text-base">Cancel</span>:<span onClick={
                     ()=>{
                         setProfileDetails({
                             ...profileDetails,
                             name_edit:!profileDetails.name_edit
                         })
                     }
-                } className={`${theme?"text-green-500":"text-yellow-500"} cursor-pointer`}>Edit</span>}</div>
+                } className={`${theme?"text-green-500":"text-yellow-500"} cursor-pointer text-[5vw] xxsm:text-base`}>Edit</span>}</div>
                 <div>
                     <input onChange={(e)=>{
                         setProfileDetails({
                             ...profileDetails,
                             name:e.target.value
                         })
-                    }} defaultValue={profileDetails.name} disabled={profileDetails.name_edit?false:true} className={`w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2`} type="text"/>
+                    }} defaultValue={profileDetails.name} disabled={profileDetails.name_edit?false:true} className={`w-full xxsm:w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="text"/>
                     {profileDetails.name_edit?<button onClick={()=>{
                         dispatch(updateName(profileDetails));
                         setProfileDetails({
                             ...profileDetails,
                             name_edit:false
                         })
-                    }} className="bg-blue-700 px-2 py-1 ml-10 rounded-md text-white">SAVE</button>:""}
+                    }} className="bg-blue-700 px-2 py-1 ml-10 rounded-md text-[5vw] xxsm:text-base text-white">SAVE</button>:""}
                     {isNameUpdating?<SpinnerCircular/>:""}
                 </div>
             </div>
             <div className="vsm:pl-10 mt-5 flex gap-5 flex-col items-center md:items-start">
-                <div className="text-left"><span className={`mr-20 ${theme?"text-zinc-800":"text-white"}`}>Email address</span> {profileDetails.email_edit?<span onClick={()=>{
+                <div className="text-left"><span className={`mr-20 ${theme?"text-zinc-800":"text-white"} text-[5vw] xxsm:text-base`}>Email address</span> {profileDetails.email_edit?<span onClick={()=>{
                     setProfileDetails({
                         ...profileDetails,
                         email_edit:!profileDetails.email_edit
                     })
-                }} className="cursor-pointer text-red-700">Cancel</span>:<span onClick={()=>{
+                }} className="cursor-pointer text-red-700 text-[5vw] xxsm:text-base">Cancel</span>:<span onClick={()=>{
                     setUpdateEmailOverlay(false);
                     setProfileDetails({
                         ...profileDetails,
                         email_edit:!profileDetails.email_edit
                     })
-                }} className={`${theme?"text-green-500":"text-yellow-500"} cursor-pointer`}>Edit</span>}</div>
+                }} className={`${theme?"text-green-500":"text-yellow-500"} text-[5vw] xxsm:text-base cursor-pointer`}>Edit</span>}</div>
                 <div>
                     <input onChange={(e)=>{
                         setProfileDetails({
                             ...profileDetails,
                             email:e.target.value
                         })
-                    }} defaultValue={profileDetails.email} disabled={profileDetails.email_edit?false:true} className={`w-full xxsm:w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2`} type="email"/>
+                    }} defaultValue={profileDetails.email} disabled={profileDetails.email_edit?false:true} className={`w-full xxsm:w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="email"/>
                     {profileDetails.email_edit?<button onClick={()=>{
                         setUpdateEmailOverlay(true);
                         setProfileDetails({
                             ...profileDetails,
                             email_edit:false
                         })
-                    }} className="bg-blue-700 px-2 py-1 ml-10 rounded-md text-white">Save</button>:""}
+                    }} className="text-[5vw] xxsm:text-base bg-blue-700 px-2 py-1 ml-10 rounded-md text-white">Save</button>:""}
                     
                 </div>
                 {updateEmailOverlay?
                 <div className="flex flex-col justify-center items-center md:items-start p-2 rounded-md">
-                    <p className={`${theme?"text-orange-500":"text-yellow-200"}`}>**Please enter password to update the email address**</p>
+                    <p className={`${theme?"text-orange-500":"text-yellow-200"} text-[5vw] xxsm:text-base`}>**Please enter password to update the email address**</p>
                     <input onChange={(e)=>{
                         setPasswordForEmail(e.target.value);
-                    }} className={`mx-4 vsm:mx-0 w-full xxsm:w-auto vsm:w-80 ${!theme?"bg-zinc-100":"bg-zinc-400"} outline-none rounded-md p-2`} type="password"/>
+                    }} className={`mx-4 vsm:mx-0 w-full xxsm:w-auto vsm:w-80 ${!theme?"bg-zinc-100":"bg-zinc-400"} outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="password"/>
                     <div className="flex gap-2">
                         <button onClick={()=>{
                             console.log(passwordForEmail);
                             dispatch(updateEmail([passwordForEmail,profileDetails.email]));
                             setUpdateEmailOverlay(false);
-                        }} className="bg-blue-700 px-2 py-1 rounded-md text-white">Update</button>
-                        <button onClick={()=>setUpdateEmailOverlay(false)} className="bg-red-700 px-2 py-1 rounded-md text-white">Cancel</button>
+                        }} className="bg-blue-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Update</button>
+                        <button onClick={()=>setUpdateEmailOverlay(false)} className="bg-red-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Cancel</button>
                     </div>
                 </div>:""}
                 {isEmailUpdating?<SpinnerCircular/>:""}
             </div>
             <div className="vsm:pl-10 mt-5 flex gap-5 flex-col pb-20 items-center md:items-start">
-                <div className="text-left"><span className={`mr-20 ${theme?"text-zinc-800":"text-white"}`}>Mobile Number</span> {profileDetails.mobile_edit?<span onClick={()=>{
+                <div className="text-left"><span className={`mr-20 ${theme?"text-zinc-800":"text-white"} text-[5vw] xxsm:text-base`}>Mobile Number</span> {profileDetails.mobile_edit?<span onClick={()=>{
                     setProfileDetails({
                         ...profileDetails,
                         mobile_edit:!profileDetails.mobile_edit
                     })
-                }} className="cursor-pointer text-red-700">Cancel</span>:<span onClick={()=>{
+                }} className="cursor-pointer text-red-700 text-[5vw] xxsm:text-base">Cancel</span>:<span onClick={()=>{
                     setUpdateMobileOverlay(false);
                     setProfileDetails({
                         ...profileDetails,
                         mobile_edit:!profileDetails.mobile_edit
                     })
-                }} className={`${theme?"text-green-500":"text-yellow-500"} cursor-pointer`}>Edit</span>}</div>
+                }} className={`${theme?"text-green-500":"text-yellow-500"} cursor-pointer text-[5vw] xxsm:text-base`}>Edit</span>}</div>
                 <div>
                     <input onChange={(e)=>{
                         setProfileDetails({
                             ...profileDetails,
                             mobile:e.target.value
                         })
-                    }} defaultValue={mobile} disabled={profileDetails.mobile_edit?false:true} className={`w-auto vsm:w-80 ${!theme?"bg-zinc-100":"bg-zinc-400"} outline-none rounded-md p-2 w-full`} type="text"/>
+                    }} defaultValue={mobile} disabled={profileDetails.mobile_edit?false:true} className={`w-full xxsm:w-auto vsm:w-80 ${!theme?"bg-zinc-100":"bg-zinc-400"} outline-none rounded-md p-2 w-full text-[5vw] xxsm:text-base`} type="text"/>
                     {profileDetails.mobile_edit?<button onClick={()=>{
                         setUpdateMobileOverlay(true);
                         setProfileDetails({
                             ...profileDetails,
                             mobile_edit:false
                         })
-                    }} className="bg-blue-700 px-2 py-1 ml-10 rounded-md text-white">Save</button>:""}
+                    }} className="bg-blue-700 px-2 py-1 ml-10 rounded-md text-white text-[5vw] xxsm:text-base">Save</button>:""}
                 </div>
                 {updateMobileOverlay?
                 <div className="flex flex-col justify-center items-center md:items-start p-2 rounded-md">
-                    <p className={`${theme?"text-orange-500":"text-yellow-200"}`}>**Please enter password to update the mobile**</p>
+                    <p className={`${theme?"text-orange-500":"text-yellow-200"} text-[5vw] xxsm:text-base`}>**Please enter password to update the mobile**</p>
                     <input onChange={(e)=>{
                         setPasswordForMobile(e.target.value);
-                    }} className={`mx-4 vsm:mx-0 w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2 w-full`} type="password"/>
+                    }} className={`mx-4 vsm:mx-0 w-full xxsm:w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="password"/>
                     <div className="flex gap-2">
                         <button onClick={()=>{
                             console.log(passwordForMobile);
                             dispatch(updateMobile([passwordForMobile,profileDetails.mobile]));
                             setUpdateMobileOverlay(false);
-                        }} className="bg-blue-700 px-2 py-1 rounded-md text-white">Update</button>
-                        <button onClick={()=>setUpdateMobileOverlay(false)} className="bg-red-700 px-2 py-1 rounded-md text-white">Cancel</button>
+                        }} className="bg-blue-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Update</button>
+                        <button onClick={()=>setUpdateMobileOverlay(false)} className="bg-red-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Cancel</button>
                     </div>
                 </div>:""}
                 {isNumberUpdating?<SpinnerCircular/>:""}

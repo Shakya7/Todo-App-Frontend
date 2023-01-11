@@ -190,7 +190,5 @@ export const loadCompletedTodosPercent=(array)=>{
     }
     //console.log(result);
     //console.log(Math.round((result.length/array.length)*100))
-    return [Math.round((result.length/array.length)*100)]
-
-    
+    return [Math.round((result.length/array.length)*100)] 
 }

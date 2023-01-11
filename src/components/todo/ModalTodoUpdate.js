@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { faCheck, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import { fetchTodos } from "../../redux/features/todos/todoSlice";
+import { fetchTodos, deleteTodo } from "../../redux/features/todos/todoSlice";
 import { loadDataIntoRedux, updateTitleAndPriority, addTasks } from "../../redux/features/updateTodos/updateTodoSlice";
 import {SpinnerCircular} from "spinners-react";
 import {v4 as uuid} from "uuid";
@@ -288,13 +288,30 @@ function ModalTodoUpdate(props) {
                 })
               }  
             </div>
-            {updateLoading?<SpinnerCircular size={20} className="self-end"/>:<button onClick={()=>{
-              setUpdateLoading(true);
-              updateTodo(title,priority,todoID);
-              //navigation("/")
-            }} className="self-end bg-yellow-400 cursor-pointer text-filter msm:text-base font-nunito py-1 rounded-md px-2">
-              Update
-            </button>}
+            {updateLoading?<SpinnerCircular size={20} className="self-end"/>:
+            <div className="flex gap-1 self-end">
+              <button onClick={()=>{
+                setUpdateLoading(true);
+                updateTodo(title,priority,todoID);
+                //navigation("/")
+              }} className="bg-yellow-400 cursor-pointer text-filter msm:text-base font-nunito py-1 rounded-md px-2">
+                Update
+              </button>
+              <button onClick={()=>{
+                    try{
+                        let obj={
+                            todoID:todoID,
+                            profileID:profileID
+                        }
+                        dispatch(deleteTodo(obj));
+                    }catch(err){
+                        console.log(err.message)
+                    }finally{
+                        props.closeModal(false);
+                    }
+                }} className="py-1 px-1 bg-stone-900 rounded-md"><FontAwesomeIcon color="#B4161B" icon={faTrash}/></button>
+            </div>
+            }
         </div>
     </div>
   )

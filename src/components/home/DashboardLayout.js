@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux"
 import Chart from "react-apexcharts";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchTodos } from "../../redux/features/todos/todoSlice";
 import { loadEvents } from "../../redux/features/calendar/eventSlice";
 import { loadNotes } from "../../redux/features/note/noteSlice";
@@ -33,27 +33,7 @@ function DashboardLayout() {
   const events=useSelector((state)=>state.event.events); 
   const notes=useSelector((state)=>state.note.notes);
 
-
-
-  // const state = {
-  //   options: {
-  //     xaxis: {
-  //       categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-  //     },
-  //     chart:{
-  //       toolbar:{
-  //         show:false
-  //       }
-  //     }
-  //   },
-  //   series: [
-  //     {
-  //       name: "series-1",
-  //       data: [30, 40, 45, 50, 49, 60, 70, 91]
-  //     }
-  //   ]
-  // };
-  
+  const [totalTodos,setTotalTodos]=useState(todos.length);
 
   const todosCreatedState = {
     chart: {
@@ -78,6 +58,14 @@ function DashboardLayout() {
       tooltip: {
         enabled: false
       }
+    },
+    yaxis: {
+      labels: {
+        formatter: (value) => { 
+          
+          return Math.floor(value)
+        },
+      },
     },
     stroke: {
       curve: 'smooth',
@@ -127,6 +115,14 @@ function DashboardLayout() {
         enabled: false
       }
     },
+    yaxis: {
+      labels: {
+        formatter: (value) => { 
+          
+          return Math.floor(value)
+        },
+      },
+    },
     tooltip:{
       x:{
         show:false
@@ -173,13 +169,20 @@ function DashboardLayout() {
             },
             total: {
               show: true,
-              label: 'Total',
+              label: `Total`,
               color: `${theme?"black":"white"}`,
               formatter: function (w) {
-                // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-                return todos.length
+                // return w.globals.seriesTotals.reduce((a, b) => {
+                //   return a + b
+                // }, 0) / w.globals.series.length + '%'
+                return `${w.config.series[0]+w.config.series[1]}%`
               }
             }
+            // total: {
+            //   show: true,
+            //   label: 'TOTAL',
+            //   color: `${theme?"black":"white"}`,
+            // }
           }
         }
       },
@@ -212,7 +215,7 @@ function DashboardLayout() {
                     fontSize:"3vw",
                     formatter: function (w) {
                       // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-                      return todos.length
+                      return `${w.config.series[0]+w.config.series[1]}%`
                     }
                   }
                 }
@@ -397,24 +400,57 @@ function DashboardLayout() {
         }
       }
     },
-  plotOptions: {
-    bar: {
-      horizontal: true,
+    plotOptions: {
+      bar: {
+        horizontal: true,
+      }
+    },
+    // tooltip: {
+    //   custom: function({ series, seriesIndex, dataPointIndex, w }) {
+    //     return (
+    //       '<div class="event-chart">' +
+    //       "<span>" +"Events : "+
+    //       series[seriesIndex][dataPointIndex] +
+    //       "</span>" +
+    //       "</div>"
+    //     );
+    //   }
+    // },
+    tooltip:{
+      y: {
+        formatter: function(val, opt) {
+          const goals =
+            opt.w.config.series[opt.seriesIndex].data[opt.dataPointIndex]
+              .goals
+      
+          if (goals && goals.length) {
+            return `${val} / ${goals[0].value}`
+          }
+          return val
+        },
+        title: {
+            formatter: (seriesName) => seriesName,
+        },
     }
-  },
-  // tooltip: {
-  //   custom: function({ series, seriesIndex, dataPointIndex, w }) {
-  //     return (
-  //       '<div class="event-chart">' +
-  //       "<span>" +"Events : "+
-  //       series[seriesIndex][dataPointIndex] +
-  //       "</span>" +
-  //       "</div>"
-  //     );
-  //   }
-  // },
-  tooltip:{
-    y: {
+    },
+    yaxis: {
+      labels: {
+        formatter: (value) => { 
+          
+          return events.length?`${months[new Date(value).getMonth()]}, ${new Date(value).getFullYear()}`:value
+        },
+      },
+    },
+    xaxis:{
+      labels: {
+        formatter: function (value) {
+          return Math.floor(value);
+        }
+      }
+    },
+
+    colors: ['#00E396'],
+    dataLabels: {
       formatter: function(val, opt) {
         const goals =
           opt.w.config.series[opt.seriesIndex].data[opt.dataPointIndex]
@@ -424,49 +460,16 @@ function DashboardLayout() {
           return `${val} / ${goals[0].value}`
         }
         return val
-      },
-      title: {
-          formatter: (seriesName) => seriesName,
-      },
-  }
-  },
-  yaxis: {
-    labels: {
-      formatter: (value) => { 
-        
-        return `${months[new Date(value).getMonth()]}, ${new Date(value).getFullYear()}`
-      },
+      }
     },
-  },
-  xaxis:{
-    labels: {
-      formatter: function (value) {
-        return value;
+    legend: {
+      show: true,
+      showForSingleSeries: true,
+      customLegendItems: ['Events'],
+      markers: {
+        fillColors: ['#00E396']
       }
     }
-  },
-
-  colors: ['#00E396'],
-  dataLabels: {
-    formatter: function(val, opt) {
-      const goals =
-        opt.w.config.series[opt.seriesIndex].data[opt.dataPointIndex]
-          .goals
-  
-      if (goals && goals.length) {
-        return `${val} / ${goals[0].value}`
-      }
-      return val
-    }
-  },
-  legend: {
-    show: true,
-    showForSingleSeries: true,
-    customLegendItems: ['Events'],
-    markers: {
-      fillColors: ['#00E396']
-    }
-  }
   };
 
 
@@ -483,38 +486,38 @@ function DashboardLayout() {
     }
 
   },
-  plotOptions: {
-    bar: {
-      columnWidth: '60%'
-    }
-  },
-  xaxis:{
-    labels: {
-      formatter: (value) => { 
-        
-        return `${months[new Date(value).getMonth()]}, ${new Date(value).getFullYear()}`
-      },
-    }
-  },
-  yaxis: {
-    labels: {
-      formatter: function (value) {
-        return value;
+    plotOptions: {
+      bar: {
+        columnWidth: '60%'
+      }
+    },
+    xaxis:{
+      labels: {
+        formatter: (value) => { 
+          console.log(notes)
+          return notes.length?`${months[new Date(value).getMonth()]}, ${new Date(value).getFullYear()}`:value
+        },
+      }
+    },
+    yaxis: {
+      labels: {
+        formatter: function (value) {
+          return Math.floor(value);
+        }
+      }
+    },
+    colors: ['#1B98F5'],
+    dataLabels: {
+      enabled: true
+    },
+    legend: {
+      show: true,
+      showForSingleSeries: true,
+      customLegendItems: ["Notes"],
+      markers: {
+        fillColors: ['#1B98F5']
       }
     }
-  },
-  colors: ['#1B98F5'],
-  dataLabels: {
-    enabled: true
-  },
-  legend: {
-    show: true,
-    showForSingleSeries: true,
-    customLegendItems: ["Notes"],
-    markers: {
-      fillColors: ['#1B98F5']
-    }
-  }
   };
 
   useEffect(()=>{
@@ -524,7 +527,7 @@ function DashboardLayout() {
       dispatch(loadEvents(profileID));
       dispatch(loadNotes(profileID));
     }
-  },[profileID])
+  },[profileID, totalTodos])
 
   
   return (

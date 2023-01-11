@@ -16,6 +16,16 @@ export const fetchTodos=createAsyncThunk("/todo/fetchTodos",async(id,{rejectWith
     }
 })
 
+export const deleteTodo=createAsyncThunk("/todo/deleteTodo",async(object,{rejectWithValue})=>{
+    try{
+        await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/deleteTodo/${object.todoID}`);
+        const data=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/getAllTodos/${object.profileID}`);
+        return data.data;
+    }catch(err){
+        return rejectWithValue(err.message);
+    }
+})
+
 function inProgressTodos(todos){
     const updatedTodos=[];
     for(let i=0;i<todos.length;i++){
@@ -88,6 +98,20 @@ const todoSlice=createSlice({
             state.isFetchingTodos=false;
         })
         builder.addCase(fetchTodos.rejected, (state,action)=>{
+            state.error=action.payload;
+            state.todos=[];
+            state.isFetchingTodos=false;
+        })
+
+        builder.addCase(deleteTodo.pending,(state)=>{
+            state.isFetchingTodos=true;
+        })
+        builder.addCase(deleteTodo.fulfilled, (state,action)=>{
+            state.todos=action.payload.data.todos;
+            state.error="";
+            state.isFetchingTodos=false;
+        })
+        builder.addCase(deleteTodo.rejected,(state,action)=>{
             state.error=action.payload;
             state.todos=[];
             state.isFetchingTodos=false;
