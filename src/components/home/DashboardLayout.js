@@ -1,8 +1,39 @@
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import Chart from "react-apexcharts";
+import { useEffect } from "react";
+import { fetchTodos } from "../../redux/features/todos/todoSlice";
+import { loadEvents } from "../../redux/features/calendar/eventSlice";
+import { loadNotes } from "../../redux/features/note/noteSlice";
+import { loadCreatedTodosData, loadHighTodosData, loadLowTodosData, loadEventsData, loadNotesData, loadLowPrTodosPercent, loadHighPrTodosPercent, loadInprogressTodosPercent, loadCompletedTodosPercent } from "../helperFunctionsCharts";
+
+const months={
+  0:"Jan",
+  1:"Feb",
+  2:"March",
+  3:"April",
+  4:"May",
+  5:"June",
+  6:"July",
+  7:"Aug",
+  8:"Sept",
+  9:"Oct",
+  10:"Nov",
+  11:"Dec"
+
+}
 
 function DashboardLayout() {
+
+  const dispatch=useDispatch();
+
   const theme=useSelector((state)=>state.settings.darkMode);
+  const profileID=useSelector((state)=>state.profile.id);
+
+  const todos=useSelector((state)=>state.todo.todos);
+  const events=useSelector((state)=>state.event.events); 
+  const notes=useSelector((state)=>state.note.notes);
+
+
 
   // const state = {
   //   options: {
@@ -22,6 +53,8 @@ function DashboardLayout() {
   //     }
   //   ]
   // };
+  
+
   const todosCreatedState = {
     chart: {
       type: "line",
@@ -34,24 +67,17 @@ function DashboardLayout() {
     series: [
       {
         name: "Todos",
-        data: [45, 52, 38, 45, 19, 33, 76,]
+        data: loadCreatedTodosData(todos)
       }
     ],
     xaxis: {
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "June",
-        "July",
-        "Aug",
-        "Sept",
-        "Oct",
-        "Nov",
-        "Dec"
-      ],
+      type: "datetime",
+      labels: {
+        format: 'MMM, yyyy'
+      },
+      tooltip: {
+        enabled: false
+      }
     },
     stroke: {
       curve: 'smooth',
@@ -66,6 +92,11 @@ function DashboardLayout() {
       markers: {
         fillColors: ['#1B98F5']
       }
+    },
+    tooltip:{
+      x:{
+        show:false
+      },
     }
     
   };
@@ -73,11 +104,11 @@ function DashboardLayout() {
   const highLowTodosState = {
     series: [{
       name: 'Low',
-      data: [31, 40, 28, 51, 42, 109, 100]
+      data: loadLowTodosData(todos)
     }, 
     {
       name: 'High',
-      data: [11, 32, 45, 32, 34, 52, 41]
+      data: loadHighTodosData(todos)
     }],
     chart: {
       type: 'area',
@@ -89,21 +120,18 @@ function DashboardLayout() {
       curve: 'smooth'
     },
     xaxis: {
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "June",
-        "July",
-        "Aug",
-        "Sept",
-        "Oct",
-        "Nov",
-        "Dec"
-      ]
+      type: "datetime",
+      labels: {
+        format: 'MMM, yyyy'
+      },tooltip: {
+        enabled: false
+      }
     },
+    tooltip:{
+      x:{
+        show:false
+      },
+    }
     
   };
 
@@ -149,7 +177,7 @@ function DashboardLayout() {
               color: `${theme?"black":"white"}`,
               formatter: function (w) {
                 // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-                return 20
+                return todos.length
               }
             }
           }
@@ -184,7 +212,7 @@ function DashboardLayout() {
                     fontSize:"3vw",
                     formatter: function (w) {
                       // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-                      return 20
+                      return todos.length
                     }
                   }
                 }
@@ -194,7 +222,7 @@ function DashboardLayout() {
         }
       ]
     },
-    series: [30,50],
+    series: [loadHighPrTodosPercent(todos),loadLowPrTodosPercent(todos)],
 
   }
 
@@ -205,7 +233,7 @@ function DashboardLayout() {
         show:false
       }
     },
-    series: [67],
+    series: [loadCompletedTodosPercent(todos)],
     colors: ["#2827CC"],
     plotOptions: {
       radialBar: {
@@ -268,6 +296,8 @@ function DashboardLayout() {
     },
     labels: ["Completed"]
   };
+
+
   const todoInprogressState = {
     chart: {
       type: "radialBar",
@@ -275,8 +305,8 @@ function DashboardLayout() {
         show:false
       },
     },
-    series: [67],
     colors: ["#F4BE2C"],
+    series:[loadInprogressTodosPercent(todos)],
     plotOptions: {
       radialBar: {
         startAngle: -135,
@@ -343,48 +373,79 @@ function DashboardLayout() {
 
   const eventsState = {
     series: [
-    {
-      name: 'Events',
-      data: [
-        {
-          x: 'Jan',
-          y: 12,
-          
-        },
-        {
-          x: 'Feb',
-          y: 44,
-    
-        },
-        {
-          x: 'March',
-          y: 54,
-          
-        },
-        {
-          x: 'April',
-          y: 66,
-        },
-        {
-          x: 'May',
-          y: 81,
-          
-        },
-        {
-          x: 'June',
-          y: 67,
-        }
-      ]
-    }
-  ],
+      {
+        name: 'Events:',
+        data: loadEventsData(events)
+      }
+    ],
     chart: {
-    type: 'bar'
-  },
+      type: 'bar',
+      toolbar:{
+        show:false
+      },
+      animations: {
+        enabled: true,
+        easing: 'easeinout',
+        speed: 800,
+        animateGradually: {
+            enabled: true,
+            delay: 150
+        },
+        dynamicAnimation: {
+            enabled: true,
+            speed: 350
+        }
+      }
+    },
   plotOptions: {
     bar: {
       horizontal: true,
     }
   },
+  // tooltip: {
+  //   custom: function({ series, seriesIndex, dataPointIndex, w }) {
+  //     return (
+  //       '<div class="event-chart">' +
+  //       "<span>" +"Events : "+
+  //       series[seriesIndex][dataPointIndex] +
+  //       "</span>" +
+  //       "</div>"
+  //     );
+  //   }
+  // },
+  tooltip:{
+    y: {
+      formatter: function(val, opt) {
+        const goals =
+          opt.w.config.series[opt.seriesIndex].data[opt.dataPointIndex]
+            .goals
+    
+        if (goals && goals.length) {
+          return `${val} / ${goals[0].value}`
+        }
+        return val
+      },
+      title: {
+          formatter: (seriesName) => seriesName,
+      },
+  }
+  },
+  yaxis: {
+    labels: {
+      formatter: (value) => { 
+        
+        return `${months[new Date(value).getMonth()]}, ${new Date(value).getFullYear()}`
+      },
+    },
+  },
+  xaxis:{
+    labels: {
+      formatter: function (value) {
+        return value;
+      }
+    }
+  },
+
   colors: ['#00E396'],
   dataLabels: {
     formatter: function(val, opt) {
@@ -413,55 +474,33 @@ function DashboardLayout() {
     series: [
     {
       name: 'Notes',
-      data: [
-        {
-          x: 'Jan',
-          y: 1292,
-        },
-        {
-          x: 'Feb',
-          y: 4432,
-          
-        },
-        {
-          x: 'March',
-          y: 5423,
-        
-        },
-        {
-          x: 'April',
-          y: 6653,
-          
-        },
-        {
-          x: 'May',
-          y: 8133,
-          
-        },
-        {
-          x: 'June',
-          y: 7132,
-          
-        },
-        {
-          x: 'July',
-          y: 7332,
-          
-        },
-        {
-          x: 'Aug',
-          y: 6553,
-          
-        }
-      ]
-    }
-  ],
+      data: loadNotesData(notes),
+    }],
     chart: {
-    type: 'bar'
+    type: 'bar',
+    toolbar:{
+      show:false
+    }
+
   },
   plotOptions: {
     bar: {
       columnWidth: '60%'
+    }
+  },
+  xaxis:{
+    labels: {
+      formatter: (value) => { 
+        
+        return `${months[new Date(value).getMonth()]}, ${new Date(value).getFullYear()}`
+      },
+    }
+  },
+  yaxis: {
+    labels: {
+      formatter: function (value) {
+        return value;
+      }
     }
   },
   colors: ['#1B98F5'],
@@ -478,6 +517,15 @@ function DashboardLayout() {
   }
   };
 
+  useEffect(()=>{
+    if(profileID){
+      //console.log("Hello")
+      dispatch(fetchTodos(profileID));
+      dispatch(loadEvents(profileID));
+      dispatch(loadNotes(profileID));
+    }
+  },[profileID])
+
   
   return (
     <div className="h-full px-4 z-4">
@@ -488,29 +536,29 @@ function DashboardLayout() {
         <div className={`flex ${!theme?"bg-zinc-600":"bg-neutral-300"} grow justify-center rounded-md`}>
           <div className={`flex ${!theme?"text-white":"text-zinc-800"} flex-col items-start justify-around p-4`}>
             <p className=" text-base xsm:text-xl">Todos</p>
-            <p className="text-4xl">24</p>
+            <p className="text-4xl">{todos.length}</p>
           </div>
           <div className="hidden apex-xsm:block">
             <Chart series={radialState.series} type="radialBar" options={radialState.options}/>
           </div>
         </div>
         <div className={`flex flex-col grow ${!theme?"bg-zinc-600":"bg-neutral-300"} justify-center items-center gap-2 rounded-md`}>
-          <Chart series={[20]} type="radialBar" options={todoInprogressState}/>
+          <Chart series={todoInprogressState.series} type="radialBar" options={todoInprogressState}/>
           <p className={`${!theme?"text-white":"text-zinc-800"}`}>In-Progress Todos</p>
         </div>
         <div className={`flex flex-col grow ${!theme?"bg-zinc-600":"bg-neutral-300"} justify-center items-center gap-2 rounded-md`}>
-          <Chart series={[30]} type="radialBar" options={todoCompletedState}/>
+          <Chart series={todoCompletedState.series} type="radialBar" options={todoCompletedState}/>
           <p className={`${!theme?"text-white":"text-zinc-800"}`}>Completed Todos</p>
         </div>
       </div>
       <div className="flex w-full flex-wrap mt-5 gap-4">
         <div className={`flex p-4 flex-col ${!theme?"text-white":"text-zinc-800"} ${!theme?"bg-zinc-600":"bg-neutral-300"} grow justify-center rounded-md`}>
           <p className=" text-base xsm:text-xl">Events</p>
-          <p className="text-4xl">24</p>
+          <p className="text-4xl">{events.length}</p>
         </div>
         <div className={`flex p-4 flex-col ${!theme?"text-white":"text-zinc-800"} ${!theme?"bg-zinc-600":"bg-neutral-300"} grow justify-center rounded-md`}>
           <p className=" text-base xsm:text-xl">Notes</p>
-          <p className="text-4xl">12</p>
+          <p className="text-4xl">{notes.length}</p>
         </div>
       </div>
       <div className="mt-3 flex flex-col msm:flex-row ">

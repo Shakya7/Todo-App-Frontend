@@ -103,7 +103,7 @@ function Profile() {
                             ...profileDetails,
                             email:e.target.value
                         })
-                    }} defaultValue={profileDetails.email} disabled={profileDetails.email_edit?false:true} className={`w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2`} type="email"/>
+                    }} defaultValue={profileDetails.email} disabled={profileDetails.email_edit?false:true} className={`w-full xxsm:w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2`} type="email"/>
                     {profileDetails.email_edit?<button onClick={()=>{
                         setUpdateEmailOverlay(true);
                         setProfileDetails({
@@ -118,7 +118,7 @@ function Profile() {
                     <p className={`${theme?"text-orange-500":"text-yellow-200"}`}>**Please enter password to update the email address**</p>
                     <input onChange={(e)=>{
                         setPasswordForEmail(e.target.value);
-                    }} className={`mx-4 vsm:mx-0 w-auto vsm:w-80 ${!theme?"bg-zinc-100":"bg-zinc-400"} outline-none rounded-md p-2`} type="password"/>
+                    }} className={`mx-4 vsm:mx-0 w-full xxsm:w-auto vsm:w-80 ${!theme?"bg-zinc-100":"bg-zinc-400"} outline-none rounded-md p-2`} type="password"/>
                     <div className="flex gap-2">
                         <button onClick={()=>{
                             console.log(passwordForEmail);
@@ -149,7 +149,7 @@ function Profile() {
                             ...profileDetails,
                             mobile:e.target.value
                         })
-                    }} defaultValue={mobile} disabled={profileDetails.mobile_edit?false:true} className={`w-auto vsm:w-80 ${!theme?"bg-zinc-100":"bg-zinc-400"} outline-none rounded-md p-2`} type="text"/>
+                    }} defaultValue={mobile} disabled={profileDetails.mobile_edit?false:true} className={`w-auto vsm:w-80 ${!theme?"bg-zinc-100":"bg-zinc-400"} outline-none rounded-md p-2 w-full`} type="text"/>
                     {profileDetails.mobile_edit?<button onClick={()=>{
                         setUpdateMobileOverlay(true);
                         setProfileDetails({
@@ -163,7 +163,7 @@ function Profile() {
                     <p className={`${theme?"text-orange-500":"text-yellow-200"}`}>**Please enter password to update the mobile**</p>
                     <input onChange={(e)=>{
                         setPasswordForMobile(e.target.value);
-                    }} className={`mx-4 vsm:mx-0 w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2`} type="password"/>
+                    }} className={`mx-4 vsm:mx-0 w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2 w-full`} type="password"/>
                     <div className="flex gap-2">
                         <button onClick={()=>{
                             console.log(passwordForMobile);
