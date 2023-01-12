@@ -7,9 +7,12 @@ function NoteCard(props) {
   const theme=useSelector((state)=>state.settings.darkMode);
   return (
     <div onClick={()=>{
+        if(props.search){
+          props.closeSearchModal(false);
+        }
         props.setShowUpdtModal(true);
         dispatch(loadUpdateNote(props))
-        }} className={`flex flex-col ${theme?"bg-neutral-300":"bg-zinc-600"} p-5 items-start gap-2 w-full xxsm:w-48 h-auto rounded-md cursor-pointer`}>
+        }} className={`flex flex-col ${theme?"bg-zinc-400":"bg-zinc-600"} p-5 items-start gap-2 w-full xxsm:w-48 h-auto rounded-md cursor-pointer`}>
         <div style={{color:props.color}} className={`text-left self-center text-todoTitle xxxsm:text-base  text-center xxxsm:self-auto`}>{props.title}</div>
         <div className="text-xs self-end">
         {

@@ -30,6 +30,9 @@ function TodoCard(props) {
             
             //console.log(props);
             dispatch(loadDataIntoRedux(props));
+            if(props.search){
+                props.closeSearchModal(false);
+            }
             return props.updateTodo(true);
             }} className={`flex flex-col ${!theme?"bg-zinc-600":"bg-neutral-300"} p-5 items-start gap-2 w-full xxsm:w-48 h-auto rounded-md cursor-pointer`}>
             <div className={`rounded-xl text-date xxxsm:text-sm px-2 py-1 self-end xxxsm:self-auto ${props.priority==="High"?"bg-red-400 text-red-900":"bg-green-400 text-green-900"}`}>{props.priority}</div>
@@ -52,7 +55,7 @@ function TodoCard(props) {
 
             </div>
             <div className="w-full flex flex-col items-start ">
-                <div className="w-full justify-between flex text-xs flex-col text-left xxxsm:flex-row">
+                <div className="w-full justify-between flex text-xs flex-col text-date xxxsm:text-xs text-left xxxsm:flex-row">
                     <p className={`${!theme?"text-gray-400":"text-stone-600"}`}>Progress</p>
                     <p className={`${!theme?"text-gray-400":"text-stone-600"}`}>{props.tasks.length===0?"-":`${completedTasks}/${props.tasks.length}`}</p>
                 </div>

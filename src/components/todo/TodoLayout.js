@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSort, faFilter, faSquarePlus, faExclamationCircle, faXmark } from "@fortawesome/free-solid-svg-icons";
-import {useState, useEffect, useLayoutEffect, useRef} from "react";
+import { faSort, faFilter, faSquarePlus, faExclamationCircle, faXmark, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {useState, useEffect, useRef} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ModalTodo from "./ModalTodo";
@@ -10,6 +10,8 @@ import ModalTodoUpdate from "./ModalTodoUpdate";
 import { loadInProgressTodos, loadCompletedTodos } from "../../redux/features/todos/todoSlice";
 import { setAll, setInProgress, setCompleted, filterTodosOnLowPr, filterTodosOnHighPr, filterTodosOn5Ageing, resetFilter, sortByUpdatedDateOldest, sortByUpdatedDateLatest, sortByCreatedDateOldest, sortByCreatedDateLatest, resetSort } from "../../redux/features/filter/filterTodosSlice";
 import axios from "axios";
+import SearchedTodosModal from "./SearchedTodosModal";
+import { setSearchedTodos } from "../../redux/features/search/searchSlice";
 
 
 function TodoLayout() {
@@ -21,12 +23,15 @@ function TodoLayout() {
   const theme=useSelector((state)=>state.settings.darkMode);
 
   const [selected, setSelected]=useState("all");
-  const [showModal, setShowModal]=useState(false);
 
+  const [showModal, setShowModal]=useState(false);
   const [showTodo, setShowTodo]=useState(false);
+  const [showSearchedTodos, setShowSearchedTodos]=useState(false);
 
   const [dropdwnSort, setDropdwnSort]=useState(false);
   const [dropdwnFilter, setDropdwnFilter]=useState(false);
+
+  const [searchTerm, setSearchTerm]=useState("");
 
   const dispatch=useDispatch();
 
@@ -52,6 +57,15 @@ function TodoLayout() {
     if(filterRef.current && dropdwnFilter && !filterRef.current.contains(e.target)){
       setDropdwnFilter(false);
     }
+  }
+
+  function searchFunction(todos){
+    if(searchTerm==="")
+      return []
+    let sA=todos.filter((todo)=>{
+      return todo.title.toLowerCase().includes(searchTerm.toLowerCase()) || todo.tasks.find((task)=>task.title.includes(searchTerm))
+    })
+    return sA
   }
   
 
@@ -121,6 +135,13 @@ function TodoLayout() {
         <button onClick={()=>{
           isLoggedIn?setShowModal((prev)=>!prev):navigation("/login");
         }} className="bg-blue-800 p-1.5 msm:px-3 msm:py-2 text-white text-filter msm:text-base rounded-md">+ Add Todo</button>
+      </div>
+      <div className={`relative vsm:${isLoggedIn?"block":"hidden"} w-full mt-3 text-filter msm:text-base items-center`}>
+          <input onChange={(e)=>setSearchTerm(e.target.value) } placeholder="Search for todos here" className={`rounded-md w-full px-7 xsm:px-10 py-2 ${theme?"bg-zinc-300 text-zinc-800":"bg-zinc-700 text-slate-200"} outline-none`} type={"text"}/>
+          <FontAwesomeIcon onClick={()=>{
+            dispatch(setSearchedTodos(searchFunction(todos)));
+            setShowSearchedTodos(true);
+          }} className={`absolute top-2.5 xsm:top-3 left-3 ${theme?"text-zinc-700":"text-slate-400"} hover:text-slate-100 cursor-pointer`} icon={faMagnifyingGlass}/>
       </div>
       <div className="flex justify-between gap-1 xxsm:gap-0 items-start xxsm:items-center mt-3 flex-col xxsm:flex-row">
         <div className="w-auto flex justify-along items-center">
@@ -428,6 +449,7 @@ function TodoLayout() {
       </div>
       {showModal?<ModalTodo closeModal={setShowModal}/>:""}
       {showTodo?<ModalTodoUpdate closeModal={setShowTodo}/>:""}
+      {showSearchedTodos?<SearchedTodosModal search={searchTerm} updateTodo={setShowTodo} closeModal={setShowSearchedTodos}/>:""}
     </div>
   )
 }
