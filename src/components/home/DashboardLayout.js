@@ -494,7 +494,6 @@ function DashboardLayout() {
     xaxis:{
       labels: {
         formatter: (value) => { 
-          console.log(notes)
           return notes.length?`${months[new Date(value).getMonth()]}, ${new Date(value).getFullYear()}`:value
         },
       }

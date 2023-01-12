@@ -40,9 +40,12 @@ function Profile() {
 
   return (
     <div className="h-full">
-        <div className="h-full">
+        <div className="h-full px-4">
+            <div className="flex justify-center md:justify-start  items-center mt-3">
+                <h2 className={`self-start font-nunito ${!theme?"text-white":"text-zinc-800"} text-title xxxsm:text-4xl`}>Profile</h2>
+            </div>
             <div className="flex pt-44 pl-10 items-center justify-center md:pt-20 md:justify-start ">
-                <div className={`rounded-full w-24 h-24 apex-xsm:w-[65vw] apex-xsm:h-[65vw]  xxsm:w-60 xxsm:h-60 mr-8 flex items-center justify-center  ${theme?"bg-zinc-300":"bg-gray-400"}`}>
+                <div className={`rounded-md apex-xsm:rounded-full w-24 h-20 apex-xsm:w-[65vw] apex-xsm:h-[65vw]  xxsm:w-60 xxsm:h-60 mr-8 flex items-center justify-center  ${theme?"bg-zinc-300":"bg-gray-400"}`}>
                     <FontAwesomeIcon className="text-xs apex-xsm:text-[14vw] xxsm:text-5xl" icon={faUser}/>
                 </div>
                 <div className="hidden md:block">

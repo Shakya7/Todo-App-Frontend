@@ -40,7 +40,10 @@ function Header() {
           <FontAwesomeIcon onClick={()=>setShow(false)} className={`text-xl absolute top-4 left-4 ${theme?"text-zinc-800":"text-slate-400"}`} icon={faXmark}/>
           <div className="mt-14 h-full">
             <div className="flex flex-col items-start text-filter vsm:text-base">
-              <div className="h-1/6 gap-x-3 flex justify-start xxsm:justify-center items-center px-4">
+              <div onClick={()=>{
+                setShow(false);
+                navigation("/")
+                }} className="h-1/6 gap-x-3 flex justify-start xxsm:justify-center items-center px-4">
                 <img className="w-1/6 vsm:w-10" src={logo} alt="logo"/>
                 <span className="font-fascinate text-gray-200 text-addTask vsm:text-xl">TraceBit</span>
               </div>
@@ -81,7 +84,10 @@ function Header() {
                 <div className="vsm:w-12"><FontAwesomeIcon className="text-filter vsm:text-xl" icon={faNoteSticky}/></div>
                 <p>Notes</p>
               </div>
-              <div className={`flex gap-x-3 w-full justify-start items-center p-4 ease-in-out duration-500 cursor-pointer ${theme?"text-gray-800":"text-gray-400"} 2xl:p-5 hover:bg-stone-900 hover:text-slate-100`}>
+              <div onClick={()=>{
+                setShow(false);
+                navigation("/settings")
+                }} className={`flex gap-x-3 w-full justify-start items-center p-4 ease-in-out duration-500 cursor-pointer ${theme?"text-gray-800":"text-gray-400"} 2xl:p-5 hover:bg-stone-900 hover:text-slate-100`}>
                 <div className="vsm:w-12"><FontAwesomeIcon className="text-filter vsm:text-xl" icon={faGear}/></div>
                 <p>Settings</p>
               </div>

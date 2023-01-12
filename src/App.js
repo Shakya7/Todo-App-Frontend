@@ -9,6 +9,9 @@ import Login from './components/Login';
 import Profile from './components/Profile';
 import TodoLayout from './components/todo/TodoLayout';
 import NoteLayout from './components/note/NoteLayout';
+import Settings from './components/Settings';
+import _500ServerError from './components/error-UI/_500ServerError';
+import PageNotFound from './components/error-UI/PageNotFound';
 
 function App() {
   return (
@@ -21,9 +24,12 @@ function App() {
           <Route path="/note" element={<NoteLayout/>}/>
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/todo" element={<TodoLayout/>}/>
+          <Route path="/settings" element={<Settings/>}/>
+          <Route path="*" element={<PageNotFound/>}/>
         </Route>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/login" element={<Login/>}/>
+        <Route path="*" element={<_500ServerError/>}/>
       </Routes>
     </div>
     </BrowserRouter>
