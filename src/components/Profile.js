@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import {  updateName, updateEmail, updateMobile } from "../redux/features/profile/profileSlice";
 import {SpinnerCircular} from "spinners-react";
 import { setUpdateEmailOverlay, setUpdateMobileOverlay } from "../redux/features/profile/profileSlice";
+import { updatePassword } from "../redux/features/profile/profileSlice";
+import { clearPasswordError, setUpdatePasswordFlag } from "../redux/features/profile/profileSlice";
 
 
 function Profile() {
@@ -15,6 +17,7 @@ function Profile() {
   const isNameUpdating=useSelector((state)=>state.profile.isNameUpdating);
   const isEmailUpdating=useSelector((state)=>state.profile.isEmailUpdating);
   const isNumberUpdating=useSelector((state)=>state.profile.isMobileUpdating);
+  const isPasswordUpdating=useSelector((state)=>state.profile.isPasswordUpdating);
   const theme=useSelector((state)=>state.settings.darkMode);
 
   const error=useSelector((state)=>state.profile.error);
@@ -33,15 +36,27 @@ function Profile() {
   //const [updateEmailOverlay, setUpdateEmailOverlay] = useState(false);
   const updateEmailOverlay=useSelector((state)=>state.profile.updateEmailOverlay);
   const updateMobileOverlay=useSelector((state)=>state.profile.updateMobileOverlay);
+  const updatePasswordFlag=useSelector((state)=>state.profile.updatePasswordFlag);
 
   const [passwordForEmail,setPasswordForEmail]=useState("");
 
   const [passwordForMobile,setPasswordForMobile]=useState("");
 
+  //const [updatePasswordFlag, setUpdatePasswordFlag]=useState(false);
+  const [updatePwData, setUpdatePwData]=useState({
+    old_p:"",
+    new_p:"",
+  })
+
   const dispatch=useDispatch();
+
   useEffect(()=>{
     
   },[profileDetails])
+
+  useEffect(()=>{
+    console.log(updatePwData)
+  },[updatePwData])
 
   return (
     <div className="h-full">
@@ -138,19 +153,26 @@ function Profile() {
                 </div>:""}
                 {isEmailUpdating?<SpinnerCircular/>:""}
             </div>
-            <div className="vsm:pl-10 mt-5 flex gap-5 flex-col pb-20 items-center md:items-start">
-                <div className="text-left"><span className={`mr-20 ${theme?"text-zinc-800":"text-white"} text-[5vw] xxsm:text-base`}>Mobile Number</span> {profileDetails.mobile_edit?<span onClick={()=>{
-                    setProfileDetails({
-                        ...profileDetails,
-                        mobile_edit:!profileDetails.mobile_edit
-                    })
-                }} className="cursor-pointer text-red-700 text-[5vw] xxsm:text-base">Cancel</span>:<span onClick={()=>{
+            <div className="vsm:pl-10 mt-5 flex gap-5 flex-col items-center md:items-start">
+                <div className="text-left">
+                    <span className={`mr-20 ${theme?"text-zinc-800":"text-white"} text-[5vw] xxsm:text-base`}>
+                        Mobile Number
+                    </span> 
+                    {profileDetails.mobile_edit?
+                    <span onClick={()=>{
+                        setProfileDetails({
+                            ...profileDetails,
+                            mobile_edit:!profileDetails.mobile_edit
+                        })
+                    }} className="cursor-pointer text-red-700 text-[5vw] xxsm:text-base">Cancel</span>:
+                    <span onClick={()=>{
                     dispatch(setUpdateMobileOverlay(false));
                     setProfileDetails({
                         ...profileDetails,
                         mobile_edit:!profileDetails.mobile_edit
                     })
-                }} className={`${theme?"text-green-500":"text-yellow-500"} cursor-pointer text-[5vw] xxsm:text-base`}>Edit</span>}</div>
+                }} className={`${theme?"text-green-500":"text-yellow-500"} cursor-pointer text-[5vw] xxsm:text-base`}>Edit</span>}
+                </div>
                 <div>
                     <input onChange={(e)=>{
                         setProfileDetails({
@@ -183,6 +205,54 @@ function Profile() {
                     {error.updateMobile?<div className="text-red-600 text-[5vw] xxsm:text-base">{error.updateMobile}</div>:""}
                 </div>:""}
                 {isNumberUpdating?<SpinnerCircular/>:""}
+            </div>
+
+            <div className="vsm:pl-10 mt-5 pb-20 flex gap-5 flex-col items-center md:items-start">
+                <div className="text-left">
+                        <span className={`mr-20 ${theme?"text-zinc-800":"text-white"} text-[5vw] xxsm:text-base`}>
+                            Password
+                        </span> 
+                        {updatePasswordFlag?
+                        <span onClick={()=>{
+                            dispatch(setUpdatePasswordFlag(false));
+                            //dispatch(clearPasswordError());
+                        }} className="cursor-pointer text-red-700 text-[5vw] xxsm:text-base">Cancel</span>:
+                        <span onClick={()=>{
+                            dispatch(setUpdatePasswordFlag(true));
+                    }} className={`${theme?"text-green-500":"text-yellow-500"} cursor-pointer text-[5vw] xxsm:text-base`}>Update</span>}
+                </div>
+                {updatePasswordFlag?
+                <div className="flex flex-col justify-center items-center md:items-start p-2 rounded-md">
+                    <p className={`${theme?"text-orange-500":"text-yellow-200"} text-[5vw] xxsm:text-base`}>**Please enter old password first**</p>
+                    <input onChange={(e)=>{
+                        setUpdatePwData({
+                            ...updatePwData,
+                            old_p:e.target.value
+                        })
+                    }} placeholder="Old password" className={`mx-4 mb-2 vsm:mx-0 w-full xxsm:w-auto ${!theme?"bg-zinc-100 text-black":"bg-zinc-800 text-gray-400"} vsm:w-80 outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="password"/>
+                    <input onChange={(e)=>{
+                        setUpdatePwData({
+                            ...updatePwData,
+                            new_p:e.target.value
+                        })
+                    }} placeholder="new password" className={`mx-4 vsm:mx-0 w-full xxsm:w-auto ${!theme?"bg-zinc-100 text-black":"bg-zinc-800 text-gray-400"} vsm:w-80 outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="password"/>
+                    <div className="flex gap-2">
+                        <button onClick={()=>{
+                            dispatch(updatePassword(updatePwData));
+                        }} className="bg-blue-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Update</button>
+                        <button onClick={()=>{
+                            setUpdatePwData({
+                                old_p:"",
+                                new_p:""
+                            })
+                            //dispatch(clearPasswordError());
+                            dispatch(setUpdatePasswordFlag(false));
+                        }} className="bg-red-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Cancel</button>
+                    </div>
+                    {error.updatePassword?<div className="text-red-600 text-[5vw] xxsm:text-base">{error.updatePassword}</div>:""}
+                </div>:""
+                }
+                {isPasswordUpdating?<SpinnerCircular/>:""}
             </div>
         </div>
     </div>

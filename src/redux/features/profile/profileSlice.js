@@ -7,12 +7,14 @@ const profileState={
     isNameUpdating:false,
     isEmailUpdating:false,
     isMobileUpdating:false,
+    isPasswordUpdating:false,
     id:"",
     error:{
         updateName:"",
         updateEmail:"",
         updateMobile:"",
         fetchData:"",
+        updatePassword:""
 
     },
     name:"",
@@ -20,7 +22,8 @@ const profileState={
     mobile:"",
 
     updateEmailOverlay:false,
-    updateMobileOverlay:false
+    updateMobileOverlay:false,
+    updatePasswordFlag:false
 }
 
 export const fetchAccountData=createAsyncThunk("/profile/fetchAccountData",async(_,{rejectWithValue})=>{
@@ -61,6 +64,14 @@ export const updateMobile=createAsyncThunk("/profile/updateMobile",async ([passw
     }
 })
 
+export const updatePassword=createAsyncThunk("/profile/updatePassword", async(obj,{rejectWithValue})=>{
+    try{
+        await account.updatePassword(obj.new_p,obj.old_p)
+    }catch(err){
+        return rejectWithValue(err.message);
+    }
+})
+
 const profileSlice=createSlice({
     name:"profile",
     initialState:profileState,
@@ -90,6 +101,14 @@ const profileSlice=createSlice({
             if(action.payload===false)
                 state.error.updateMobile=""
             state.updateMobileOverlay=action.payload;
+        },
+        setUpdatePasswordFlag:(state,action)=>{
+            if(action.payload===false)
+                state.error.updatePassword=""
+            state.updatePasswordFlag=action.payload;
+        },
+        clearPasswordError:(state)=>{
+            state.error.updatePassword=""
         }
 
     },
@@ -151,8 +170,22 @@ const profileSlice=createSlice({
             state.isMobileUpdating=false;
             state.updateMobileOverlay=true;
         })
+
+        //Update password
+        builder.addCase(updatePassword.pending,(state)=>{
+            state.isPasswordUpdating=true;
+        }).addCase(updatePassword.fulfilled,(state)=>{
+            state.error.updatePassword="";
+            state.isPasswordUpdating=false;
+            state.updatePasswordFlag=false;
+        }).addCase(updatePassword.rejected, (state,action)=>{
+            console.log(action.payload);
+            state.error.updatePassword=action.payload==="Invalid credentials. Please check the email and password."?"Invalid credentials. Please check old password.":action.payload;
+            state.isPasswordUpdating=false;
+            state.updatePasswordFlag=true;
+        })
     }
 })
 
-export const {resetData, setUpdateEmailOverlay, setUpdateMobileOverlay}=profileSlice.actions;
+export const {resetData, setUpdateEmailOverlay, setUpdateMobileOverlay,setUpdatePasswordFlag, clearPasswordError}=profileSlice.actions;
 export default profileSlice.reducer;
