@@ -13,6 +13,8 @@ function CreateEventModal(props) {
   const profileID=useSelector((state)=>state.profile.id);
   const isLoading=useSelector((state)=>state.event.isLoading);
   const theme=useSelector((state)=>state.settings.darkMode);
+
+  const [error, setError]=useState("");
   
 
   const [currentState,setCurrentState]=useState({
@@ -116,14 +118,27 @@ function CreateEventModal(props) {
                     </div>
                 </div>
             </div> */}
+            <p className={`text-filter xxsm:text-base ${theme?"text-red-600":"text-red-400"}`}>{error}</p>
             <button onClick={()=>{
-                console.log(currentState);
                 if(currentState.title==="" || currentState.start_date==="" || currentState.end_date==="" || currentState.start_time==="" || currentState.end_time==="" || currentState.link===""){
-
-
-
-                    
-                }else{
+                    setError("Please fill all the fields");
+                }
+                else if(new Date(currentState.start_date).getTime()>new Date(currentState.end_date).getTime()){
+                    setError("Start date should be smaller than End date");
+                }
+                else if(Number(currentState.start_time.split(":").join(""))>Number(currentState.end_time.split(":").join(""))){
+                    if(new Date(currentState.start_date).getTime()===new Date(currentState.end_date).getTime())
+                        setError("Start time should be smaller then End time");
+                    else{
+                        setError("");
+                        dispatch(createEvent(currentState));
+                        if(!isLoading){
+                            props.closeModal(false)
+                        }
+                    }
+                }
+                else{
+                    setError("");
                     dispatch(createEvent(currentState));
                     if(!isLoading){
                         props.closeModal(false)

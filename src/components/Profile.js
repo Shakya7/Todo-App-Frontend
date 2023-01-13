@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import {  updateName, updateEmail, updateMobile } from "../redux/features/profile/profileSlice";
 import {SpinnerCircular} from "spinners-react";
+import { setUpdateEmailOverlay, setUpdateMobileOverlay } from "../redux/features/profile/profileSlice";
 
 
 function Profile() {
@@ -16,27 +17,31 @@ function Profile() {
   const isNumberUpdating=useSelector((state)=>state.profile.isMobileUpdating);
   const theme=useSelector((state)=>state.settings.darkMode);
 
+  const error=useSelector((state)=>state.profile.error);
+
   const [profileDetails,setProfileDetails]=useState({
     name_edit:false,
     email_edit:false,
     mobile_edit:false,
-    name,
-    email,
+    name:String(name),
+    email:String(email),
     mobile:String(mobile)
   });
 
   
 
-  const [updateEmailOverlay, setUpdateEmailOverlay] = useState(false);
+  //const [updateEmailOverlay, setUpdateEmailOverlay] = useState(false);
+  const updateEmailOverlay=useSelector((state)=>state.profile.updateEmailOverlay);
+  const updateMobileOverlay=useSelector((state)=>state.profile.updateMobileOverlay);
+
   const [passwordForEmail,setPasswordForEmail]=useState("");
 
-  const [updateMobileOverlay, setUpdateMobileOverlay]=useState(false);
   const [passwordForMobile,setPasswordForMobile]=useState("");
 
   const dispatch=useDispatch();
   useEffect(()=>{
     
-  },[profileDetails, name, email, mobile, isNameUpdating, isEmailUpdating, isNumberUpdating, updateEmailOverlay, updateMobileOverlay])
+  },[profileDetails])
 
   return (
     <div className="h-full">
@@ -76,7 +81,7 @@ function Profile() {
                             ...profileDetails,
                             name:e.target.value
                         })
-                    }} defaultValue={profileDetails.name} disabled={profileDetails.name_edit?false:true} className={`w-full xxsm:w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="text"/>
+                    }} defaultValue={name} disabled={profileDetails.name_edit?false:true} className={`w-full xxsm:w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="text"/>
                     {profileDetails.name_edit?<button onClick={()=>{
                         dispatch(updateName(profileDetails));
                         setProfileDetails({
@@ -94,7 +99,7 @@ function Profile() {
                         email_edit:!profileDetails.email_edit
                     })
                 }} className="cursor-pointer text-red-700 text-[5vw] xxsm:text-base">Cancel</span>:<span onClick={()=>{
-                    setUpdateEmailOverlay(false);
+                    dispatch(setUpdateEmailOverlay(false));
                     setProfileDetails({
                         ...profileDetails,
                         email_edit:!profileDetails.email_edit
@@ -106,9 +111,9 @@ function Profile() {
                             ...profileDetails,
                             email:e.target.value
                         })
-                    }} defaultValue={profileDetails.email} disabled={profileDetails.email_edit?false:true} className={`w-full xxsm:w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="email"/>
+                    }} defaultValue={email} disabled={profileDetails.email_edit?false:true} className={`w-full xxsm:w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="email"/>
                     {profileDetails.email_edit?<button onClick={()=>{
-                        setUpdateEmailOverlay(true);
+                        dispatch(setUpdateEmailOverlay(true));
                         setProfileDetails({
                             ...profileDetails,
                             email_edit:false
@@ -124,12 +129,12 @@ function Profile() {
                     }} className={`mx-4 vsm:mx-0 w-full xxsm:w-auto vsm:w-80 ${!theme?"bg-zinc-100":"bg-zinc-400"} outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="password"/>
                     <div className="flex gap-2">
                         <button onClick={()=>{
-                            console.log(passwordForEmail);
+                            //console.log(passwordForEmail);
                             dispatch(updateEmail([passwordForEmail,profileDetails.email]));
-                            setUpdateEmailOverlay(false);
                         }} className="bg-blue-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Update</button>
-                        <button onClick={()=>setUpdateEmailOverlay(false)} className="bg-red-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Cancel</button>
+                        <button onClick={()=>dispatch(setUpdateEmailOverlay(false))} className="bg-red-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Cancel</button>
                     </div>
+                    {error.updateEmail?<div className="text-red-600 text-[5vw] xxsm:text-base">{error.updateEmail}</div>:""}
                 </div>:""}
                 {isEmailUpdating?<SpinnerCircular/>:""}
             </div>
@@ -140,7 +145,7 @@ function Profile() {
                         mobile_edit:!profileDetails.mobile_edit
                     })
                 }} className="cursor-pointer text-red-700 text-[5vw] xxsm:text-base">Cancel</span>:<span onClick={()=>{
-                    setUpdateMobileOverlay(false);
+                    dispatch(setUpdateMobileOverlay(false));
                     setProfileDetails({
                         ...profileDetails,
                         mobile_edit:!profileDetails.mobile_edit
@@ -153,13 +158,15 @@ function Profile() {
                             mobile:e.target.value
                         })
                     }} defaultValue={mobile} disabled={profileDetails.mobile_edit?false:true} className={`w-full xxsm:w-auto vsm:w-80 ${!theme?"bg-zinc-100":"bg-zinc-400"} outline-none rounded-md p-2 w-full text-[5vw] xxsm:text-base`} type="text"/>
-                    {profileDetails.mobile_edit?<button onClick={()=>{
-                        setUpdateMobileOverlay(true);
+                    {profileDetails.mobile_edit?
+                    <button onClick={()=>{
+                        dispatch(setUpdateMobileOverlay(true));
                         setProfileDetails({
                             ...profileDetails,
                             mobile_edit:false
                         })
                     }} className="bg-blue-700 px-2 py-1 ml-10 rounded-md text-white text-[5vw] xxsm:text-base">Save</button>:""}
+                    {profileDetails.mobile_edit?<p className={`italic ${!theme?"text-white":"text-zinc-800"} text-[5vw] xxsm:text-xs text-center custom-1:text-left`}>While updating this, please remove +91</p>:""}
                 </div>
                 {updateMobileOverlay?
                 <div className="flex flex-col justify-center items-center md:items-start p-2 rounded-md">
@@ -169,12 +176,11 @@ function Profile() {
                     }} className={`mx-4 vsm:mx-0 w-full xxsm:w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="password"/>
                     <div className="flex gap-2">
                         <button onClick={()=>{
-                            console.log(passwordForMobile);
                             dispatch(updateMobile([passwordForMobile,profileDetails.mobile]));
-                            setUpdateMobileOverlay(false);
                         }} className="bg-blue-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Update</button>
-                        <button onClick={()=>setUpdateMobileOverlay(false)} className="bg-red-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Cancel</button>
+                        <button onClick={()=>dispatch(setUpdateMobileOverlay(false))} className="bg-red-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Cancel</button>
                     </div>
+                    {error.updateMobile?<div className="text-red-600 text-[5vw] xxsm:text-base">{error.updateMobile}</div>:""}
                 </div>:""}
                 {isNumberUpdating?<SpinnerCircular/>:""}
             </div>

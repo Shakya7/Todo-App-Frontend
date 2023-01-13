@@ -10,6 +10,7 @@ module.exports = {
         "msm":"650px",
         "vsm":"560px",
         "xsm":"480px",
+        "custom-1":"397px",
         "xxsm":"350px",
         "xxxsm":"250px",
         "apex-xsm":"230px"

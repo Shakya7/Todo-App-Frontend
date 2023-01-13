@@ -52,7 +52,7 @@ function Login(){
             <div className="basis-full h-full overflow-y-scroll overflow-x-hidden">
                 <div className="h-full">
                     <div className={`flex flex-col ${theme?"bg-zinc-50":"bg-zinc-800"} justify-center items-center`}>
-                        <div className="flex justify-center items-center gap-1 my-6">
+                        <div onClick={()=>navigation("/")} className="flex justify-center items-center gap-1 my-6">
                             <img className="w-1/5 xxsm:w-20" src={logo} alt="logo"/>
                             <p className={`${theme?"text-zinc-800":"text-white"} font-fascinate text-title xxsm:text-5xl`}>TraceBit</p>
                         </div>

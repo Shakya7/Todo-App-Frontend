@@ -14,6 +14,8 @@ function ModalNote(props) {
 
   const theme=useSelector((state)=>state.settings.darkMode);
 
+  const [error,setError]=useState("");
+
   const [currentState,setCurrentState]=useState({
     title:"",
     color:"#3F3F46",
@@ -45,14 +47,13 @@ function ModalNote(props) {
                         note:e.target.value
                     })
                 }} style={{resize:"none"}} className={`note-sec w-full h-full rounded-sm outline-none overflow-y-scroll px-1.5 ${theme?"bg-zinc-200 text-zinc-800":"bg-zinc-800 text-gray-400"} text-filter xsm:text-base`} placeholder="Enter the notes here"/>
+            <p className={`text-filter xxsm:text-base ${theme?"text-red-600":"text-red-400"}`}>{error}</p>    
             <button onClick={()=>{
                 try{
                     if(currentState.title==="" || currentState.note===""){
-
-
-
-                    
+                        setError("Please fill all the fields")
                     }else{
+                        setError("");
                         dispatch(createNote(currentState));
                         if(!isLoading){
                             props.closeModal(false)

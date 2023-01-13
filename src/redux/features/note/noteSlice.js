@@ -77,6 +77,12 @@ const noteSlice=createSlice({
             state.updateNote.note=action.payload.noteContent;
             state.updateNote.cDate=action.payload.cdate;
             state.updateNote.uDate=action.payload.udate;
+        },
+        resetNotesData:(state)=>{
+            state.isLoading=false;
+            state.error="";
+            state.notes=[];
+            state.updateNote={};
         }
     },
     extraReducers:(builder)=>{
@@ -130,5 +136,5 @@ const noteSlice=createSlice({
     }
 })
 
-export const {loadUpdateNote}=noteSlice.actions;
+export const {loadUpdateNote, resetNotesData}=noteSlice.actions;
 export default noteSlice.reducer;

@@ -85,6 +85,12 @@ const eventSlice=createSlice({
             state.updateEvent.end_date=end_dt[0];
             state.updateEvent.end_time=end_dt[1].slice(0,5);
             state.updateEvent.id=action.payload._id;
+        },
+        resetEventsData:(state)=>{
+            state.isLoading=false;
+            state.events=[];
+            state.error="";
+            state.updateEvent={};
         }
     },
     extraReducers:(builder)=>{
@@ -137,5 +143,5 @@ const eventSlice=createSlice({
     }
 });
 
-export const {loadEventData}=eventSlice.actions;
+export const {loadEventData, resetEventsData}=eventSlice.actions;
 export default eventSlice.reducer;

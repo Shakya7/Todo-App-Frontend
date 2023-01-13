@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { SpinnerCircular } from "spinners-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { updateNote, deleteNote } from "../../redux/features/note/noteSlice";
 
 
@@ -23,6 +23,8 @@ function ModalNoteUpdate(props) {
   const profileID=useSelector((state)=>state.profile.id);
   const theme=useSelector((state)=>state.settings.darkMode);
 
+  const [error,setError]=useState("");
+
 
   const [currentState, setCurrentState]=useState({
     title,
@@ -33,6 +35,10 @@ function ModalNoteUpdate(props) {
     noteID,
     profileID
   })
+
+  useEffect(()=>{
+
+  },[udate])
 
   return (
     <div className='fixed top-0 left-0 w-screen h-screen backdrop-blur-sm z-10 flex justify-center items-center'>
@@ -60,10 +66,15 @@ function ModalNoteUpdate(props) {
                     note:e.target.value
                 })
             }} defaultValue={note} style={{resize:"none"}} className={`note-sec w-full h-full bg-transparent outline-none overflow-y-scroll ${theme?"text-zinc-800":"text-white"} text-filter xsm:text-base`}/>
+            <p className={`text-filter xxsm:text-base ${theme?"text-red-600":"text-red-400"}`}>{error}</p>
             <div className="flex w-full gap-1">
                 <button onClick={()=>{
                     try{
-                        dispatch(updateNote(currentState));
+                        if(currentState.title==="" || currentState.note===""){
+                            setError("Please fill all the fields")
+                        }else{
+                            dispatch(updateNote(currentState));
+                        }
                         //dispatch(loadEvents(currentEventState.profileID));
                     }catch(err){
                         console.log(err.message);

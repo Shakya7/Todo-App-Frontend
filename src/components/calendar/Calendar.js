@@ -11,6 +11,7 @@ import { loadEventData } from "../../redux/features/calendar/eventSlice";
 
 import CreateEventModal from "./CreateEventModal";
 import UpdateEventModal from "./UpdateEventModal";
+import { useNavigate } from "react-router-dom";
 
 
 const localizer = momentLocalizer(moment)
@@ -22,10 +23,16 @@ const MyCalendar = function(props){
   const events=useSelector((state)=>state.event.events);
   const profileID=useSelector((state)=>state.profile.id);
 
+  const isLoggedIn=useSelector((state)=>state.login.isLogged);
+
   const theme=useSelector((state)=>state.settings.darkMode);
 
   const [createEventModal, setCreateEventModal]=useState(false);
   const [updateEventModal, setUpdateEventModal]=useState(false);
+
+  const navigation=useNavigate()
+
+  
 
   const calendarStyle = (date) => {
     let currentDate = `${new Date().getDate()} ${new Date().getMonth()+1} ${new Date().getFullYear()}`
@@ -68,10 +75,13 @@ const MyCalendar = function(props){
     // clickRef.current = window.setTimeout(() => {
       
     // }, 250)
-
-    console.log(slotInfo);
+    if(isLoggedIn){
+      setCreateEventModal(true);
+    }
+    else{
+      navigation("/login");
+    }
     //window.alert(JSON.stringify(slotInfo));
-    setCreateEventModal(true);
   }, [])
 
   const onSelectEvent = useCallback((calEvent) => {
@@ -86,7 +96,6 @@ const MyCalendar = function(props){
     clickRef.current = window.setTimeout(() => {
       dispatch(loadEventData(calEvent));
       setUpdateEventModal(true);
-      console.log(calEvent);
 
     }, 250)
   }, [])

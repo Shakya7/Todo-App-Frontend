@@ -32,6 +32,8 @@ function ModalTodo(props) {
 
   const [isFetching, setIsFetching]=useState(false);
 
+  const [error,setError]=useState("");
+
   const changePriority=(e)=>{
     console.log(e.target.value);
     setPriority(e.target.value);
@@ -83,29 +85,35 @@ function ModalTodo(props) {
           tasks.map((t)=><div className={`${theme?"bg-neutral-400":"bg-zinc-600"} mb-1 msm:mb-2 text-filter msm:text-base`} key={t.id}>{t.title}</div>):""
         }
         </div>
-        <button onClick={async()=>{
-          setIsFetching(true);
-          console.log(tasks);
-          console.log(priority);
-          try{
-            const data=await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/createTodo`,{
-              title,
-              createDate:new Date(Date.now()),
-              updatedDate:new Date(Date.now()),
-              tasks,
-              userID:profileID,
-              priority
-            });
-            console.log(data.data);
-            dispatch(fetchTodos(profileID));
-            setIsFetching(false);
-            if(!isFetchingTodos)
-              props.closeModal(false);
-          }catch(err){
-            console.log(err.message);
-            setIsFetching(false);
-          }
-        }} className="self-end bg-green-400 cursor-pointer font-nunito py-1 rounded-md px-2 text-filter msm:text-base">{isFetching?<SpinnerCircular size={25}/>:"Create"}</button>
+        <div className="flex w-full justify-between items-center">
+          <p className={`text-filter xxsm:text-base ${theme?"text-red-600":"text-red-800"}`}>{error}</p>
+          <button onClick={async()=>{
+            if(title===""){
+              setError("Please enter a title")
+              return;
+            }
+            try{
+              setIsFetching(true);
+              await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/todos/createTodo`,{
+                title,
+                createDate:new Date(Date.now()),
+                updatedDate:new Date(Date.now()),
+                tasks,
+                userID:profileID,
+                priority
+              });
+              dispatch(fetchTodos(profileID));
+              setIsFetching(false);
+              setError("")
+              if(!isFetchingTodos)
+                props.closeModal(false);
+            }catch(err){
+              console.log(err.message);
+              setIsFetching(false);
+            }
+          }} className="self-end bg-green-400 cursor-pointer font-nunito py-1 rounded-md px-2 text-filter msm:text-base">{isFetching?<SpinnerCircular size={25}/>:"Create"}</button>
+        </div>
+        
       </div>
     </div>
   )

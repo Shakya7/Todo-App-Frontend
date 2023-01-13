@@ -22,6 +22,8 @@ function UpdateEventModal(props) {
 
   const theme=useSelector((state)=>state.settings.darkMode);
 
+  const [error,setError]=useState("");
+
   const dispatch=useDispatch();
 
   const [currentEventState,setCurrentEventState]=useState({
@@ -114,13 +116,30 @@ function UpdateEventModal(props) {
                     </div>
                 </div>
             </div> */}
+            <p className={`text-filter xxsm:text-base ${theme?"text-red-600":"text-red-400"}`}>{error}</p>
             <div className="flex w-full gap-1">
                 <button onClick={()=>{
-                    try{
-                        dispatch(updateEvent(currentEventState))
-                        //dispatch(loadEvents(currentEventState.profileID));
-                    }catch(err){
-                        console.log(err.message);
+                    if(currentEventState.title==="" || currentEventState.start_date==="" || currentEventState.end_date==="" || currentEventState.start_time==="" || currentEventState.end_time==="" || currentEventState.link===""){
+                        setError("Please fill all the fields");
+                    }
+                    else if(new Date(currentEventState.start_date).getTime()>new Date(currentEventState.end_date).getTime()){
+                        setError("Start date should be smaller than End date");
+                    }
+                    else if(Number(currentEventState.start_time.split(":").join(""))>Number(currentEventState.end_time.split(":").join(""))){
+                        if(new Date(currentEventState.start_date).getTime()===new Date(currentEventState.end_date).getTime())
+                            setError("Start time should be smaller then End time");
+                        else{
+                            setError("");
+                            dispatch(updateEvent(currentEventState));
+                        }
+                    }
+                    else{
+                        try{
+                            dispatch(updateEvent(currentEventState))
+                            //dispatch(loadEvents(currentEventState.profileID));
+                        }catch(err){
+                            console.log(err.message);
+                        }
                     }
                 }} className="bg-green-600 py-1 w-full text-white rounded-md font-nunito text-filter xsm:text-base">{isLoading?<div className="flex justify-center items-center gap-2"><p>Updating</p><SpinnerCircular size={20}/></div>:"Update Event"}</button>
                 <button onClick={()=>{

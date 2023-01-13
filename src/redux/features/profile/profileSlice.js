@@ -8,10 +8,19 @@ const profileState={
     isEmailUpdating:false,
     isMobileUpdating:false,
     id:"",
-    error:"",
+    error:{
+        updateName:"",
+        updateEmail:"",
+        updateMobile:"",
+        fetchData:"",
+
+    },
     name:"",
     email:"",
     mobile:"",
+
+    updateEmailOverlay:false,
+    updateMobileOverlay:false
 }
 
 export const fetchAccountData=createAsyncThunk("/profile/fetchAccountData",async(_,{rejectWithValue})=>{
@@ -44,7 +53,7 @@ export const updateEmail=createAsyncThunk("/profile/updateEmail",async ([passwor
 
 export const updateMobile=createAsyncThunk("/profile/updateMobile",async ([password,mobile],{rejectWithValue})=>{
     try{    
-        console.log(mobile,password);
+        //console.log(mobile,password);
         const data=account.updatePhone(`+91${mobile}`, password);
         return data;
     }catch(err){
@@ -62,11 +71,27 @@ const profileSlice=createSlice({
             state.isEmailUpdating=false;
             state.isMobileUpdating=false;
             state.id="";
-            state.error="";
+            state.error={
+                updateEmail:"",
+                updateMobile:"",
+                fetchData:"",
+                updateName:""
+            };
             state.name="";
             state.email="";
             state.mobile="";
+        },
+        setUpdateEmailOverlay:(state,action)=>{
+            if(action.payload===false)
+                state.error.updateEmail=""
+            state.updateEmailOverlay=action.payload;
+        },
+        setUpdateMobileOverlay:(state,action)=>{
+            if(action.payload===false)
+                state.error.updateMobile=""
+            state.updateMobileOverlay=action.payload;
         }
+
     },
     extraReducers:(builder)=>{
 
@@ -80,9 +105,10 @@ const profileSlice=createSlice({
             state.name=action.payload.name;
             state.mobile=action.payload.phone;
             state.isFetching=false;
+            state.error.fetchData="";
         })
         builder.addCase(fetchAccountData.rejected,(state,action)=>{
-            state.error=action.payload;
+            state.error.fetchData="Error in fetching data!!!";
             state.isFetching=false;
         })
 
@@ -92,8 +118,9 @@ const profileSlice=createSlice({
         }).addCase(updateName.fulfilled,(state,action)=>{
             state.name=action.payload.name;
             state.isNameUpdating=false;
+            state.error.updateName=""
         }).addCase(updateName.rejected,(state, action)=>{
-            state.error=action.payload;
+            state.error.updateName="Network issue!!!";
             state.isNameUpdating=false;
         })
 
@@ -103,9 +130,12 @@ const profileSlice=createSlice({
         }).addCase(updateEmail.fulfilled, (state,action)=>{
             state.email=action.payload.email;
             state.isEmailUpdating=false;
-        }).addCase(updateEmail.rejected, (state,action)=>{
-            state.error=action.payload;
+            state.error.updateEmail="";
+            state.updateEmailOverlay=false;
+        }).addCase(updateEmail.rejected, (state)=>{
+            state.error.updateEmail="Inavalid password or network issue!!!";
             state.isEmailUpdating=false;
+            state.updateEmailOverlay=true;
         })
 
         //Update mobile
@@ -114,12 +144,15 @@ const profileSlice=createSlice({
         }).addCase(updateMobile.fulfilled, (state,action)=>{
             state.mobile=action.payload.phone;
             state.isMobileUpdating=false;
-        }).addCase(updateMobile.rejected,(state,action)=>{
-            state.error=action.payload;
+            state.error.updateMobile="";
+            state.updateMobileOverlay=false;
+        }).addCase(updateMobile.rejected,(state)=>{
+            state.error.updateMobile="Inavalid password or network issue!!!";
             state.isMobileUpdating=false;
+            state.updateMobileOverlay=true;
         })
     }
 })
 
-export const {resetData}=profileSlice.actions;
+export const {resetData, setUpdateEmailOverlay, setUpdateMobileOverlay}=profileSlice.actions;
 export default profileSlice.reducer;

@@ -11,6 +11,8 @@ import { resetData } from "../redux/features/profile/profileSlice";
 import { resetTodosData } from "../redux/features/todos/todoSlice";
 import { resetFilterSortTodos } from "../redux/features/filter/filterTodosSlice";
 import { changeTheme } from "../redux/features/settings/settingSlice";
+import { resetNotesData } from "../redux/features/note/noteSlice";
+import { resetEventsData } from "../redux/features/calendar/eventSlice";
 
 function Header() {
 
@@ -132,6 +134,8 @@ function Header() {
             dispatch(logout());
             dispatch(resetData());
             dispatch(resetTodosData());
+            dispatch(resetNotesData());
+            dispatch(resetEventsData());
             dispatch(resetFilterSortTodos());
             setProfileDrpDwn(false);
             navigation("/");

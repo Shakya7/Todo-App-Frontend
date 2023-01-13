@@ -27,6 +27,8 @@ function ModalTodoUpdate(props) {
 
   const filter=useSelector((state)=>state.filterTodo.filter);
 
+  const [error,setError]=useState("");
+
   //loading state
   const [deleteloading, setDeleteLoading]=useState({
     state:false,
@@ -288,9 +290,15 @@ function ModalTodoUpdate(props) {
                 })
               }  
             </div>
+            <p className={`text-filter xxsm:text-base ${theme?"text-red-600":"text-red-400"}`}>{error}</p>
             {updateLoading?<SpinnerCircular size={20} className="self-end"/>:
             <div className="flex gap-1 self-end">
               <button onClick={()=>{
+                if(updateTitle===""){
+                  setError("Please enter a title");
+                  console.log("Hello")
+                  return;
+                }
                 setUpdateLoading(true);
                 updateTodo(title,priority,todoID);
                 //navigation("/")
