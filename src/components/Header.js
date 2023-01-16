@@ -2,17 +2,19 @@ import {FontAwesomeIcon}from "@fortawesome/react-fontawesome"
 import {faBars, faUser, faBell, faComment, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import logo from "../images/logo.png";
 import {faHome, faCalendarDays, faListCheck, faNoteSticky, faGear, faXmark} from "@fortawesome/free-solid-svg-icons";
 import { logout } from "../redux/features/login/loginSlice";
 import {SpinnerCircular} from "spinners-react";
-import { resetData } from "../redux/features/profile/profileSlice";
+import { resetData, fetchAccountData } from "../redux/features/profile/profileSlice";
 import { resetTodosData } from "../redux/features/todos/todoSlice";
 import { resetFilterSortTodos } from "../redux/features/filter/filterTodosSlice";
 import { changeTheme } from "../redux/features/settings/settingSlice";
 import { resetNotesData } from "../redux/features/note/noteSlice";
 import { resetEventsData } from "../redux/features/calendar/eventSlice";
+import axios from "axios";
+import { authenticate } from "../redux/features/login/loginSlice";
 
 function Header() {
 
@@ -34,6 +36,26 @@ function Header() {
     }
   }
   document.addEventListener('mousedown',closeProfileMenus);
+
+  async function authenticateNow(){
+    try{
+      const data=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/authenticate`,{
+        withCredentials:true
+      });
+      
+      console.log(data.data.data.userID);
+      dispatch(fetchAccountData(data.data.data.userID));
+      dispatch(authenticate(data.data.data.userID));
+    }catch(err){
+      console.log(err.message);
+    }
+    
+    
+  }
+
+  useEffect(()=>{
+    authenticateNow()
+  },[])
   return (
     <div className={`${!theme?"bg-zinc-900":"bg-zinc-50"} opacity-100 h-14 w-full sticky top-0 left-0 flex justify-end items-center z-10`}>
 

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import { account } from "../../../appwrite/appwriteConfig";
 
 
@@ -26,11 +27,11 @@ const profileState={
     updatePasswordFlag:false
 }
 
-export const fetchAccountData=createAsyncThunk("/profile/fetchAccountData",async(_,{rejectWithValue})=>{
+export const fetchAccountData=createAsyncThunk("/profile/fetchAccountData",async(profileID,{rejectWithValue})=>{
     try{
-        const data=await account.get();
+        const data=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/getProfileData/${profileID}`);
         //console.log(data);
-        return data;
+        return data.data.data.user;
     }catch(err){
         return rejectWithValue(err.message);
     }
@@ -119,7 +120,7 @@ const profileSlice=createSlice({
             state.isFetching=true;
         })
         builder.addCase(fetchAccountData.fulfilled,(state,action)=>{
-            state.id=action.payload.$id;
+            state.id=action.payload._id;
             state.email=action.payload.email;
             state.name=action.payload.name;
             state.mobile=action.payload.phone;

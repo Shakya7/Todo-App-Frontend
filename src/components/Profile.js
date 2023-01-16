@@ -7,6 +7,7 @@ import {SpinnerCircular} from "spinners-react";
 import { setUpdateEmailOverlay, setUpdateMobileOverlay } from "../redux/features/profile/profileSlice";
 import { updatePassword } from "../redux/features/profile/profileSlice";
 import { clearPasswordError, setUpdatePasswordFlag } from "../redux/features/profile/profileSlice";
+import { useNavigate } from "react-router-dom";
 
 
 function Profile() {
@@ -21,6 +22,10 @@ function Profile() {
   const theme=useSelector((state)=>state.settings.darkMode);
 
   const error=useSelector((state)=>state.profile.error);
+
+  const isLoggedIn=useSelector((state)=>state.login.isLogged);
+
+  const navigation=useNavigate();
 
   const [profileDetails,setProfileDetails]=useState({
     name_edit:false,
@@ -51,6 +56,9 @@ function Profile() {
   const dispatch=useDispatch();
 
   useEffect(()=>{
+    if(!isLoggedIn){
+        navigation("/login");
+    }
     
   },[profileDetails])
 

@@ -13,20 +13,23 @@ import { useSelector } from "react-redux";
 function HomeLayout(){
     const dispatch=useDispatch();
     const theme=useSelector((state)=>state.settings.darkMode);
+    const profileID=useSelector((state)=>state.login.userID);
 
     async function getSession(){
         try{
-        const session=await account.getSession('current');
+        //const session=await account.getSession('current');
         //console.log(session);
-        dispatch(sessionPresent());
-        dispatch(fetchAccountData());
+        if(profileID){
+            dispatch(sessionPresent());
+            dispatch(fetchAccountData(profileID));
+        }
         }catch(err){
             console.log(err.message);
         }
     }
     useEffect(()=>{
         getSession();
-    },[])
+    },[profileID])
     return(
         <div className="flex h-screen bg-red-400">
                 <Sidebar/>
