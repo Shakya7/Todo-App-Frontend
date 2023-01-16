@@ -105,7 +105,10 @@ function Login(){
                                 </div>
                             </div>
                         </form>
-                        <div className={`mt-12 ${theme?"text-zinc-800":"text-white"} flex flex-col items-center mb-10 text-updateTodoText xxsm:text-base`}>
+                        <p onClick={()=>{
+                            navigation("/forgotpass")
+                        }} className={`hover:underline cursor-pointer ${theme?"text-zinc-800":"text-white"} text-updateTodoText xxsm:text-sm`}>Forgot your password?</p>
+                        <div className={`mt-5 ${theme?"text-zinc-800":"text-white"} flex flex-col items-center mb-10 text-updateTodoText xxsm:text-base`}>
                             <b>Don't have an account yet?</b>
                             <button className="w-64 cursor-pointer" onClick={(e)=>{
                                 e.preventDefault();

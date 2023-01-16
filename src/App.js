@@ -12,6 +12,7 @@ import NoteLayout from './components/note/NoteLayout';
 import Settings from './components/Settings';
 import _500ServerError from './components/error-UI/_500ServerError';
 import PageNotFound from './components/error-UI/PageNotFound';
+import ForgotpassPage from './components/ForgotpassPage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         </Route>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/login" element={<Login/>}/>
+        <Route path="/forgotpass" element={<ForgotpassPage/>}/>
         <Route path="*" element={<_500ServerError/>}/>
       </Routes>
     </div>

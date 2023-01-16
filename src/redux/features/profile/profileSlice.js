@@ -23,7 +23,14 @@ const profileState={
 
     updateEmailOverlay:false,
     updateMobileOverlay:false,
-    updatePasswordFlag:false
+    updatePasswordFlag:false,
+
+    forgotPassword:{
+        isLoading:false,
+        error:"",
+        success:""
+    }
+
 }
 
 export const fetchAccountData=createAsyncThunk("/profile/fetchAccountData",async(_,{rejectWithValue})=>{
@@ -67,6 +74,19 @@ export const updateMobile=createAsyncThunk("/profile/updateMobile",async ([passw
 export const updatePassword=createAsyncThunk("/profile/updatePassword", async(obj,{rejectWithValue})=>{
     try{
         await account.updatePassword(obj.new_p,obj.old_p)
+    }catch(err){
+        return rejectWithValue(err.message);
+    }
+})
+
+
+export const sendPasswordLinkToEmail=createAsyncThunk("profile/sendPasswordLinkToEmail", async(obj,{rejectWithValue})=>{
+    try{
+        console.log(obj);
+
+        account.createRecovery(obj.email, obj.redirectLink).then((response)=>{
+            console.log(response);
+        }).catch((err)=>{console.log(err)});
     }catch(err){
         return rejectWithValue(err.message);
     }
@@ -183,6 +203,20 @@ const profileSlice=createSlice({
             state.error.updatePassword=action.payload==="Invalid credentials. Please check the email and password."?"Invalid credentials. Please check old password.":action.payload;
             state.isPasswordUpdating=false;
             state.updatePasswordFlag=true;
+        })
+
+
+        //Forgot password
+        builder.addCase(sendPasswordLinkToEmail.pending,(state)=>{
+            state.forgotPassword.isLoading=true;
+        }).addCase(sendPasswordLinkToEmail.fulfilled, (state)=>{
+            state.forgotPassword.isLoading=false;
+            state.forgotPassword.error="";
+            state.forgotPassword.success="Password reset link has been sent to your email address."
+        }).addCase(sendPasswordLinkToEmail.rejected, (state,action)=>{
+            state.forgotPassword.isLoading=false;
+            state.forgotPassword.error=action.payload;
+            state.forgotPassword.success="";
         })
     }
 })
