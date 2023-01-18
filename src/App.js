@@ -12,6 +12,8 @@ import NoteLayout from './components/note/NoteLayout';
 import Settings from './components/Settings';
 import _500ServerError from './components/error-UI/_500ServerError';
 import PageNotFound from './components/error-UI/PageNotFound';
+import ForgotpassPage from './components/ForgotpassPage';
+import { ResetPass } from './components/ResetPassword';
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
           <Route path="*" element={<PageNotFound/>}/>
         </Route>
         <Route path="/signup" element={<Signup/>}/>
+        <Route path="/forgotpass" element={<ForgotpassPage/>}/>
+        <Route path="resetPassword/:token" element={<ResetPass/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="*" element={<_500ServerError/>}/>
       </Routes>

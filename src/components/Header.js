@@ -121,11 +121,13 @@ function Header() {
       {!show && <div onClick={()=>setShow(true)} className="absolute top-4 z-100 left-4 md:hidden">
         <FontAwesomeIcon className="text-slate-400" icon={faBars}/>
       </div>}
-
-      <div onClick={()=>{
-          dispatch(changeTheme())
-      }} className={`${theme?"bg-zinc-700":"bg-zinc-200"} ease-in-out duration-500 w-6 xxsm:w-12 h-3 xxsm:h-5 mr-4 rounded-full flex items-center ${theme?"justify-start":"justify-end"} p-1 cursor-pointer`}>
-        <div className={`${theme?"bg-zinc-200":"bg-zinc-700"} w-2 h-2 xxsm:w-4 xxsm:h-4 rounded-full`}></div>
+      <div className={`flex flex-col justify-center items-end gap-2 vsm:flex-row vsm:gap-0 py-1 vsm:py-0 ${isLoggedIn?"mr-4":"mr-0"}`}>
+        <div onClick={()=>{
+            dispatch(changeTheme())
+          }} className={`${theme?"bg-zinc-700":"bg-zinc-200"} ease-in-out duration-500 w-6 xxsm:w-12 h-3 xxsm:h-5 mr-0 mt-3 vsm:mt-0 vsm:mr-4 rounded-full flex items-center ${theme?"justify-start":"justify-end"} p-1 cursor-pointer self-end`}>
+          <div className={`${theme?"bg-zinc-200":"bg-zinc-700"} w-2 h-2 xxsm:w-4 xxsm:h-4 rounded-full`}></div>
+        </div>
+        {!isLoggedIn?<div onClick={()=>navigation("/login")} className="block vsm:hidden rounded-md bg-stone-700 justify-center items-center px-2 py-1 text-slate-400 hover:text-slate-100 cursor-pointer text-updateTodoText xxsm:text-base">Login</div>:""}
       </div>
       
       <div className={`hidden relative vsm:${isLoggedIn?"block":"hidden"} xxl:basis-2/5 2xl:basis-3/5 mr-2.5`}>

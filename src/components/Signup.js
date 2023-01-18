@@ -41,21 +41,21 @@ function Signup(){
                     </div>
                     <div className="flex flex-col justify-center items-center ">
                         <form className="flex flex-col  w-3/4 vsm:w-2/4 max-w-xl p-4 gap-5 bg-stone-900 rounded-lg">
-                            <div className="flex flex-col">
+                            <div className="flex flex-col text-updateTodoText xxsm:text-base">
                                 <label className="self-start text-white" htmlFor="name">Name</label>
                                 <input className="p-2 rounded-sm outline-none" onFocus={()=>dispatch(removeError())} id="name" type={"text"} placeholder="Name" onChange={(e)=>setCredentials({
                                     ...credentials,
                                     name:e.target.value
                                 })}/>
                             </div>
-                            <div className="flex flex-col">
+                            <div className="flex flex-col text-updateTodoText xxsm:text-base">
                                 <label className="self-start text-white" htmlFor="email">Email address</label>
                                 <input className="p-2 rounded-sm outline-none" onFocus={()=>dispatch(removeError())} id="email" type={"email"} placeholder="Email address" onChange={(e)=>setCredentials({
                                     ...credentials,
                                     email:e.target.value
                                 })}/>
                             </div>
-                            <div className="flex flex-col">
+                            <div className="flex flex-col text-updateTodoText xxsm:text-base">
                                 <label className="self-start text-white" htmlFor="pw">Password</label>
                                 <input className="p-2 rounded-sm outline-none" onFocus={()=>dispatch(removeError())} id="pw" type={"password"} placeholder="Password" onChange={(e)=>setCredentials({
                                     ...credentials,
@@ -63,7 +63,7 @@ function Signup(){
                                 })}/>
                             </div>
                             <div>
-                                <button className="bg-green-800 cursor-pointer text-white w-full rounded-sm py-1.5" onClick={
+                                <button className="bg-green-800 cursor-pointer text-white w-full rounded-sm py-1.5 text-updateTodoText xxsm:text-base" onClick={
                                     (e)=>{
                                         e.preventDefault();
                                         dispatch(signupFunction(credentials));
@@ -80,7 +80,7 @@ function Signup(){
 
                             </div>
                             {error?<p className="text-updateTodoText xxsm:text-base" style={{color:"red",textAlign:"center"}}>Please enter valid email address or password</p>:""}
-                            <div className="text-white">OR</div>
+                            <div className="text-white text-updateTodoText xxsm:text-base">OR</div>
                             <div className="flex gap-x-2">
                                 <div className="basis-full py-1 cursor-pointer border border-slate-600 rounded-md">
                                     <FontAwesomeIcon className="text-slate-600" icon={faGithub}/>

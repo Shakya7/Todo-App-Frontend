@@ -14,7 +14,7 @@ const profileState={
         updateEmail:"",
         updateMobile:"",
         fetchData:"",
-        updatePassword:""
+        updatePassword:"",
 
     },
     name:"",
@@ -23,7 +23,17 @@ const profileState={
 
     updateEmailOverlay:false,
     updateMobileOverlay:false,
-    updatePasswordFlag:false
+    updatePasswordFlag:false,
+    forgotPassword:{
+        isLoading:false,
+        error:"",
+        success:""
+    },
+    resetPassword:{
+        isLoading:false,
+        error:"",
+        success:""
+    }
 }
 
 export const fetchAccountData=createAsyncThunk("/profile/fetchAccountData",async(profileID,{rejectWithValue})=>{
@@ -80,6 +90,33 @@ export const updatePassword=createAsyncThunk("/profile/updatePassword", async(ob
         })
         
     }catch(err){
+        return rejectWithValue(err.message);
+    }
+})
+
+export const sendPasswordLinkToEmail=createAsyncThunk("profile/sendPasswordLinkToEmail", async(obj,{rejectWithValue})=>{
+    try{
+        console.log(obj);
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/forgotPassword`,{
+            email:obj.email
+        })
+        
+    }catch(err){
+        return rejectWithValue(err.message);
+    }
+})
+
+export const resetPassword=createAsyncThunk("profile/resetPassword",async(obj,{rejectWithValue})=>{
+    try{
+        //console.log(obj.newPassword);
+        const user=await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/resetPassword/${obj.token}`,{
+            password:obj.password,
+            confirmPassword:obj.confirmPassword
+        },{withCredentials:true});
+        //console.log(user);
+
+    }catch(err){
+        //console.log(err);
         return rejectWithValue(err.message);
     }
 })
@@ -196,6 +233,32 @@ const profileSlice=createSlice({
             state.error.updatePassword=action.payload==="Invalid credentials. Please check the email and password."?"Invalid credentials. Please check old password.":action.payload;
             state.isPasswordUpdating=false;
             state.updatePasswordFlag=true;
+        })
+
+        //Forgot password
+        builder.addCase(sendPasswordLinkToEmail.pending,(state)=>{
+            state.forgotPassword.isLoading=true;
+        }).addCase(sendPasswordLinkToEmail.fulfilled, (state)=>{
+            state.forgotPassword.isLoading=false;
+            state.forgotPassword.error="";
+            state.forgotPassword.success="Password reset link has been sent to your email address."
+        }).addCase(sendPasswordLinkToEmail.rejected, (state,action)=>{
+            state.forgotPassword.isLoading=false;
+            state.forgotPassword.error=action.payload;
+            state.forgotPassword.success="";
+        })
+
+        //Reset password
+        builder.addCase(resetPassword.pending, (state)=>{
+            state.resetPassword.isLoading=true;
+        }).addCase(resetPassword.fulfilled, (state)=>{
+            state.resetPassword.isLoading=false;
+            state.resetPassword.error="";
+            state.resetPassword.success="Password has been changed. Please login now"
+        }).addCase(resetPassword.rejected,(state,action)=>{
+            state.resetPassword.isLoading=false;
+            state.resetPassword.error=action.payload;
+            state.resetPassword.success="";
         })
     }
 })
