@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { account } from "../../../appwrite/appwriteConfig";
 
 
 const profileState={
@@ -30,36 +29,44 @@ const profileState={
 export const fetchAccountData=createAsyncThunk("/profile/fetchAccountData",async(profileID,{rejectWithValue})=>{
     try{
         const data=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/getProfileData/${profileID}`);
-        //console.log(data);
         return data.data.data.user;
     }catch(err){
         return rejectWithValue(err.message);
     }
 })
 
-export const updateName=createAsyncThunk("/profile/updateName", async({name},{rejectWithValue})=>{
+export const updateName=createAsyncThunk("/profile/updateName", async(obj,{rejectWithValue})=>{
     try{
-        const data=await account.updateName(name);
-        return data;
+        const data=await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/updateName/${obj.profileID}`,{
+            name:obj.name
+        })
+        return data.data.data.user;
     }catch(err){
         return rejectWithValue(err.message);
     }
 })
 
-export const updateEmail=createAsyncThunk("/profile/updateEmail",async ([password, email],{rejectWithValue})=>{
+export const updateEmail=createAsyncThunk("/profile/updateEmail",async (obj,{rejectWithValue})=>{
     try{    
-        const data=account.updateEmail(email, password);
-        return data;
+        console.log("Hello ",obj.profileID);
+        const data=await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/updateMail/${obj.profileID}`,{
+            email:obj.email,
+            password:obj.passwordForEmail,
+        })
+        return data.data.data.user;
     }catch(err){
         return rejectWithValue(err.message);
     }
 })
 
-export const updateMobile=createAsyncThunk("/profile/updateMobile",async ([password,mobile],{rejectWithValue})=>{
+export const updateMobile=createAsyncThunk("/profile/updateMobile",async (obj,{rejectWithValue})=>{
     try{    
-        //console.log(mobile,password);
-        const data=account.updatePhone(`+91${mobile}`, password);
-        return data;
+        
+        const data=await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/updateMobile/${obj.profileID}`,{
+            mobile:obj.mobile,
+            password:obj.passwordForMobile
+        })
+        return data.data.data.user;
     }catch(err){
         return rejectWithValue(err.message);
     }
@@ -67,7 +74,11 @@ export const updateMobile=createAsyncThunk("/profile/updateMobile",async ([passw
 
 export const updatePassword=createAsyncThunk("/profile/updatePassword", async(obj,{rejectWithValue})=>{
     try{
-        await account.updatePassword(obj.new_p,obj.old_p)
+        await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/updatePassword/${obj.profileID}`,{
+            password:obj.password,
+            currentPassword:obj.currentPassword
+        })
+        
     }catch(err){
         return rejectWithValue(err.message);
     }
@@ -123,7 +134,7 @@ const profileSlice=createSlice({
             state.id=action.payload._id;
             state.email=action.payload.email;
             state.name=action.payload.name;
-            state.mobile=action.payload.phone;
+            state.mobile=action.payload.mobile_number;
             state.isFetching=false;
             state.error.fetchData="";
         })
@@ -153,7 +164,7 @@ const profileSlice=createSlice({
             state.error.updateEmail="";
             state.updateEmailOverlay=false;
         }).addCase(updateEmail.rejected, (state)=>{
-            state.error.updateEmail="Inavalid password or network issue!!!";
+            state.error.updateEmail="Inavalid password or email or network issue!!!";
             state.isEmailUpdating=false;
             state.updateEmailOverlay=true;
         })
@@ -162,12 +173,13 @@ const profileSlice=createSlice({
         builder.addCase(updateMobile.pending,(state)=>{
             state.isMobileUpdating=true;
         }).addCase(updateMobile.fulfilled, (state,action)=>{
-            state.mobile=action.payload.phone;
+
+            state.mobile=action.payload.mobile_number;
             state.isMobileUpdating=false;
             state.error.updateMobile="";
             state.updateMobileOverlay=false;
         }).addCase(updateMobile.rejected,(state)=>{
-            state.error.updateMobile="Inavalid password or network issue!!!";
+            state.error.updateMobile="Inavalid password or mobile or network issue!!!";
             state.isMobileUpdating=false;
             state.updateMobileOverlay=true;
         })

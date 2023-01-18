@@ -1,5 +1,4 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import { account } from "../../../appwrite/appwriteConfig";
 import axios from "axios";
 
 

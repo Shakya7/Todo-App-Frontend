@@ -24,6 +24,7 @@ function Profile() {
   const error=useSelector((state)=>state.profile.error);
 
   const isLoggedIn=useSelector((state)=>state.login.isLogged);
+  const profileID=useSelector((state)=>state.login.userID);
 
   const navigation=useNavigate();
 
@@ -63,8 +64,9 @@ function Profile() {
   },[profileDetails])
 
   useEffect(()=>{
-    console.log(updatePwData)
-  },[updatePwData])
+    console.log(updatePwData);
+    console.log(passwordForEmail);
+  },[updatePwData, passwordForEmail])
 
   return (
     <div className="h-full">
@@ -106,13 +108,17 @@ function Profile() {
                         })
                     }} defaultValue={name} disabled={profileDetails.name_edit?false:true} className={`w-full xxsm:w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="text"/>
                     {profileDetails.name_edit?<button onClick={()=>{
-                        dispatch(updateName(profileDetails));
+                        let obj={
+                            profileID,
+                            name:profileDetails.name
+                        }
+                        dispatch(updateName(obj));
                         setProfileDetails({
                             ...profileDetails,
                             name_edit:false
                         })
                     }} className="bg-blue-700 px-2 py-1 ml-10 rounded-md text-[5vw] xxsm:text-base text-white">SAVE</button>:""}
-                    {isNameUpdating?<SpinnerCircular/>:""}
+                    {isNameUpdating?<SpinnerCircular size={20}/>:""}
                 </div>
             </div>
             <div className="vsm:pl-10 mt-5 flex gap-5 flex-col items-center md:items-start">
@@ -153,13 +159,19 @@ function Profile() {
                     <div className="flex gap-2">
                         <button onClick={()=>{
                             //console.log(passwordForEmail);
-                            dispatch(updateEmail([passwordForEmail,profileDetails.email]));
+                            //dispatch(updateEmail([passwordForEmail,profileDetails.email]));
+                            let obj={
+                                profileID,
+                                email:profileDetails.email,
+                                passwordForEmail,
+                            }
+                            dispatch(updateEmail(obj));
                         }} className="bg-blue-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Update</button>
                         <button onClick={()=>dispatch(setUpdateEmailOverlay(false))} className="bg-red-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Cancel</button>
                     </div>
                     {error.updateEmail?<div className="text-red-600 text-[5vw] xxsm:text-base">{error.updateEmail}</div>:""}
                 </div>:""}
-                {isEmailUpdating?<SpinnerCircular/>:""}
+                {isEmailUpdating?<SpinnerCircular size={20}/>:""}
             </div>
             <div className="vsm:pl-10 mt-5 flex gap-5 flex-col items-center md:items-start">
                 <div className="text-left">
@@ -196,7 +208,6 @@ function Profile() {
                             mobile_edit:false
                         })
                     }} className="bg-blue-700 px-2 py-1 ml-10 rounded-md text-white text-[5vw] xxsm:text-base">Save</button>:""}
-                    {profileDetails.mobile_edit?<p className={`italic ${!theme?"text-white":"text-zinc-800"} text-[5vw] xxsm:text-xs text-center custom-1:text-left`}>While updating this, please remove +91</p>:""}
                 </div>
                 {updateMobileOverlay?
                 <div className="flex flex-col justify-center items-center md:items-start p-2 rounded-md">
@@ -206,13 +217,18 @@ function Profile() {
                     }} className={`mx-4 vsm:mx-0 w-full xxsm:w-auto ${!theme?"bg-zinc-100":"bg-zinc-400"} vsm:w-80 outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="password"/>
                     <div className="flex gap-2">
                         <button onClick={()=>{
-                            dispatch(updateMobile([passwordForMobile,profileDetails.mobile]));
+                            let obj={
+                                mobile:profileDetails.mobile,
+                                profileID,
+                                passwordForMobile
+                            }
+                            dispatch(updateMobile(obj));
                         }} className="bg-blue-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Update</button>
                         <button onClick={()=>dispatch(setUpdateMobileOverlay(false))} className="bg-red-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Cancel</button>
                     </div>
                     {error.updateMobile?<div className="text-red-600 text-[5vw] xxsm:text-base">{error.updateMobile}</div>:""}
                 </div>:""}
-                {isNumberUpdating?<SpinnerCircular/>:""}
+                {isNumberUpdating?<SpinnerCircular size={20}/>:""}
             </div>
 
             <div className="vsm:pl-10 mt-5 pb-20 flex gap-5 flex-col items-center md:items-start">
@@ -246,7 +262,12 @@ function Profile() {
                     }} placeholder="new password" className={`mx-4 vsm:mx-0 w-full xxsm:w-auto ${!theme?"bg-zinc-100 text-black":"bg-zinc-800 text-gray-400"} vsm:w-80 outline-none rounded-md p-2 text-[5vw] xxsm:text-base`} type="password"/>
                     <div className="flex gap-2">
                         <button onClick={()=>{
-                            dispatch(updatePassword(updatePwData));
+                            let obj={
+                                profileID,
+                                password:updatePwData.new_p,
+                                currentPassword:updatePwData.old_p
+                            }
+                            dispatch(updatePassword(obj));
                         }} className="bg-blue-700 px-2 py-1 rounded-md text-white text-[5vw] xxsm:text-base">Update</button>
                         <button onClick={()=>{
                             setUpdatePwData({
@@ -260,7 +281,7 @@ function Profile() {
                     {error.updatePassword?<div className="text-red-600 text-[5vw] xxsm:text-base">{error.updatePassword}</div>:""}
                 </div>:""
                 }
-                {isPasswordUpdating?<SpinnerCircular/>:""}
+                {isPasswordUpdating?<SpinnerCircular size={20}/>:""}
             </div>
         </div>
     </div>

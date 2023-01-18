@@ -2,7 +2,6 @@ import {Outlet} from "react-router-dom";
 import { useEffect } from "react";
 import Sidebar from "../Sidebar";
 import Header from "../Header";
-import { account } from "../../appwrite/appwriteConfig";
 import { sessionPresent } from "../../redux/features/login/loginSlice";
 import { fetchAccountData } from "../../redux/features/profile/profileSlice";
 import { useDispatch } from "react-redux";
@@ -17,8 +16,6 @@ function HomeLayout(){
 
     async function getSession(){
         try{
-        //const session=await account.getSession('current');
-        //console.log(session);
         if(profileID){
             dispatch(sessionPresent());
             dispatch(fetchAccountData(profileID));

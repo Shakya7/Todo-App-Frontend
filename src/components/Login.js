@@ -20,25 +20,6 @@ function Login(){
          email:"",
          password:"",
      });
-    //const [failure,setFailure]=useState(false);
-    //const [isLoading,setIsLoading]=useState(false);
-
-    //  async function login(e){
-    //     e.preventDefault();
-    //     setIsLoading(true);
-    //     const promise = account.createEmailSession(credentials.email, credentials.password);
-    
-
-    //     promise.then(function (response) {
-    //         console.log(response); // Success
-    //         setIsLoading(false);
-    //         navigation("/");
-    //     }, function (error) {
-    //         console.log(error); // Failure
-    //         setIsLoading(false);
-    //         setFailure(true);
-    //     });
-    // }
 
    
     useEffect(()=>{
@@ -52,7 +33,7 @@ function Login(){
             <div className="basis-full h-full overflow-y-scroll overflow-x-hidden">
                 <div className="h-full">
                     <div className={`flex flex-col ${theme?"bg-zinc-50":"bg-zinc-800"} justify-center items-center`}>
-                        <div onClick={()=>navigation("/")} className="flex justify-center items-center gap-1 my-6">
+                        <div onClick={()=>navigation("/")} className="flex justify-center items-center gap-1 my-6 cursor-pointer">
                             <img className="w-1/5 xxsm:w-20" src={logo} alt="logo"/>
                             <p className={`${theme?"text-zinc-800":"text-white"} font-fascinate text-title xxsm:text-5xl`}>TraceBit</p>
                         </div>
