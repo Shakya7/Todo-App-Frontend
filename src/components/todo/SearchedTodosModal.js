@@ -12,7 +12,7 @@ function SearchedTodosModal(props) {
 
   return (
     <div className='fixed top-0 left-0 w-screen h-screen backdrop-blur-sm z-10 flex justify-center items-center'>
-      <div className={`w-11/12 h-full ${theme?"bg-neutral-300":"bg-zinc-700"} border border-gray-700 rounded-md flex flex-col justify-center items-center sm:items-start p-4 relative gap-2 m-5`}>
+      <div className={`w-11/12 h-full ${theme?"bg-stone-100":"bg-zinc-700"} border border-gray-700 rounded-md flex flex-col justify-center items-center sm:items-start p-4 relative gap-2 m-5`}>
         <div className={`${!theme?"text-white":"text-zinc-800"} flex justify-between items-center w-full`}>
           <p className={`self-start text-updateTodoText xxxsm:text-base`}>Searched Todos</p>
           <div onClick={e=>props.closeModal(false)} className="self-end	cursor-pointer text-updateTodoText xxsm:text-2xl">X</div>
