@@ -521,7 +521,6 @@ function DashboardLayout() {
 
   useEffect(()=>{
     if(profileID){
-      //console.log("Hello")
       dispatch(fetchTodos(profileID));
       dispatch(loadEvents(profileID));
       dispatch(loadNotes(profileID));

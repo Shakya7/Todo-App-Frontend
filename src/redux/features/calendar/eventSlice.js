@@ -43,7 +43,6 @@ export const updateEvent=createAsyncThunk("event/updateEvent",async(object,{reje
 
 export const createEvent=createAsyncThunk("event/createEvent",async(object,{rejectWithValue})=>{
     try{
-        //console.log(object);
         await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/events/createEvent/${object.profileID}`,{
             title:object.title,
             start:new Date(`${object.start_date}T${object.start_time}:00.000Z`),
@@ -74,7 +73,6 @@ const eventSlice=createSlice({
     initialState:eventState,
     reducers:{
         loadEventData:(state,action)=>{
-            //console.log(typeof action.payload.start);
             let start_dt=action.payload.start.split("T");
             let end_dt=action.payload.end.split("T");
 

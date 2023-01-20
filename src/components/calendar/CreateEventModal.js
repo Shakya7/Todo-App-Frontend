@@ -46,7 +46,6 @@ function CreateEventModal(props) {
                     <div className="flex flex-col items-start gap-2 text-filter xsm:text-base">
                         <label className={`${theme?"text-zinc-800":"text-white"}`}>Start Date</label>
                         <input onChange={(e)=>{
-                            console.log(e.target.value);
                             setCurrentState({
                                 ...currentState,
                                 start_date:e.target.value
@@ -69,7 +68,6 @@ function CreateEventModal(props) {
                     <div className="flex flex-col items-start gap-2 text-filter xsm:text-base">
                         <label className={`${theme?"text-zinc-800":"text-white"}`}>Start Time</label>
                         <input onInput={e=>{
-                            //console.log(e.target.value)
                             setCurrentState({
                                 ...currentState,
                                 start_time:e.target.value
@@ -79,7 +77,6 @@ function CreateEventModal(props) {
                     <div className="flex flex-col items-start gap-2 text-filter xsm:text-base">
                         <label className={`${theme?"text-zinc-800":"text-white"}`}>End Time</label>
                         <input onInput={e=>{
-                            console.log(e.target.value)
                             setCurrentState({
                                 ...currentState,
                                 end_time:e.target.value

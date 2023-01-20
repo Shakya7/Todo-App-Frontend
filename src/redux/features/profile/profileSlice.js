@@ -58,7 +58,6 @@ export const updateName=createAsyncThunk("/profile/updateName", async(obj,{rejec
 
 export const updateEmail=createAsyncThunk("/profile/updateEmail",async (obj,{rejectWithValue})=>{
     try{    
-        console.log("Hello ",obj.profileID);
         const data=await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/updateMail/${obj.profileID}`,{
             email:obj.email,
             password:obj.passwordForEmail,
@@ -96,7 +95,6 @@ export const updatePassword=createAsyncThunk("/profile/updatePassword", async(ob
 
 export const sendPasswordLinkToEmail=createAsyncThunk("profile/sendPasswordLinkToEmail", async(obj,{rejectWithValue})=>{
     try{
-        console.log(obj);
         await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/forgotPassword`,{
             email:obj.email
         })
@@ -108,15 +106,12 @@ export const sendPasswordLinkToEmail=createAsyncThunk("profile/sendPasswordLinkT
 
 export const resetPassword=createAsyncThunk("profile/resetPassword",async(obj,{rejectWithValue})=>{
     try{
-        //console.log(obj.newPassword);
         const user=await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/resetPassword/${obj.token}`,{
             password:obj.password,
             confirmPassword:obj.confirmPassword
         },{withCredentials:true});
-        //console.log(user);
 
     }catch(err){
-        //console.log(err);
         return rejectWithValue(err.message);
     }
 })
@@ -229,7 +224,6 @@ const profileSlice=createSlice({
             state.isPasswordUpdating=false;
             state.updatePasswordFlag=false;
         }).addCase(updatePassword.rejected, (state,action)=>{
-            console.log(action.payload);
             state.error.updatePassword=action.payload==="Invalid credentials. Please check the email and password."?"Invalid credentials. Please check old password.":action.payload;
             state.isPasswordUpdating=false;
             state.updatePasswordFlag=true;

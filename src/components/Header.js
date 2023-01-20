@@ -42,8 +42,6 @@ function Header() {
       const data=await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/authenticate`,{
         withCredentials:true
       });
-      
-      console.log(data.data.data.userID);
       dispatch(fetchAccountData(data.data.data.userID));
       dispatch(authenticate(data.data.data.userID));
     }catch(err){

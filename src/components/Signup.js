@@ -23,7 +23,6 @@ function Signup(){
 
     useEffect(()=>{
         if(isLogged){
-            console.log("test")
             dispatch(fetchAccountData());
             navigation("/");
         }

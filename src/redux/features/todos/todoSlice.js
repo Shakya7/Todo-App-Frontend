@@ -73,7 +73,6 @@ const todoSlice=createSlice({
     initialState:todoState,
     reducers:{
         loadInProgressTodos:(state,action)=>{
-            //console.log(action.payload);
             state.filteredTodos=inProgressTodos(action.payload);
 
         },

@@ -22,12 +22,10 @@ export function ResetPass(){
     const isLoading=useSelector((state)=>state.profile.resetPassword.isLoading);
     const success=useSelector((state)=>state.profile.resetPassword.success);
     const error=useSelector((state)=>state.profile.resetPassword.error);
-    //console.log(token);
     const checkToken=()=>{
         axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users/checkResetToken`,{
             passwordResetToken:token
         },{withCredentials:true}).then(res=>setShowResultPForm(true)).catch(err=>setShowResultPForm(false));
-        console.log(showError);
     }
     useLayoutEffect(()=>{
         checkToken();

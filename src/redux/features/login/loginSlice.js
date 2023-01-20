@@ -15,10 +15,8 @@ export const signupFunction=createAsyncThunk("/login/signupFunction",async({emai
             password,
             name
         },{withCredentials:true});
-        console.log(data);
         return data.data.data.user._id;
     }catch(err){
-        console.log(err);
         //****** in REDUX-THUNK error handling, rejectwithValue is used as used *//
         return rejectWithValue(err.message);
     }

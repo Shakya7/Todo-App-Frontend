@@ -64,8 +64,8 @@ function Profile() {
   },[profileDetails])
 
   useEffect(()=>{
-    console.log(updatePwData);
-    console.log(passwordForEmail);
+    // console.log(updatePwData);
+    // console.log(passwordForEmail);
   },[updatePwData, passwordForEmail])
 
   return (
