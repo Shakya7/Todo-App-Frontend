@@ -31,7 +31,7 @@ function App() {
         </Route>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/forgotpass" element={<ForgotpassPage/>}/>
-        <Route path="resetPassword/:token" element={<ResetPass/>}/>
+        <Route path="/resetPassword/:token" element={<ResetPass/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="*" element={<_500ServerError/>}/>
       </Routes>
