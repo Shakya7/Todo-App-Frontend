@@ -150,6 +150,7 @@ function Header() {
             setProfileDrpDwn(false);
             }} className={`px-4 py-2 cursor-pointer ${theme?"hover:bg-zinc-400":"hover:bg-zinc-800"} justify-end`}>Profile</p>
           <p onClick={()=>{
+            navigation("/settings");
             setProfileDrpDwn(false);
             }} className={`px-4 py-2 cursor-pointer ${theme?"hover:bg-zinc-400":"hover:bg-zinc-800"} justify-end`}>Settings</p>
           <p onClick={()=>{
